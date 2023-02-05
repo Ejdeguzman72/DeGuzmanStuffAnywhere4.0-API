@@ -21,9 +21,5 @@ public class AppStartupConfigEvent {
 	public void startApp() {
 
 		LOGGER.info("AppStartupConfigEvent - startApp(): Application has started on port 8080");
-		
-		startupScripts.startUpExerciseTypes();
-		startupScripts.startupRestaurantTypes();
-		startupScripts.startupTransactionTypes();
 	}
 }

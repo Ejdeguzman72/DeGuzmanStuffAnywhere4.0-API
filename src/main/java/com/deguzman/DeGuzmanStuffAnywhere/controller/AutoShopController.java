@@ -3,6 +3,8 @@ package com.deguzman.DeGuzmanStuffAnywhere.controller;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -69,7 +71,7 @@ public class AutoShopController {
 
 	@PostMapping("/add-auto-shop")
 	@CrossOrigin
-	public int addAutoRepairShopInformation(@RequestBody AutoRepairShop autoShop) throws DuplicateAutoShopException {
+	public int addAutoRepairShopInformation(@RequestBody @Valid AutoRepairShop autoShop) throws DuplicateAutoShopException {
 		return autoShopService.addAutoRepairShopInfo(autoShop);
 	}
 

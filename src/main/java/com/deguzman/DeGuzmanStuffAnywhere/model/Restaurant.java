@@ -2,8 +2,16 @@ package com.deguzman.DeGuzmanStuffAnywhere.model;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
 @CrossOrigin
 public class Restaurant implements Serializable {
 
@@ -12,12 +20,31 @@ public class Restaurant implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 	public int restaurant_id;
+	
+	@NotNull(message = "name field is missing/null")
+	@Pattern(regexp = "[a-zA-Z,0-9]{0,50}", message = "Bad request, name field can only contain letters, special characters are not allowed")
 	public String name;
+	
+	@NotNull(message = "address field is missing/null")
+	@Pattern(regexp = "[a-zA-Z,0-9]{0,50}", message = "Bad request, address field can only contain letters, special characters are not allowed")
 	public String address;
+	
+	@NotNull(message = "city field is missing/null")
+	@Pattern(regexp = "[a-zA-Z]{0,50}", message = "Bad request, city field can only contain letters, special characters are not allowed")
 	public String city;
+	
+	@NotNull(message = "state field is missing/null")
+	@Pattern(regexp = "[a-zA-Z]{0,50}", message = "Bad request, state field can only contain letters, special characters are not allowed")
 	public String state;
+	
+	@NotNull(message = "zip field is missing/null")
+	@Pattern(regexp = "[0-9]{5}", message = "Bad request, zip field can only contain letters, special characters are not allowed")
 	public String zip;
+	
+	@NotNull(message = "restaurant_type_id field is missing/null")
+	@Pattern(regexp = "[0-9]{0,50}", message = "Bad request, restaurant_type_id field can only contain letters, special characters are not allowed")
 	public int restaurant_type_id;
+	
 	public int getRestaurant_id() {
 		return restaurant_id;
 	}

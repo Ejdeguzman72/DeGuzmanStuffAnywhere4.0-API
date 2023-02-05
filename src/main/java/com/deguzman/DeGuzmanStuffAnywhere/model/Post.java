@@ -2,6 +2,14 @@ package com.deguzman.DeGuzmanStuffAnywhere.model;
 
 import java.util.Date;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonIgnoreProperties(ignoreUnknown = true)
+@CrossOrigin
 public class Post {
 
 	public int post_id;
