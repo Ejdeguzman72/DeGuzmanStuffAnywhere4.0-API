@@ -1,5 +1,8 @@
 package com.deguzman.DeGuzmanStuffAnywhere.model;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -11,8 +14,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class Song {
 
 	public int song_id;
+	
+	@NotNull(message = "title field is missing/null")
+	@Pattern(regexp = "[a-zA-Z]{0,50}", message = "Bad request, title field can only contain letters, numbers/special characters are not allowed")
 	public String title;
+	
+	@NotNull(message = "artist field is missing/null")
+	@Pattern(regexp = "[a-zA-Z]{0,50}", message = "Bad request, artist field can only contain letters, numbers/special characters are not allowed")
 	public String artist;
+	
+	@NotNull(message = "genre field is missing/null")
+	@Pattern(regexp = "[a-zA-Z]{0,50}", message = "Bad request, genre field can only contain letters, numbers/special characters are not allowed")
 	public String genre;
 
 	public int getSong_id() {

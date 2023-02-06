@@ -2,6 +2,9 @@ package com.deguzman.DeGuzmanStuffAnywhere.model;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -17,10 +20,25 @@ public class MedicalOffice implements Serializable {
 	 */
 	private static final long serialVersionUID = 4526702942282551513L;
 	public long medicalOfficeId;
+	
+	@NotNull(message = "Invalid request, name field is missing/null")
+	@Pattern(regexp = "[a-zA-Z,0-9]{0,50}", message = "Bad request, name field can only contain letters, special characters are not allowed")
 	public String name;
+	
+	@NotNull(message = "Invalid request, address field is missing/null")
+	@Pattern(regexp = "[a-zA-Z,0-9]{0,50}", message = "Bad request, address field can only contain letters, special characters are not allowed")
 	public String address;
+	
+	@NotNull(message = "Invalid request, city field is missing/null")
+	@Pattern(regexp = "[a-zA-Z]{0,50}", message = "Bad request, city field can only contain letters, special characters are not allowed")
 	public String city;
+	
+	@NotNull(message = "Invalid request, state field is missing/null")
+	@Pattern(regexp = "[a-zA-Z,0-9]{0,50}", message = "Bad request, state field can only contain letters, special characters are not allowed")
 	public String state;
+	
+	@NotNull(message = "Invalid request, zip field is missing/null")
+	@Pattern(regexp = "[0-9]{5}", message = "Bad request, zip field can only contain letters, special characters are not allowed")
 	public String zip;
 
 	public Long getMedicalOfficeId() {

@@ -2,8 +2,12 @@ package com.deguzman.DeGuzmanStuffAnywhere.model;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -17,10 +21,25 @@ public class GeneralTransaction implements Serializable {
 	 */
 	private static final long serialVersionUID = 3866557359119459426L;
 	private long transaction_id;
+	
+	@NotNull(message = "Invald request, amount is null/missing")
+	@Pattern(regexp = "^(?:[01]\\d|5[0123]).(?:[012345]\\d)", message = "Bad request, amount field must follow the proper format. $00000.00")
 	private double amount;
+	
+	@NotNull(message = "Invalid request, payment_date field is null/missing")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private String payment_date;
+	
+	@NotNull(message = "Invalid request, entity field is missing/null")
+	@Pattern(regexp = "[a-zA-Z,0-9]{0,50}", message = "Invalid request, entity field can only contain letters, special characters are not allowed")
 	private String entity;
+	
+	@NotNull(message = "Invalid request, transaction_type_id field is missing/null")
+	@Pattern(regexp = "[a-zA-Z,0-9]{0,50}", message = "Invalid request, transaction_type_id field can only contain letters, special characters are not allowed")
 	public long transaction_type_id;
+	
+	@NotNull(message = "Invalid request, user_id field is missing/null")
+	@Pattern(regexp = "[a-zA-Z,0-9]{0,50}", message = "Invalid request, user_id field can only contain letters, special characters are not allowed")
 	public long user_id;
 
 	public long getTransaction_id() {

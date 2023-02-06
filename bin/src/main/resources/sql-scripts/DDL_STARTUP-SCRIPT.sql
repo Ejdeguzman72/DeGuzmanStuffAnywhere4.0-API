@@ -376,3 +376,11 @@ CREATE TABLE public.vehicle (
 	"year" varchar(255) NULL,
 	CONSTRAINT car_pkey PRIMARY KEY (vehicle_id)
 );
+
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+INSERT INTO roles(name) VALUES('ROLE_USER');
+INSERT INTO roles(name) VALUES('ROLE_MODERATOR');
+INSERT INTO roles(name) VALUES('ROLE_ADMIN');

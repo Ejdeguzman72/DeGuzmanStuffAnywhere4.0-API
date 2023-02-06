@@ -1,0 +1,64 @@
+Coding bat Exercises
+
+public boolean hasTeen(int a, int b, int c) {
+  return (a >= 13 && a <= 19) ||
+          (b >= 13 && b <= 19) ||
+          (c >= 13 && c <= 19);
+}
+---------------------------------------------------------------------
+public boolean loneTeen(int a, int b) {
+  // Store teen-ness in boolean local vars first. Boolean local
+  // vars like this are a little rare, but here they work great.
+  boolean aTeen = (a >= 13 && a <= 19);
+  boolean bTeen = (b >= 13 && b <= 19);
+  
+  return (aTeen && !bTeen) || (!aTeen && bTeen);
+  // Translation: one or the other, but not both.
+  // Alternately could use the Java xor operator, but it's obscure.
+}
+---------------------------------------------------------------------
+public String delDel(String str) {
+  if (str.length() >= 4 && str.substring(1,4).equals("del")) {
+    return str.substring(0,1) + str.substring(4);
+  }
+  
+  return str;
+}
+-----------------------------------------------------------------------
+public boolean mixStart(String str) {
+  if (str.length() >= 3 && str.substring(1,3).equals("ix")) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+--------------------------------------------------------------------------
+public String startOz(String str) {
+  String result = "";
+  
+  if (str.length() >= 1 && str.charAt(0)=='o') {
+    result = result + str.charAt(0);
+  }
+  
+  if (str.length() >= 2 && str.charAt(1)=='z') {
+    result = result + str.charAt(1);
+  }
+  
+  return result;
+}
+
+--------------------------------------------------------------------------
+public int intMax(int a, int b, int c) {
+  if (a > b && a > c) {
+    return a;
+  }
+  else if (b > a && b > c) {
+    return b;
+  }
+  else {
+    return c;
+  }
+}
+--------------------------------------------------------------------------
+

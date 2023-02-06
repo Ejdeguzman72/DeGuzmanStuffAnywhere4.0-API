@@ -2,6 +2,9 @@ package com.deguzman.DeGuzmanStuffAnywhere.model;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -17,10 +20,25 @@ public class Vehicle implements Serializable {
 	 */
 	private static final long serialVersionUID = -6819954124384869848L;
 	public long vehicleId;
+	
+	@NotNull(message = "Invalid request, year field is missing/null")
+	@Pattern(regexp = "[0-9]{4}", message = "Invalid request, year field can only contain letters, special characters are not allowed")
 	public String year;
+	
+	@NotNull(message = "Invalid request, make field is missing/null")
+	@Pattern(regexp = "[a-zA-Z,0-9]{0,50}", message = "Invalid request, make field can only contain letters, special characters are not allowed")
 	public String make;
+	
+	@NotNull(message = "Invalid request, model model is missing/null")
+	@Pattern(regexp = "[a-zA-Z,0-9]{0,50}", message = "Invalid request, model field can only contain letters, special characters are not allowed")
 	public String model;
+	
+	@NotNull(message = "Invalid request, capacity field is missing/null")
+	@Pattern(regexp = "[0-9]{1,2}", message = "Invalid request, capacity field can only contain letters, special characters are not allowed")
 	public int capacity;
+	
+	@NotNull(message = "Invalid request, transmission field is missing/null")
+	@Pattern(regexp = "[a-zA-Z]{0,50}", message = "Invalid request, transmission field can only contain letters, special characters are not allowed")
 	public String transmission;
 
 	public long getVehicleId() {

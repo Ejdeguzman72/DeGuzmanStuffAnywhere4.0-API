@@ -2,8 +2,12 @@ package com.deguzman.DeGuzmanStuffAnywhere.model;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -17,10 +21,23 @@ public class RunTracker implements Serializable {
 	 */
 	private static final long serialVersionUID = -4812037100686878546L;
 	public long run_id;
+	
+	@NotNull(message = "Invalid request, runDate field is null/missing")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	public String runDate;
+	
+	@NotNull(message = "Invald request, amount is null/missing")
+	@Pattern(regexp = "^(?:[01]\\d|5[0123]).(?:[012345]\\d)", message = "Bad request, amount field must follow the proper format. $00000.00")
 	public double runDistance;
+	
+	@NotNull(message = "Invald request, amount is null/missing")
+	@Pattern(regexp = "^(?:[01]\\d|5[0123]).(?:[012345]\\d)", message = "Bad request, amount field must follow the proper format. $00000.00")
 	public String runTime;
+	
+	@NotNull(message = "Invalid request, user_id field is missing/null")
+	@Pattern(regexp = "[0-9]{1,4}", message = "Invalid request, user_id field can only contain letters, special characters are not allowed")
 	public long user_id;
+	
 	public long getRun_id() {
 		return run_id;
 	}

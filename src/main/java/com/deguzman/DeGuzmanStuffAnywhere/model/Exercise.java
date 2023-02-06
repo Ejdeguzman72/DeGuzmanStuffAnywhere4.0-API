@@ -2,6 +2,9 @@ package com.deguzman.DeGuzmanStuffAnywhere.model;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -17,12 +20,33 @@ public class Exercise implements Serializable {
 	 */
 	private static final long serialVersionUID = -1101615341293557860L;
 	public int exercise_id;
+	
+	@NotNull(message = "Invalid request, make field is missing/null")
+	@Pattern(regexp = "[a-zA-Z]{0,50}", message = "Invalid request, make field can only contain letters, numbers/special characters are not allowed")
 	public String exerciseName;
+	
+	@NotNull(message = "Invalid request, sets field is missing/null")
+	@Pattern(regexp = "[0-9]{1,4}", message = "Invalid request, sets field can only contain letters, special characters are not allowed")
 	public int sets;
+	
+	@NotNull(message = "Invalid request, reps field is missing/null")
+	@Pattern(regexp = "[0-9]{1,4}", message = "Invalid request, reps field can only contain letters, special characters are not allowed")
 	public int reps;
+	
+	@NotNull(message = "Invalid request, weight field is missing/null")
+	@Pattern(regexp = "[0-9]{1,4}", message = "Invalid request, weight field can only contain letters, special characters are not allowed")
 	public double weight;
+	
+	@NotNull(message = "Invalid request, date field is missing/null")
+	@Pattern(regexp = "[0-9]{1,4}", message = "Invalid request, date field can only contain letters, special characters are not allowed")
 	public String date;
+	
+	@NotNull(message = "Invalid request, exercise_type_id field is missing/null")
+	@Pattern(regexp = "[0-9]{1,4}", message = "Invalid request, exercise_type_id field can only contain letters, special characters are not allowed")
 	public int exercise_type_id;
+	
+	@NotNull(message = "Invalid request, user_id field is missing/null")
+	@Pattern(regexp = "[0-9]{1,4}", message = "Invalid request, user_id field can only contain letters, special characters are not allowed")
 	public long user_id;
 	
 	public int getExercise_id() {

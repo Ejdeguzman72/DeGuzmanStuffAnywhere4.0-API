@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="windows-1252" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2022-08-08T01:01:03.392331600Z</date>
+  <millis>1659920463392</millis>
+  <nanos>331600</nanos>
+  <sequence>0</sequence>
+  <logger>javassist.bytecode.stackmap.TypeData$ClassName</logger>
+  <level>INFO</level>
+  <class>com.deguzman.hapi2_2_0.HapiVersion2_2Application</class>
+  <method>submitButtonActionPerformed</method>
+  <thread>17</thread>
+  <message>Username and passwords match: user has been authenticated</message>
+</record>
+</log>
+<?xml version="1.0" encoding="windows-1252" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+</log>
+<?xml version="1.0" encoding="windows-1252" standalone="no"?>
+<!DOCTYPE log SYSTEM "logger.dtd">
+<log>
+<record>
+  <date>2022-08-19T01:30:23.637478600Z</date>
+  <millis>1660872623637</millis>
+  <nanos>478600</nanos>
+  <sequence>0</sequence>
+  <logger>javassist.bytecode.stackmap.TypeData$ClassName</logger>
+  <level>WARNING</level>
+  <class>com.deguzman.hapi2_2_0.HapiVersion2_2Application</class>
+  <method>submitButtonActionPerformed</method>
+  <thread>17</thread>
+  <message>Invalid Credentials</message>
+</record>
+<record>
+  <date>2022-08-19T01:30:31.357793600Z</date>
+  <millis>1660872631357</millis>
+  <nanos>793600</nanos>
+  <sequence>1</sequence>
+  <logger>javassist.bytecode.stackmap.TypeData$ClassName</logger>
+  <level>WARNING</level>
+  <class>com.deguzman.hapi2_2_0.HapiVersion2_2Application</class>
+  <method>submitButtonActionPerformed</method>
+  <thread>17</thread>
+  <message>Invalid Credentials</message>
+</record>
+</log>

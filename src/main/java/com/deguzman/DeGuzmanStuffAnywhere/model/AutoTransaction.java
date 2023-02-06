@@ -1,11 +1,20 @@
 package com.deguzman.DeGuzmanStuffAnywhere.model;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -17,11 +26,29 @@ public class AutoTransaction implements Serializable {
 	 */
 	private static final long serialVersionUID = 8676869382585836353L;
 	public long auto_transaction_id;
+	
+	@NotNull(message = "Invalid request, auto_transaction_date field is null/missing")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	public String auto_transaction_date;
+	
+	@NotNull(message = "Invald request, amount is null/missing")
+	@Pattern(regexp = "^(?:[01]\\d|5[0123]).(?:[012345]\\d)", message = "Bad request, amount field must follow the proper format. $00000.00")
 	public double amount;
+	
+	@NotNull(message = "Invalid request, auto_shop_id is null/missing")
+	@Pattern(regexp = "[0-9]{1,20}", message = "Invalid request, auto_shop_id field can only contain letters, special characters are not allowed")
 	public int auto_shop_id;
+	
+	@NotNull(message = "Invalid request, transaction_type_id is null/missing")
+	@Pattern(regexp = "[0-9]{1,20}", message = "Invalid request, transaction_type_id field can only contain letters, special characters are not allowed")
 	public long transaction_type_id;
+	
+	@NotNull(message = "Invalid request, vehicle_id is null/missing")
+	@Pattern(regexp = "[0-9]{1,20}", message = "Invalid request, vehicle_id field can only contain letters, special characters are not allowed")
 	public long vehicle_id;
+	
+	@NotNull(message = "Invalid request, user_id is null/missing")
+	@Pattern(regexp = "[0-9]{1,20}", message = "Invalid request, user_id field can only contain letters, special characters are not allowed")
 	public long user_id;
 
 	public long getAuto_transaction_id() {

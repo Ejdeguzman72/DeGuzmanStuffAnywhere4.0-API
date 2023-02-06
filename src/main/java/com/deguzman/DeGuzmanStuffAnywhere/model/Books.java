@@ -1,5 +1,8 @@
 package com.deguzman.DeGuzmanStuffAnywhere.model;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -11,8 +14,17 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class Books {
 
 	public int book_id;
+	
+	@NotNull(message = "Invalid request, title field is missing/null")
+	@Pattern(regexp = "[a-zA-Z,0-9]{0,50}", message = "Invalid request, title field can only contain letters, special characters are not allowed")
 	public String title;
+	
+	@NotNull(message = "Invalid request, author field is missing/null")
+	@Pattern(regexp = "[a-zA-Z]{0,50}", message = "Invalid request, author field can only contain letters, numbers, special characters are not allowed")
 	public String author;
+	
+	@NotNull(message = "Invalid request, descr field is missing/null")
+	@Pattern(regexp = "[a-zA-Z,0-9]{0,200}", message = "Bad request, descr field can only contain letters, special characters are not allowed")
 	public String descr;
 
 	public int getBook_id() {

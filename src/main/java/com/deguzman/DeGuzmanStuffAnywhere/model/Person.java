@@ -1,7 +1,11 @@
 package com.deguzman.DeGuzmanStuffAnywhere.model;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -11,17 +15,52 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public class Person {
 
 	public int personId;
+	
+	@NotNull(message = "Invalid request, firstname field is missing/null")
+	@Pattern(regexp = "[a-zA-Z]{0,50}", message = "Bad request, firstname field can only contain letters, special characters are not allowed")
 	public String firstname;
+	
+	@NotNull(message = "Invalid request, middleInitial field is missing/null")
+	@Pattern(regexp = "[a-zA-Z]{1}", message = "Bad request, middleInitial field can only contain letters, special characters are not allowed")
 	public String middleInitial;
+	
+	@NotNull(message = "Invalid request, lastname field is missing/null")
+	@Pattern(regexp = "[a-zA-Z]{0,50}", message = "Bad request, lastname field can only contain letters, special characters are not allowed")
 	public String lastname;
+	
+	@NotNull(message = "Invalid request, age field is missing/null")
+	@Pattern(regexp = "[0-9]{1,3}", message = "Bad request, age field can only contain letters, special characters are not allowed")
 	public int age;
+	
+	@NotNull(message = "Invalid request, address01 field is missing/null")
+	@Pattern(regexp = "[a-zA-Z,0-9]{0,50}", message = "Bad request, address01 field can only contain letters, special characters are not allowed")
 	public String address01;
+	
+	@NotNull(message = "Invalid request, address02 field is missing/null")
+	@Pattern(regexp = "[a-zA-Z,0-9]{0,50}", message = "Bad request, address02 field can only contain letters, special characters are not allowed")
 	public String address02;
+	
+	@NotNull(message = "Invalid request, city field is missing/null")
+	@Pattern(regexp = "[a-zA-Z]{0,50}", message = "Bad request, city field can only contain letters, special characters are not allowed")
 	public String city;
+
+	@NotNull(message = "Invalid request, state field is missing/null")
+	@Pattern(regexp = "[a-zA-Z]{0,50}", message = "Bad request, state field can only contain letters, numbers/special characters are not allowed")
 	public String state;
+	
+	@NotNull(message = "Invalid request, zipcode field is missing/null")
+	@Pattern(regexp = "[0-9]{5}", message = "Bad request, zipcode field can only contain numbers, letters,special characters are not allowed")
 	public String zipcode;
+	
+	@NotNull(message = "Invalid request, phone field is missing/null")
+	@Pattern(regexp = "[0-9]{10}", message = "Bad request, phone field can only contain numbers, letters/special characters are not allowed")
 	public String phone;
+	
+	@NotNull(message = "Invalid request, email field is missing/null")
 	public String email;
+	
+	@NotNull(message = "Invalid request, birthdate field is null/missing")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	public String birthdate;
 
 	public int getPersonId() {
