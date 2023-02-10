@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 
+import org.apache.commons.compress.utils.FileNameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.deguzman.DeGuzmanStuffAnywhere.file_upload_jpa_dao.AutoTrxUploadDao;
 import com.deguzman.DeGuzmanStuffAnywhere.file_upload_jpa_models.AutoTrxFile;
+import com.deguzman.DeGuzmanStuffAnywhere.util.AppConstants;
 
 @Service
 public class AutoTrxFileStorageService {
@@ -29,26 +31,34 @@ public class AutoTrxFileStorageService {
 	
 	public AutoTrxFile store(MultipartFile file) throws IOException {
 		String filename = StringUtils.cleanPath(file.getOriginalFilename());
-		File uploadFile = new File(filename);
-		String path = "./uploads/auto-transactions/" + uploadFile;
+		String fileExt = FileNameUtils.getExtension(filename);
+		AutoTrxFile autoTrxFile = null;
 		
-		Path targetPath = Paths.get(path);
-		
-		if (!Files.exists(targetPath)) {
-			File autoTrxUploadDir = new File("./uploads/auto-transactions");
+		if (fileExt.equals(AppConstants.JPEG) || 
+				fileExt.equals(AppConstants.JPG) ||
+				fileExt.equals(AppConstants.PDF)) {
 			
-			autoTrxUploadDir.mkdirs();
+			File uploadFile = new File(filename);
+			String path = "./uploads/auto-transactions/" + uploadFile;
+			
+			Path targetPath = Paths.get(path);
+			
+			if (!Files.exists(targetPath)) {
+				File autoTrxUploadDir = new File("./uploads/auto-transactions");
+				
+				autoTrxUploadDir.mkdirs();
+			}
+			
+			InputStream inputStreamFile = file.getInputStream();
+			
+			Files.copy(inputStreamFile, Paths.get(path), StandardCopyOption.REPLACE_EXISTING);
+			
+			autoTrxFile = new AutoTrxFile(filename, path,file.getContentType(), file.getBytes());
+			
+			LOGGER.info("Uploaded file: " + filename);
 		}
 		
-		InputStream inputStreamFile = file.getInputStream();
-		
-		Files.copy(inputStreamFile, Paths.get(path), StandardCopyOption.REPLACE_EXISTING);
-		
-		AutoTrxFile photo = new AutoTrxFile(filename, path,file.getContentType(), file.getBytes());
-		
-		LOGGER.info("Uploaded file: " + filename);
-		
-		return autoTrxDao.save(photo);
+		return autoTrxDao.save(autoTrxFile);
 	}
 	
 	public AutoTrxFile getFile(String fileId) {
