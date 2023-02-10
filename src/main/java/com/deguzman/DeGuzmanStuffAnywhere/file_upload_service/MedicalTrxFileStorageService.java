@@ -10,6 +10,7 @@ import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.util.stream.Stream;
 
+import org.apache.commons.compress.utils.FileNameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.deguzman.DeGuzmanStuffAnywhere.file_upload_jpa_dao.MedicalTrxUploadDao;
 import com.deguzman.DeGuzmanStuffAnywhere.file_upload_jpa_models.MedicalTrxFile;
+import com.deguzman.DeGuzmanStuffAnywhere.util.AppConstants;
 
 @Service
 public class MedicalTrxFileStorageService {
@@ -29,28 +31,43 @@ public class MedicalTrxFileStorageService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(MedicalTrxFileStorageService.class);
 	
 	public MedicalTrxFile store(MultipartFile file) throws IOException {
-		LocalDateTime dateTime = LocalDateTime.now();
 		String filename = StringUtils.cleanPath(file.getOriginalFilename());
-		File uploadFile = new File(filename);
-		String path = "./uploads/medical-transactions/" + uploadFile;
+		String fileExt = FileNameUtils.getExtension(filename);
+		MedicalTrxFile medicalTrxFile = new MedicalTrxFile();
 		
-		Path targetPath = Paths.get(path);
-		
-		if (Files.exists(targetPath)) {
-			File medicalTrxUploadDir = new File("/uploads/medical-transactions");
+		if (fileExt.equals(AppConstants.JPEG) || 
+				fileExt.equals(AppConstants.JPG) ||
+				fileExt.equals(AppConstants.PDF)) {
 			
-			medicalTrxUploadDir.mkdirs();
+			try {
+				File uploadFile = new File(filename);
+				
+				String path = "./uploads/medical-transactions/" + uploadFile;
+				
+				Path targetPath = Paths.get(path);
+				
+				if (Files.exists(targetPath)) {
+					File medicalTrxUploadDir = new File("/uploads/medical-transactions");
+					
+					medicalTrxUploadDir.mkdirs();
+				}
+				
+				InputStream inputStreamFile = file.getInputStream();
+				
+				Files.copy(inputStreamFile, Paths.get(path), StandardCopyOption.REPLACE_EXISTING);
+				
+				medicalTrxFile.setFilename(filename);
+				medicalTrxFile.setType(file.getContentType());
+				medicalTrxFile.setData(file.getBytes());
+				
+				LOGGER.info("Uploaded file: " + filename);
+			} catch (Exception e) {
+				LOGGER.error("Error in handling upload: " + e.toString());
+			}
+			
 		}
 		
-		InputStream inputStreamFile = file.getInputStream();
-		
-		Files.copy(inputStreamFile, Paths.get(path), StandardCopyOption.REPLACE_EXISTING);
-		
-		MedicalTrxFile photo = new MedicalTrxFile(filename, path,file.getContentType(), file.getBytes());
-		
-		LOGGER.info("Uploaded file: " + filename);
-		
-		return medicalTrxDao.save(photo);
+		return medicalTrxDao.save(medicalTrxFile);
 	}
 	
 	public MedicalTrxFile getFile(String fileId) {

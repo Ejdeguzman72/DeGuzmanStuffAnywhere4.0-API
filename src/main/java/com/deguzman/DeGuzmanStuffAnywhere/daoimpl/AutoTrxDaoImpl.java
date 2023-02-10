@@ -1,5 +1,6 @@
 package com.deguzman.DeGuzmanStuffAnywhere.daoimpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -7,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -84,52 +86,74 @@ public class AutoTrxDaoImpl implements AutoTrxDao {
 	@Override
 	@Cacheable(value = "autoTransactionList")
 	public List<AutoTrxInfoDTO> findAllAutoTransactionInformation() {
-		List<AutoTrxInfoDTO> autoTrxList = jdbcTemplate.query(GET_ALL_AUTO_TRX_INFORMATION,
-				BeanPropertyRowMapper.newInstance(AutoTrxInfoDTO.class));
-
-		LOGGER.info("Retrieving all Auto Transactions...");
+		List<AutoTrxInfoDTO> autoTrxList = new ArrayList<>();
+		try {
+			autoTrxList = jdbcTemplate.query(GET_ALL_AUTO_TRX_INFORMATION,
+					BeanPropertyRowMapper.newInstance(AutoTrxInfoDTO.class));
+			
+			LOGGER.info("Retrieving all Auto Transactions...");			
+		} catch (Exception e) {
+			LOGGER.error("Error: " + e.toString());
+		}
 
 		return autoTrxList;
 	}
 
 	@Override
 	public List<AutoTrxInfoDTO> findAutoTransactionsByVehicle(long vehicle_id) {
-		List<AutoTrxInfoDTO> autoTrxListVehicle = jdbcTemplate.query(GET_ALL_AUTO_TRX_INFO_BY_VEHICLE,
-				(rs, rowNum) -> new AutoTrxInfoDTO(rs.getLong("AUTO_TRANSACTION_ID"), rs.getDouble("AMOUNT"),
-						rs.getString("AUTO_TRANSACTION_DATE"), rs.getString("MAKE"), rs.getString("MODEL"),
-						rs.getString("YEAR"), rs.getString("AUTO_SHOP_NAME"), rs.getString("USERNAME"),
-						rs.getString("TRANSACTION_TYPE_DESCR")),
-				vehicle_id);
+		List<AutoTrxInfoDTO> autoTrxListVehicle = new ArrayList<>();
+		try {
+			autoTrxListVehicle = jdbcTemplate.query(GET_ALL_AUTO_TRX_INFO_BY_VEHICLE,
+					(rs, rowNum) -> new AutoTrxInfoDTO(rs.getLong("AUTO_TRANSACTION_ID"), rs.getDouble("AMOUNT"),
+							rs.getString("AUTO_TRANSACTION_DATE"), rs.getString("MAKE"), rs.getString("MODEL"),
+							rs.getString("YEAR"), rs.getString("AUTO_SHOP_NAME"), rs.getString("USERNAME"),
+							rs.getString("TRANSACTION_TYPE_DESCR")),
+					vehicle_id);
 
-		LOGGER.info("Retriving all Auto Transactions by vehicle_id: " + vehicle_id);
+			LOGGER.info("Retriving all Auto Transactions by vehicle_id: " + vehicle_id);
 
+		} catch (Exception e) {
+			LOGGER.error("Error: " + e.toString());
+		}
+		
 		return autoTrxListVehicle;
 	}
 
 	@Override
 	public List<AutoTrxInfoDTO> findAutoTransactionsByUser(long user_id) {
-		List<AutoTrxInfoDTO> autoTrxListUser = jdbcTemplate.query(GET_ALL_AUTO_TRX_BY_USER,
-				(rs, rowNum) -> new AutoTrxInfoDTO(rs.getLong("AUTO_TRANSACTION_ID"), rs.getDouble("AMOUNT"),
-						rs.getString("AUTO_TRANSACTION_DATE"), rs.getString("MAKE"), rs.getString("MODEL"),
-						rs.getString("YEAR"), rs.getString("AUTO_SHOP_NAME"), rs.getString("USERNAME"),
-						rs.getString("TRANSACTION_TYPE_DESCR")),
-				user_id);
+		List<AutoTrxInfoDTO> autoTrxListUser = new ArrayList<>();
+		try {
+			autoTrxListUser = jdbcTemplate.query(GET_ALL_AUTO_TRX_BY_USER,
+					(rs, rowNum) -> new AutoTrxInfoDTO(rs.getLong("AUTO_TRANSACTION_ID"), rs.getDouble("AMOUNT"),
+							rs.getString("AUTO_TRANSACTION_DATE"), rs.getString("MAKE"), rs.getString("MODEL"),
+							rs.getString("YEAR"), rs.getString("AUTO_SHOP_NAME"), rs.getString("USERNAME"),
+							rs.getString("TRANSACTION_TYPE_DESCR")),
+					user_id);
 
-		LOGGER.info("Retrieving all Auto Transactions by user_id: " + user_id);
+			LOGGER.info("Retrieving all Auto Transactions by user_id: " + user_id);
+		} catch (Exception e) {
+			LOGGER.error("Error: " + e.toString());
+		}
 
 		return autoTrxListUser;
 	}
 
 	@Override
 	public List<AutoTrxInfoDTO> findAutoTransactionsByType(long transaction_type_id) {
-		List<AutoTrxInfoDTO> autoTrxListType = jdbcTemplate.query(GET_ALL_AUTO_TRX_INFO_BY_TYPE,
-				(rs, rowNum) -> new AutoTrxInfoDTO(rs.getLong("AUTO_TRANSACTION_ID"), rs.getDouble("AMOUNT"),
-						rs.getString("AUTO_TRANSACTION_DATE"), rs.getString("MAKE"), rs.getString("MODEL"),
-						rs.getString("YEAR"), rs.getString("AUTO_SHOP_NAME"), rs.getString("USERNAME"),
-						rs.getString("TRANSACTION_TYPE_DESCR")),
-				transaction_type_id);
+		List<AutoTrxInfoDTO> autoTrxListType = new ArrayList<>();
+		try {
+			autoTrxListType = jdbcTemplate.query(GET_ALL_AUTO_TRX_INFO_BY_TYPE,
+					(rs, rowNum) -> new AutoTrxInfoDTO(rs.getLong("AUTO_TRANSACTION_ID"), rs.getDouble("AMOUNT"),
+							rs.getString("AUTO_TRANSACTION_DATE"), rs.getString("MAKE"), rs.getString("MODEL"),
+							rs.getString("YEAR"), rs.getString("AUTO_SHOP_NAME"), rs.getString("USERNAME"),
+							rs.getString("TRANSACTION_TYPE_DESCR")),
+					transaction_type_id);
 
-		LOGGER.info("Retrieving all Auto Transactions by transaction_type_id: " + transaction_type_id);
+			LOGGER.info("Retrieving all Auto Transactions by transaction_type_id: " + transaction_type_id);
+		} catch (Exception e) {
+			LOGGER.error("Error: " + e.toString());
+		}
+		
 
 		return autoTrxListType;
 	}
@@ -138,11 +162,16 @@ public class AutoTrxDaoImpl implements AutoTrxDao {
 	@Cacheable(value = "autoTrasactionById", key = "#auto_transaction_id")
 	public ResponseEntity<AutoTrxInfoDTO> findAutoTranasctionInformatioDTOnById(@PathVariable long auto_transaction_id)
 			throws InvalidTransactionException {
+		AutoTrxInfoDTO autoTrxInfo = new AutoTrxInfoDTO();
+		try {
+			autoTrxInfo = jdbcTemplate.queryForObject(GET_AUTO_TRX_DTO_INFO_BY_ID,
+					BeanPropertyRowMapper.newInstance(AutoTrxInfoDTO.class), auto_transaction_id);
 
-		AutoTrxInfoDTO autoTrxInfo = jdbcTemplate.queryForObject(GET_AUTO_TRX_DTO_INFO_BY_ID,
-				BeanPropertyRowMapper.newInstance(AutoTrxInfoDTO.class), auto_transaction_id);
-
-		LOGGER.info("Retrieving transaction based on ID: " + " " + auto_transaction_id);
+			LOGGER.info("Retrieving transaction based on ID: " + " " + auto_transaction_id);
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.error("Empty data set: " + e.toString());
+		}
+		
 
 		return ResponseEntity.ok().body(autoTrxInfo);
 	}
@@ -170,18 +199,25 @@ public class AutoTrxDaoImpl implements AutoTrxDao {
 	@CachePut(value = "autoTransactionList")
 	public int addAutoTransactionInformation(AutoTransaction autoTransaction) throws InvalidAutoShopException,
 			InvalidUserException, InvalidTransactionTypeException, InvalidVehicleException {
-		double amount = autoTransaction.getAmount();
-		String auto_transaction_date = autoTransaction.getAuto_transaction_date();
-		int autoShop = autoTransaction.getAuto_shop_id();
-		long transactionType = autoTransaction.getTransaction_type_id();
-		long vehicle = autoTransaction.getVehicle_id();
-		long user = autoTransaction.getUser_id();
+		int count = 0;
+		
+		try {
+			double amount = autoTransaction.getAmount();
+			String auto_transaction_date = autoTransaction.getAuto_transaction_date();
+			int autoShop = autoTransaction.getAuto_shop_id();
+			long transactionType = autoTransaction.getTransaction_type_id();
+			long vehicle = autoTransaction.getVehicle_id();
+			long user = autoTransaction.getUser_id();
+			
+			count = jdbcTemplate.update(ADD_AUTO_TRX_INFO,
+					new Object[] { amount, auto_transaction_date, autoShop, transactionType, vehicle, user });
 
-		LOGGER.info("Adding Auto Transaction: " + " " + amount);
-
-		return jdbcTemplate.update(ADD_AUTO_TRX_INFO,
-				new Object[] { amount, auto_transaction_date, autoShop, transactionType, vehicle, user });
-
+			LOGGER.info("Adding Auto Transaction: " + " " + amount);
+		} catch (Exception e) {
+			LOGGER.error("Error: " + e.toString());
+		}
+		
+		return count;
 	}
 
 	@Override
@@ -191,30 +227,38 @@ public class AutoTrxDaoImpl implements AutoTrxDao {
 			InvalidUserException {
 
 		int result = 0;
+		AutoTransaction transaction = new AutoTransaction();
+		try {
+			transaction = jdbcTemplate.queryForObject(GET_AUTO_TRANSACTION_INFO,
+					BeanPropertyRowMapper.newInstance(AutoTransaction.class), auto_transaction_id);			
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.error("Error: " + e.toString());
+		}
 		
-		AutoTransaction transaction = jdbcTemplate.queryForObject(GET_AUTO_TRANSACTION_INFO,
-				BeanPropertyRowMapper.newInstance(AutoTransaction.class), auto_transaction_id);
-		
-		if (transaction != null) {
-			transaction.setAmount(autoTransactionDetails.getAmount());
-			transaction.setAuto_transaction_date(autoTransactionDetails.getAuto_transaction_date());
-			transaction.setAuto_shop_id(autoTransactionDetails.getAuto_shop_id());
-			transaction.setTransaction_type_id(autoTransactionDetails.getTransaction_type_id());
-			transaction.setVehicle_id(autoTransactionDetails.getVehicle_id());
-			transaction.setUser_id(autoTransactionDetails.getUser_id());
-			transaction.setAuto_transaction_id(auto_transaction_id);
-			
-			result = jdbcTemplate.update(UPDATE_AUTO_TRANSACTION_INFORMATION, new Object[] {
-					transaction.getAmount(),
-					transaction.getAuto_transaction_date(),
-					transaction.getAuto_shop_id(),
-					transaction.getTransaction_type_id(),
-					transaction.getVehicle_id(),
-					transaction.getUser_id(),
-					transaction.getAuto_transaction_id()
-			});
-			
-			LOGGER.info("Updating Auto Tranasction Information with auto_transaction_id: " + auto_transaction_id);
+		try {
+			if (transaction != null) {
+				transaction.setAmount(autoTransactionDetails.getAmount());
+				transaction.setAuto_transaction_date(autoTransactionDetails.getAuto_transaction_date());
+				transaction.setAuto_shop_id(autoTransactionDetails.getAuto_shop_id());
+				transaction.setTransaction_type_id(autoTransactionDetails.getTransaction_type_id());
+				transaction.setVehicle_id(autoTransactionDetails.getVehicle_id());
+				transaction.setUser_id(autoTransactionDetails.getUser_id());
+				transaction.setAuto_transaction_id(auto_transaction_id);
+				
+				result = jdbcTemplate.update(UPDATE_AUTO_TRANSACTION_INFORMATION, new Object[] {
+						transaction.getAmount(),
+						transaction.getAuto_transaction_date(),
+						transaction.getAuto_shop_id(),
+						transaction.getTransaction_type_id(),
+						transaction.getVehicle_id(),
+						transaction.getUser_id(),
+						transaction.getAuto_transaction_id()
+				});
+				
+				LOGGER.info("Updating Auto Tranasction Information with auto_transaction_id: " + auto_transaction_id);
+			}
+		} catch (Exception e) {
+			LOGGER.error("Error: " + e.toString());
 		}
 		
 		return result;
@@ -223,9 +267,14 @@ public class AutoTrxDaoImpl implements AutoTrxDao {
 	@Override
 	@CachePut(value = "autoTrasactionById", key = "#auto_tranasction_id")
 	public int deleteAutoTransactionInformation(long auto_transaction_id) {
-		int count = jdbcTemplate.update(DELETE_AUTO_TRX_BY_ID, auto_transaction_id);
-
-		LOGGER.info("Deleting Auto Transaction with ID: " + auto_transaction_id);
+		int count = 0;
+		try {
+			count = jdbcTemplate.update(DELETE_AUTO_TRX_BY_ID, auto_transaction_id);
+			
+			LOGGER.info("Deleting Auto Transaction with ID: " + auto_transaction_id);			
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.error("Error: " + e.toString());
+		}
 
 		return count;
 	}

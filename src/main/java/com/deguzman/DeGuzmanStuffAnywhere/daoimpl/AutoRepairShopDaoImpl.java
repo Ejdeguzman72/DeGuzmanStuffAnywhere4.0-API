@@ -1,5 +1,6 @@
 package com.deguzman.DeGuzmanStuffAnywhere.daoimpl;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -43,43 +45,66 @@ public class AutoRepairShopDaoImpl implements AutoShopDao {
 	@Override
 	@Cacheable(value = "autoShopList")
 	public List<AutoRepairShop> findAllAutoRepairShopInfo() {
-		List<AutoRepairShop> listAutoRepairShops = jdbcTemplate.query(GET_ALL_AUTO_REPAIR_SHOPS,
-				BeanPropertyRowMapper.newInstance(AutoRepairShop.class));
+		List<AutoRepairShop> listAutoRepairShops = new ArrayList<>();
+		try {
+			listAutoRepairShops = jdbcTemplate.query(GET_ALL_AUTO_REPAIR_SHOPS,
+					BeanPropertyRowMapper.newInstance(AutoRepairShop.class));
 
-		LOGGER.info("Retrieving all auto repair shops...");
-
+			LOGGER.info("Retrieving all auto repair shops...");
+		} catch (Exception e) {
+			LOGGER.error("Error: " + e.toString());
+		}
+		
 		return listAutoRepairShops;
 	}
 
 	@Override
 	@Cacheable(value="autoShopById", key="#auto_shop_id")
 	public ResponseEntity<AutoRepairShop> findAutoRepairShopById(@PathVariable int auto_shop_id) {
-		AutoRepairShop autoShop = jdbcTemplate.queryForObject(GET_AUTO_SHOP_BY_ID,
-				BeanPropertyRowMapper.newInstance(AutoRepairShop.class), auto_shop_id);
+		AutoRepairShop autoShop = new AutoRepairShop();
+		try {
+			autoShop = jdbcTemplate.queryForObject(GET_AUTO_SHOP_BY_ID,
+					BeanPropertyRowMapper.newInstance(AutoRepairShop.class), auto_shop_id);
 
-		LOGGER.info("Retrieved Auto Repair Shop Information: " + autoShop.getAutoShopName() + "...");
+			LOGGER.info("Retrieved Auto Repair Shop Information: " + autoShop.getAutoShopName() + "...");
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.error("Error: " + e.toString());
+		}
+		
 
 		return ResponseEntity.ok().body(autoShop);
 	}
 
 	@Override
 	public ResponseEntity<AutoRepairShop> findAutoRepairShopByName(@PathVariable String autoShopName) {
-		AutoRepairShop autoShop = jdbcTemplate.queryForObject(GET_AUTO_SHOP_BY_NAME,
-				BeanPropertyRowMapper.newInstance(AutoRepairShop.class), autoShopName);
+		AutoRepairShop autoShop = new AutoRepairShop();
+		try {
+			autoShop = jdbcTemplate.queryForObject(GET_AUTO_SHOP_BY_NAME,
+					BeanPropertyRowMapper.newInstance(AutoRepairShop.class), autoShopName);
 
-		LOGGER.info("Retrieved Repair Shop Information: " + autoShop.getAutoShopName() + "...");
+			LOGGER.info("Retrieved Repair Shop Information: " + autoShop.getAutoShopName() + "...");
 
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.error("Empty data set: " + e.toString());
+		}
+		
 		return ResponseEntity.ok().body(autoShop);
 	}
 
 	@Override
 	public List<AutoRepairShop> findAutoRepairShopByZip(@PathVariable String zip) {
-		List<AutoRepairShop> autoShopList = jdbcTemplate.query(GET_AUTO_REPAIR_SHOP_BY_ZIP,
-				(rs, rowNum) -> new AutoRepairShop(rs.getInt("AUTO_SHOP_ID"), rs.getString("AUTO_SHOP_NAME"),
-						rs.getString("ADDRESS"), rs.getString("CITY"), rs.getString("STATE"), rs.getString("ZIP")),
-				zip);
+		List<AutoRepairShop> autoShopList = new ArrayList<>();
+		try {
+			autoShopList = jdbcTemplate.query(GET_AUTO_REPAIR_SHOP_BY_ZIP,
+					(rs, rowNum) -> new AutoRepairShop(rs.getInt("AUTO_SHOP_ID"), rs.getString("AUTO_SHOP_NAME"),
+							rs.getString("ADDRESS"), rs.getString("CITY"), rs.getString("STATE"), rs.getString("ZIP")),
+					zip);
 
-		LOGGER.info("Retrieving Auto Shops By ZipCocde " + zip + "...");
+			LOGGER.info("Retrieving Auto Shops By ZipCocde " + zip + "...");
+		} catch (Exception e) {
+			LOGGER.error("Error: " + e.toString());
+		}
+		
 
 		return autoShopList;
 	}
@@ -96,26 +121,31 @@ public class AutoRepairShopDaoImpl implements AutoShopDao {
 	@Override
 	@CachePut(value = "autoShopList")
 	public int addAutoRepairShopInfo(AutoRepairShop autoShop) throws DuplicateAutoShopException {
-		
-		String autoShopName = autoShop.getAutoShopName();		
-		String address = autoShop.getAddress();
-		String city = autoShop.getCity();
-		String state = autoShop.getState();
-		String zip = autoShop.getZip();
-		
-		int count = jdbcTemplate.update(ADD_AUTO_SHOP_INFORMATION, new Object[] {
-				autoShopName,
-				address,
-				city,
-				state,
-				zip
-		});
-		
-		if (checkAutoShops(autoShop)) {
-			throw new DuplicateAutoShopException("Duplicate Auto Repair Shop");
-		}
+		int count = 0;
+		try {
+			String autoShopName = autoShop.getAutoShopName();		
+			String address = autoShop.getAddress();
+			String city = autoShop.getCity();
+			String state = autoShop.getState();
+			String zip = autoShop.getZip();
+			
+			count = jdbcTemplate.update(ADD_AUTO_SHOP_INFORMATION, new Object[] {
+					autoShopName,
+					address,
+					city,
+					state,
+					zip
+			});
+			
+			if (checkAutoShops(autoShop)) {
+				throw new DuplicateAutoShopException("Duplicate Auto Repair Shop");
+			}
 
-		LOGGER.info("Inserted Auto Repair Shop Information: " + autoShop.getAutoShopName() + "...");
+			LOGGER.info("Inserted Auto Repair Shop Information: " + autoShop.getAutoShopName() + "...");
+		} catch (Exception e) {
+			LOGGER.error("Error: " + e.toString());
+		}
+		 
 
 		return count;
 
@@ -127,28 +157,37 @@ public class AutoRepairShopDaoImpl implements AutoShopDao {
 		
 		int result = 0;
 		
-		AutoRepairShop autoShop = jdbcTemplate.queryForObject(GET_AUTO_SHOP_BY_ID,
-				BeanPropertyRowMapper.newInstance(AutoRepairShop.class), auto_shop_id);
-		 
-		if (autoShop != null) {
-			autoShop.setAutoShopName(shopDetails.getAutoShopName());
-			autoShop.setAddress(shopDetails.getAddress());
-			autoShop.setCity(shopDetails.getCity());
-			autoShop.setState(shopDetails.getState());
-			autoShop.setZip(shopDetails.getZip());
-			autoShop.setAuto_shop_id(shopDetails.getAuto_shop_id());
-			
-			
-			result = jdbcTemplate.update(UPDATE_AUTO_SHOP_INFORMATION, new Object[] {
-				autoShop.getAutoShopName(),
-				autoShop.getAddress(),
-				autoShop.getCity(),
-				autoShop.getState(),
-				autoShop.getZip(),
-				autoShop.getAuto_shop_id()
-			});
-			
-			LOGGER.info("Updating Auto Repair Shop with auto_shop_id: " + auto_shop_id);
+		AutoRepairShop autoShop = new AutoRepairShop();
+		try {
+			autoShop = jdbcTemplate.queryForObject(GET_AUTO_SHOP_BY_ID,
+					BeanPropertyRowMapper.newInstance(AutoRepairShop.class), auto_shop_id);
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.error("Empty data set: " + e.toString());
+		}
+		
+		try {
+			if (autoShop != null) {
+				autoShop.setAutoShopName(shopDetails.getAutoShopName());
+				autoShop.setAddress(shopDetails.getAddress());
+				autoShop.setCity(shopDetails.getCity());
+				autoShop.setState(shopDetails.getState());
+				autoShop.setZip(shopDetails.getZip());
+				autoShop.setAuto_shop_id(shopDetails.getAuto_shop_id());
+				
+				
+				result = jdbcTemplate.update(UPDATE_AUTO_SHOP_INFORMATION, new Object[] {
+					autoShop.getAutoShopName(),
+					autoShop.getAddress(),
+					autoShop.getCity(),
+					autoShop.getState(),
+					autoShop.getZip(),
+					autoShop.getAuto_shop_id()
+				});
+				
+				LOGGER.info("Updating Auto Repair Shop with auto_shop_id: " + auto_shop_id);
+			}
+		} catch (Exception e) {
+			LOGGER.error("Error: " + e.toString());
 		}
 		
 		return result;
@@ -157,9 +196,15 @@ public class AutoRepairShopDaoImpl implements AutoShopDao {
 	@Override
 	@CachePut(value = "autoShopById", key = "#auto_shop_id")
 	public int deleteAutoRepairShopInfo(@PathVariable int auto_shop_id) {
-		int count = jdbcTemplate.update(DELETE_AUTO_SHOP_INFORMATION_BY_ID, auto_shop_id);
-
-		LOGGER.info("Deleting Auto Repair Shop with ID: " + " " + auto_shop_id + "...");
+		int count = 0;
+		
+		try {
+			count = jdbcTemplate.update(DELETE_AUTO_SHOP_INFORMATION_BY_ID, auto_shop_id);
+			
+			LOGGER.info("Deleting Auto Repair Shop with ID: " + " " + auto_shop_id + "...");			
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.error("Empty data set: " + e.toString());
+		}
 
 		return count;
 	}

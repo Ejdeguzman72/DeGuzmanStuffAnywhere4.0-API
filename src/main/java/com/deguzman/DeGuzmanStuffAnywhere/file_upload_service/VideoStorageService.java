@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 
+import org.apache.commons.compress.utils.FileNameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.deguzman.DeGuzmanStuffAnywhere.file_upload_jpa_dao.VideoUploadDao;
 import com.deguzman.DeGuzmanStuffAnywhere.file_upload_jpa_models.Video;
+import com.deguzman.DeGuzmanStuffAnywhere.util.AppConstants;
 
 @Service
 public class VideoStorageService {
@@ -29,26 +31,39 @@ public class VideoStorageService {
 
 	public Video store(MultipartFile file) throws IOException {
 		String filename = StringUtils.cleanPath(file.getOriginalFilename());
-		File uploadFile = new File(filename);
-		String path = "./uploads/videos/" + uploadFile;
+		String fileExt = FileNameUtils.getExtension(filename);
+		Video video = new Video();
+		
+		if (fileExt.equals(AppConstants.JPEG) || 
+				fileExt.equals(AppConstants.JPG) ||
+				fileExt.equals(AppConstants.PDF)) {
+			try {
+				File uploadFile = new File(filename);
+				String path = "./uploads/videos/" + uploadFile;
 
-		Path targetPath = Paths.get(path);
+				Path targetPath = Paths.get(path);
 
-		if (Files.exists(targetPath)) {
-			File generalTrxUploadDir = new File("./uploads/videos");
+				if (Files.exists(targetPath)) {
+					File generalTrxUploadDir = new File("./uploads/videos");
 
-			generalTrxUploadDir.mkdirs();
+					generalTrxUploadDir.mkdirs();
+				}
+
+				InputStream inputStreamFile = file.getInputStream();
+
+				Files.copy(inputStreamFile, Paths.get(path), StandardCopyOption.REPLACE_EXISTING);
+
+				video.setFilename(filename);
+				video.setType(file.getContentType());
+				video.setData(file.getBytes());
+
+				LOGGER.info("Uploaded file: " + filename);
+			} catch (Exception e) {
+				LOGGER.error("Error handling upload: " + e.toString());
+			}
 		}
-
-		InputStream inputStreamFile = file.getInputStream();
-
-		Files.copy(inputStreamFile, Paths.get(path), StandardCopyOption.REPLACE_EXISTING);
-
-		Video photo = new Video(filename, path, file.getContentType(), file.getBytes());
-
-		LOGGER.info("Uploaded file: " + filename);
-
-		return videoDao.save(photo);
+		
+		return videoDao.save(video);
 	}
 
 	public Video getVideo(String videoId) {

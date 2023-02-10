@@ -32,30 +32,37 @@ public class AutoTrxFileStorageService {
 	public AutoTrxFile store(MultipartFile file) throws IOException {
 		String filename = StringUtils.cleanPath(file.getOriginalFilename());
 		String fileExt = FileNameUtils.getExtension(filename);
-		AutoTrxFile autoTrxFile = null;
+		AutoTrxFile autoTrxFile = new AutoTrxFile();
 		
 		if (fileExt.equals(AppConstants.JPEG) || 
 				fileExt.equals(AppConstants.JPG) ||
 				fileExt.equals(AppConstants.PDF)) {
-			
-			File uploadFile = new File(filename);
-			String path = "./uploads/auto-transactions/" + uploadFile;
-			
-			Path targetPath = Paths.get(path);
-			
-			if (!Files.exists(targetPath)) {
-				File autoTrxUploadDir = new File("./uploads/auto-transactions");
+			try {
+				File uploadFile = new File(filename);
+				String path = "./uploads/auto-transactions/" + uploadFile;
 				
-				autoTrxUploadDir.mkdirs();
+				Path targetPath = Paths.get(path);
+				
+				if (!Files.exists(targetPath)) {
+					File autoTrxUploadDir = new File("./uploads/auto-transactions");
+					
+					autoTrxUploadDir.mkdirs();
+				}
+				
+				InputStream inputStreamFile = file.getInputStream();
+				
+				Files.copy(inputStreamFile, Paths.get(path), StandardCopyOption.REPLACE_EXISTING);
+				
+				
+				autoTrxFile.setFilename(filename);
+				autoTrxFile.setType(file.getContentType());
+				autoTrxFile.setData(file.getBytes());
+				
+				LOGGER.info("Uploaded file: " + filename);
+			} catch (Exception e) {
+				LOGGER.error("Erorr in handling upload: " + e.toString());
 			}
 			
-			InputStream inputStreamFile = file.getInputStream();
-			
-			Files.copy(inputStreamFile, Paths.get(path), StandardCopyOption.REPLACE_EXISTING);
-			
-			autoTrxFile = new AutoTrxFile(filename, path,file.getContentType(), file.getBytes());
-			
-			LOGGER.info("Uploaded file: " + filename);
 		}
 		
 		return autoTrxDao.save(autoTrxFile);

@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 
+import org.apache.commons.compress.utils.FileNameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.deguzman.DeGuzmanStuffAnywhere.file_upload_jpa_dao.GeneralTrxUploadDao;
 import com.deguzman.DeGuzmanStuffAnywhere.file_upload_jpa_models.GeneralTrxFile;
+import com.deguzman.DeGuzmanStuffAnywhere.util.AppConstants;
 
 @Service
 public class GeneralTrxFileStorageService {
@@ -29,26 +31,40 @@ public class GeneralTrxFileStorageService {
 	
 	public GeneralTrxFile store(MultipartFile file) throws IOException {
 		String filename = StringUtils.cleanPath(file.getOriginalFilename());
-		File uploadFile = new File(filename);
-		String path = "./uploads/general-transactions/" + uploadFile;
+		String fileExt = FileNameUtils.getExtension(filename);
+		GeneralTrxFile generalFile = new GeneralTrxFile();
 		
-		Path targetPath = Paths.get(path);
-		
-		if (Files.exists(targetPath)) {
-			File generalTrxUploadDir = new File("./uploads/general-transactions");
+		if (fileExt.equals(AppConstants.JPEG) || 
+				fileExt.equals(AppConstants.JPG) ||
+				fileExt.equals(AppConstants.PDF)) {
 			
-			generalTrxUploadDir.mkdirs();
+			try {
+				File uploadFile = new File(filename);
+				String path = "./uploads/general-transactions/" + uploadFile;
+				
+				Path targetPath = Paths.get(path);
+				
+				if (Files.exists(targetPath)) {
+					File generalTrxUploadDir = new File("./uploads/general-transactions");
+					
+					generalTrxUploadDir.mkdirs();
+				}
+				
+				InputStream inputStreamFile = file.getInputStream();
+				
+				Files.copy(inputStreamFile, Paths.get(path), StandardCopyOption.REPLACE_EXISTING);
+				
+				generalFile.setFilename(filename);
+				generalFile.setType(file.getContentType());
+				generalFile.setData(file.getBytes());
+				
+				LOGGER.info("Uploaded file: " + filename);
+			} catch (Exception e) {
+				LOGGER.error("Error in handling upload: " + e.toString());
+			}
 		}
 		
-		InputStream inputStreamFile = file.getInputStream();
-		
-		Files.copy(inputStreamFile, Paths.get(path), StandardCopyOption.REPLACE_EXISTING);
-		
-		GeneralTrxFile photo = new GeneralTrxFile(filename, path,file.getContentType(), file.getBytes());
-		
-		LOGGER.info("Uploaded file: " + filename);
-		
-		return generalTrxDao.save(photo);
+		return generalTrxDao.save(generalFile);
 	}
 	
 	public GeneralTrxFile getFile(String fileId) {
