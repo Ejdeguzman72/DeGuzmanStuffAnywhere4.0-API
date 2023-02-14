@@ -1,5 +1,6 @@
 package com.deguzman.DeGuzmanStuffAnywhere.daoimpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -7,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -57,22 +60,34 @@ public class UtilityDaoImpl implements UtilityDao {
 	@Override
 	@Cacheable(value = "utilityList")
 	public List<UtilityInfoDTO> findAllUtilityInformation() {
-		List<UtilityInfoDTO> list = jdbcTemplate.query(GET_ALL_UTILITY_INFORMATION,
-				BeanPropertyRowMapper.newInstance(UtilityInfoDTO.class));
+		List<UtilityInfoDTO> list = new ArrayList<>();
+		try {
+			list = jdbcTemplate.query(GET_ALL_UTILITY_INFORMATION,
+					BeanPropertyRowMapper.newInstance(UtilityInfoDTO.class));
 
-		LOGGER.info("Retrieving all utility information...");
+			LOGGER.info("Retrieving all utility information...");
+		} catch (Exception e) {
+			LOGGER.error("Exception: " + e.toString());
+			e.printStackTrace();
+		}
 
 		return list;
 	}
 
 	@Override
 	public List<UtilityInfoDTO> findUtilityInformationByDueDate(String dueDate) {
-		List<UtilityInfoDTO> utilityList = jdbcTemplate.query(GET_UTILITY_INFORMATION_BY_DUE_DATE,
-				(rs, rowNum) -> new UtilityInfoDTO(rs.getInt("UTILITY_ID"), rs.getString("NAME"), rs.getString("PHONE"),
-						rs.getString("URL"), rs.getString("DUE_DATE"), rs.getString("UTILITY_TYPE_DESCR")),
-				dueDate);
+		List<UtilityInfoDTO> utilityList = new ArrayList<>();
+		try {
+			utilityList = jdbcTemplate.query(GET_UTILITY_INFORMATION_BY_DUE_DATE,
+					(rs, rowNum) -> new UtilityInfoDTO(rs.getInt("UTILITY_ID"), rs.getString("NAME"), rs.getString("PHONE"),
+							rs.getString("URL"), rs.getString("DUE_DATE"), rs.getString("UTILITY_TYPE_DESCR")),
+					dueDate);
 
-		LOGGER.info("Retrieving utilties by Due Date: " + dueDate);
+			LOGGER.info("Retrieving utilties by Due Date: " + dueDate);
+		} catch (Exception e) {
+			LOGGER.error("Exception: " + e.toString());
+			e.printStackTrace();
+		}
 
 		return utilityList;
 	}
@@ -80,31 +95,49 @@ public class UtilityDaoImpl implements UtilityDao {
 	@Override
 	@Cacheable(value = "utilityById", key = "#utility_id")
 	public ResponseEntity<UtilityInfoDTO> findUtilityInformationById(long utility_id) {
-		UtilityInfoDTO utilityInfo = jdbcTemplate.queryForObject(GET_UTILITY_INFORMATION_BY_ID,
-				BeanPropertyRowMapper.newInstance(UtilityInfoDTO.class), utility_id);
+		UtilityInfoDTO utilityInfo = null;
+		try {
+			utilityInfo = jdbcTemplate.queryForObject(GET_UTILITY_INFORMATION_BY_ID,
+					BeanPropertyRowMapper.newInstance(UtilityInfoDTO.class), utility_id);
 
-		LOGGER.info("Retrieved Utility Information with ID: " + " " + utility_id + " " + utilityInfo.getName());
+			LOGGER.info("Retrieved Utility Information with ID: " + " " + utility_id + " " + utilityInfo.getName());
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.error("Exception: " + e.toString());
+			e.printStackTrace();
+		}
 
 		return ResponseEntity.ok().body(utilityInfo);
 	}
 
 	@Override
 	public ResponseEntity<UtilityInfoDTO> findUtilityInformationByName(String name) {
-		UtilityInfoDTO utilityInfo = jdbcTemplate.queryForObject(GET_UTILITY_INFORMATION_BY_NAME,
-				BeanPropertyRowMapper.newInstance(UtilityInfoDTO.class), name);
+		UtilityInfoDTO utilityInfo = null;
+		try {
+			utilityInfo = jdbcTemplate.queryForObject(GET_UTILITY_INFORMATION_BY_NAME,
+					BeanPropertyRowMapper.newInstance(UtilityInfoDTO.class), name);
 
-		LOGGER.info("Retrieved Utility Information by name: " + utilityInfo.getName());
+			LOGGER.info("Retrieved Utility Information by name: " + utilityInfo.getName());
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.error("Exception: " + e.toString());
+			e.printStackTrace();
+		}
 
 		return ResponseEntity.ok().body(utilityInfo);
 	}
 
 	@Override
 	public ResponseEntity<UtilityInfoDTO> findUtilityInformationByType(int utility_type_id) {
-		UtilityInfoDTO utilityInfo = jdbcTemplate.queryForObject(GET_UTILITY_INFORMATION_BY_TYPE,
-				BeanPropertyRowMapper.newInstance(UtilityInfoDTO.class), GET_UTILITY_INFORMATION_BY_TYPE);
+		UtilityInfoDTO utilityInfo = null;
+		try {
+			utilityInfo = jdbcTemplate.queryForObject(GET_UTILITY_INFORMATION_BY_TYPE,
+					BeanPropertyRowMapper.newInstance(UtilityInfoDTO.class), GET_UTILITY_INFORMATION_BY_TYPE);
 
-		LOGGER.info("Retrieved Utility Information By Utility Type ID: " + " " + utility_type_id + " "
-				+ utilityInfo.getName());
+			LOGGER.info("Retrieved Utility Information By Utility Type ID: " + " " + utility_type_id + " "
+					+ utilityInfo.getName());
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.error("Exception: " + e.toString());
+			e.printStackTrace();
+		}
 
 		return ResponseEntity.ok().body(utilityInfo);
 	}
@@ -120,18 +153,25 @@ public class UtilityDaoImpl implements UtilityDao {
 
 	@Override
 	@CachePut(value = "utilityList")
-	public int addUtilityInformation(@RequestBody Utility utility) {
+	public int addUtilityInformation(Utility utility) {
+		int result = 0;
+		try {
+			int utility_type_id = utility.getUtility_type_id();
+			String name = utility.getName();
+			String phone = utility.getPhone();
+			String url = utility.getUrl();
+			String dueDate = utility.getDueDate();
 
-		int utility_type_id = utility.getUtility_type_id();
-		String name = utility.getName();
-		String phone = utility.getPhone();
-		String url = utility.getUrl();
-		String dueDate = utility.getDueDate();
+			LOGGER.info("Adding Utility Information: " + name + " " + url);
 
-		LOGGER.info("Adding Utility Information: " + name + " " + url);
-
-		return jdbcTemplate.update(ADD_UTILITY_INFORMATION,
-				new Object[] { utility_type_id, name, phone, url, dueDate });
+			result = jdbcTemplate.update(ADD_UTILITY_INFORMATION,
+					new Object[] { utility_type_id, name, phone, url, dueDate });
+		} catch (Exception e) {
+			LOGGER.error("Exception: " + e.toString());
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
 
 	@Override
@@ -144,9 +184,15 @@ public class UtilityDaoImpl implements UtilityDao {
 	@Override
 	@CachePut(value = "utilityById", key = "#utility_id")
 	public int deleteUtilityInformation(long utility_id) {
-		int count = jdbcTemplate.update(DELETE_UTILITY_INFORMATION_BY_ID, utility_id);
+		int count = 0;
+		try {
+			count = jdbcTemplate.update(DELETE_UTILITY_INFORMATION_BY_ID, utility_id);
 
-		LOGGER.info("Deleting Utility Information by ID: " + utility_id);
+			LOGGER.info("Deleting Utility Information by ID: " + utility_id);
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.error("Exception: " + e.toString());
+			e.printStackTrace();
+		}
 
 		return count;
 	}
@@ -154,9 +200,15 @@ public class UtilityDaoImpl implements UtilityDao {
 	@Override
 	@CachePut(value = "utilityList")
 	public int deleteAllUtilityInformation() {
-		int count = jdbcTemplate.update(DELETE_ALL_UTILITY_INFORMATION);
+		int count = 0;
+		try {
+			count = jdbcTemplate.update(DELETE_ALL_UTILITY_INFORMATION);
 
-		LOGGER.info("Deleting All Utilities...");
+			LOGGER.info("Deleting All Utilities...");
+		} catch (Exception e) {
+			LOGGER.error("Exception: " + e.toString());
+			e.printStackTrace();
+		}
 
 		return count;
 	}

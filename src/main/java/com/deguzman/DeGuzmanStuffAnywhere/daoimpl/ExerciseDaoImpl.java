@@ -3,6 +3,7 @@ package com.deguzman.DeGuzmanStuffAnywhere.daoimpl;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -10,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -59,57 +61,86 @@ public class ExerciseDaoImpl implements ExerciseDao {
 	@Override
 	@Cacheable(value = "exerciseList")
 	public List<ExerciseInfoDTO> findAllExerciseInformation() {
-		List<ExerciseInfoDTO> list = jdbcTemplate.query(GET_ALL_EXERCISE_INFORMATION,
-				BeanPropertyRowMapper.newInstance(ExerciseInfoDTO.class));
-
-		LOGGER.info("Retrieving All Exercise Information...");
+		List<ExerciseInfoDTO> list = new ArrayList<>();
+		try {
+			list = jdbcTemplate.query(GET_ALL_EXERCISE_INFORMATION,
+					BeanPropertyRowMapper.newInstance(ExerciseInfoDTO.class));
+			
+			LOGGER.info("Retrieving All Exercise Information...");			
+		} catch (Exception e) {
+			LOGGER.error("Exception: " + e.toString());
+		}
 
 		return list;
 	}
 
 	@Override
-	public List<ExerciseInfoDTO> findExerciseInformationByUser(@PathVariable long user_id) {
-		List<ExerciseInfoDTO> exerciseListUser = jdbcTemplate.query(GET_EXERCISE_INFORMATION_BY_USER,
-				(rs, rowNum) -> new ExerciseInfoDTO(rs.getInt("EXERCISE_ID"), rs.getString("EXERCISE_NAME"),
-						rs.getInt("SETS"), rs.getInt("REPS"), rs.getDouble("WEIGHT"), rs.getString("DATE"),
-						rs.getString("EXERCISE_TYPE_NAME"), rs.getString("USERNAME")),
-				user_id);
-
-		LOGGER.info("Retrieved Exercise Information by User ID: " + " " + user_id);
+	public List<ExerciseInfoDTO> findExerciseInformationByUser(long user_id) {
+		List<ExerciseInfoDTO> exerciseListUser = new ArrayList<>();
+		
+		try {
+			exerciseListUser = jdbcTemplate.query(GET_EXERCISE_INFORMATION_BY_USER,
+					(rs, rowNum) -> new ExerciseInfoDTO(rs.getInt("EXERCISE_ID"), rs.getString("EXERCISE_NAME"),
+							rs.getInt("SETS"), rs.getInt("REPS"), rs.getDouble("WEIGHT"), rs.getString("DATE"),
+							rs.getString("EXERCISE_TYPE_NAME"), rs.getString("USERNAME")),
+					user_id);
+			
+			LOGGER.info("Retrieved Exercise Information by User ID: " + " " + user_id);			
+		} catch (Exception e) {
+			LOGGER.error("Exception: " + e.toString());
+		}
 
 		return exerciseListUser;
 	}
 
 	@Override
 	public List<ExerciseInfoDTO> findExerciseInformationByType(int exercise_type_id) {
-		List<ExerciseInfoDTO> exerciseListType = jdbcTemplate.query(GET_EXERCISE_INFORMATION_BY_USER,
-				(rs, rowNum) -> new ExerciseInfoDTO(rs.getInt("EXERCISE_ID"), rs.getString("EXERCISE_NAME"),
-						rs.getInt("SETS"), rs.getInt("REPS"), rs.getDouble("WEIGHT"), rs.getString("DATE"),
-						rs.getString("EXERCISE_TYPE_NAME"), rs.getString("USERNAME")),
-				exercise_type_id);
+		List<ExerciseInfoDTO> exerciseListType = new ArrayList<>();
+		
+		try {
+			exerciseListType = jdbcTemplate.query(GET_EXERCISE_INFORMATION_BY_USER,
+					(rs, rowNum) -> new ExerciseInfoDTO(rs.getInt("EXERCISE_ID"), rs.getString("EXERCISE_NAME"),
+							rs.getInt("SETS"), rs.getInt("REPS"), rs.getDouble("WEIGHT"), rs.getString("DATE"),
+							rs.getString("EXERCISE_TYPE_NAME"), rs.getString("USERNAME")),
+					exercise_type_id);
 
-		LOGGER.info("Retrieved Exercise Information by Exercise Type ID: " + " " + exercise_type_id);
-
+			LOGGER.info("Retrieved Exercise Information by Exercise Type ID: " + " " + exercise_type_id);
+		} catch (Exception e) {
+			LOGGER.error("Exception: " + e.toString());
+		}
+		
 		return exerciseListType;
 	}
 
 	@Override
 	@Cacheable(value = "exerciseById", key = "#exercise_id")
-	public ResponseEntity<Exercise> findExerciseById(@PathVariable int exercise_id) {
-		Exercise exerciseInfo = jdbcTemplate.queryForObject(GET_EXERCISE_INFO,
-				BeanPropertyRowMapper.newInstance(Exercise.class), exercise_id);
-
-		LOGGER.info("Retrieved Exercise information by exercise_id: " + " " + exercise_id);
+	public ResponseEntity<Exercise> findExerciseById(int exercise_id) {
+		Exercise exerciseInfo = new Exercise();
+		
+		try {
+			exerciseInfo = jdbcTemplate.queryForObject(GET_EXERCISE_INFO,
+					BeanPropertyRowMapper.newInstance(Exercise.class), exercise_id);
+			
+			LOGGER.info("Retrieved Exercise information by exercise_id: " + " " + exercise_id);			
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.error("Empty data set: " + e.toString());
+		}
 
 		return ResponseEntity.ok().body(exerciseInfo);
 	}
 	
 	@Override
-	public ResponseEntity<ExerciseInfoDTO> findExerciseDTOById(@PathVariable int exercise_id) {
-		ExerciseInfoDTO exerciseInfo = jdbcTemplate.queryForObject(GET_EXERCISE_INFORMATION_BY_ID,
-				BeanPropertyRowMapper.newInstance(ExerciseInfoDTO.class), exercise_id);
-
-		LOGGER.info("Retrieved Exercise information by exercise_id: " + " " + exercise_id);
+	public ResponseEntity<ExerciseInfoDTO> findExerciseDTOById(int exercise_id) {
+		ExerciseInfoDTO exerciseInfo = new ExerciseInfoDTO();
+		
+		try {
+			exerciseInfo = jdbcTemplate.queryForObject(GET_EXERCISE_INFORMATION_BY_ID,
+					BeanPropertyRowMapper.newInstance(ExerciseInfoDTO.class), exercise_id);
+			
+			LOGGER.info("Retrieved Exercise information by exercise_id: " + " " + exercise_id);			
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.error("Empty data set: " + e.toString());
+		}
 
 		return ResponseEntity.ok().body(exerciseInfo);
 	}
@@ -118,52 +149,68 @@ public class ExerciseDaoImpl implements ExerciseDao {
 	@CachePut(value = "exerciseList")
 	public int addExerciseInformation(Exercise exercise) {
 
-		String exerciseName = exercise.getExerciseName();
-		int sets = exercise.getSets();
-		int reps = exercise.getReps();
-		double weight = exercise.getWeight();
-		String date = exercise.getDate();
-		int exercise_type = exercise.getExercise_type_id();
-		long user = exercise.getUser_id();
+		int result = 0;
+		
+		try {
+			String exerciseName = exercise.getExerciseName();
+			int sets = exercise.getSets();
+			int reps = exercise.getReps();
+			double weight = exercise.getWeight();
+			String date = exercise.getDate();
+			int exercise_type = exercise.getExercise_type_id();
+			long user = exercise.getUser_id();
 
-		LOGGER.info("Adding Exercise Entry for user with ID: " + user);
+			LOGGER.info("Adding Exercise Entry for user with ID: " + user);
 
-		return jdbcTemplate.update(ADD_EXERCISE_INFORMATION,
-				new Object[] { date, exerciseName, reps, sets, weight, exercise_type, user });
-
+			result = jdbcTemplate.update(ADD_EXERCISE_INFORMATION,
+					new Object[] { date, exerciseName, reps, sets, weight, exercise_type, user });
+		} catch (Exception e) {
+			LOGGER.error("Exception: " + e.toString());
+		}
+		
+		return result;
 	}
 
 	@Override
 	@CachePut(value = "exerciseById", key = "#exercise_id")
-	public int updateExerciseInformation(@PathVariable int exercise_id, @RequestBody Exercise exerciseDetails) {
+	public int updateExerciseInformation(int exercise_id, Exercise exerciseDetails) {
 
 		int result = 0;
+		Exercise exercise = new Exercise();
 		
-		Exercise exercise = jdbcTemplate.queryForObject(GET_EXERCISE_INFO,
-				BeanPropertyRowMapper.newInstance(Exercise.class), exercise_id);
+		try {
+			exercise = jdbcTemplate.queryForObject(GET_EXERCISE_INFO,
+					BeanPropertyRowMapper.newInstance(Exercise.class), exercise_id);
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.error("Empty data set: " + e.toString());
+		}
 		
-		if (exercise != null) {
-			exercise.setExerciseName(exerciseDetails.getExerciseName());
-			exercise.setSets(exerciseDetails.getSets());
-			exercise.setReps(exerciseDetails.getReps());
-			exercise.setWeight(exerciseDetails.getWeight());
-			exercise.setDate(exerciseDetails.getDate());
-			exercise.setExercise_type_id(exerciseDetails.getExercise_type_id());
-			exercise.setUser_id(exerciseDetails.getUser_id());
-			exercise.setExercise_id(exercise_id);
-			
-			result = jdbcTemplate.update(UPDATE_EXERCISE_INFORMATION, new Object[] {
-				exercise.getExerciseName(),
-				exercise.getSets(),
-				exercise.getReps(),
-				exercise.getWeight(),
-				exercise.getDate(),
-				exercise.getExercise_type_id(),
-				exercise.getUser_id(),
-				exercise.getExercise_id()
-			});
-			
-			LOGGER.info("Updating exercise information with exericse_id: " + exercise_id);
+		try {
+			if (exercise != null) {
+				exercise.setExerciseName(exerciseDetails.getExerciseName());
+				exercise.setSets(exerciseDetails.getSets());
+				exercise.setReps(exerciseDetails.getReps());
+				exercise.setWeight(exerciseDetails.getWeight());
+				exercise.setDate(exerciseDetails.getDate());
+				exercise.setExercise_type_id(exerciseDetails.getExercise_type_id());
+				exercise.setUser_id(exerciseDetails.getUser_id());
+				exercise.setExercise_id(exercise_id);
+				
+				result = jdbcTemplate.update(UPDATE_EXERCISE_INFORMATION, new Object[] {
+					exercise.getExerciseName(),
+					exercise.getSets(),
+					exercise.getReps(),
+					exercise.getWeight(),
+					exercise.getDate(),
+					exercise.getExercise_type_id(),
+					exercise.getUser_id(),
+					exercise.getExercise_id()
+				});
+				
+				LOGGER.info("Updating exercise information with exericse_id: " + exercise_id);
+			}
+		} catch (Exception e) {
+			LOGGER.error("Exception: " + e.toString());
 		}
 		
 		return result;
@@ -172,9 +219,15 @@ public class ExerciseDaoImpl implements ExerciseDao {
 	@Override
 	@CachePut(value = "exerciseById", key = "#exercise_id")
 	public int deleteExerciseInformationById(int exercise_id) {
-		int count = jdbcTemplate.update(DELETE_EXERCISE_INFORMATION_BY_ID, exercise_id);
-
-		LOGGER.info("Deleting Exercise Information by exercise_id: " + exercise_id);
+		int count = 0;
+		
+		try {
+			count = jdbcTemplate.update(DELETE_EXERCISE_INFORMATION_BY_ID, exercise_id);
+			
+			LOGGER.info("Deleting Exercise Information by exercise_id: " + exercise_id);			
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.error("Exception: " + e.toString());
+		}
 
 		return count;
 	}
@@ -182,9 +235,15 @@ public class ExerciseDaoImpl implements ExerciseDao {
 	@Override
 	@CachePut(value = "exerciseList")
 	public int deleteAllExercisInformation() {
-		int count = jdbcTemplate.update(DELETE_ALL_EXERCISE_INFORMATION);
-
-		LOGGER.info("Deleting All Exercise Information...");
+		int count = 0;
+		
+		try {
+			count = jdbcTemplate.update(DELETE_ALL_EXERCISE_INFORMATION);
+			
+			LOGGER.info("Deleting All Exercise Information...");
+		} catch (Exception e) {
+			LOGGER.error("Exception: " + e.toString());
+		}
 
 		return count;
 	}

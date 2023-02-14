@@ -13,19 +13,19 @@ public interface RunTrackerDao {
 
 	public List<RunTrackerInfoDTO> findAllRunTrackerInformation();
 
-	public List<RunTrackerInfoDTO> findRunTrackerInformationByUser(@PathVariable long user_id);
+	public List<RunTrackerInfoDTO> findRunTrackerInformationByUser(long user_id);
 
-	public ResponseEntity<RunTrackerInfoDTO> findRunTrackerInformationDTOById(@PathVariable long run_id);
+	public ResponseEntity<RunTrackerInfoDTO> findRunTrackerInformationDTOById(long run_id);
 	
-	public ResponseEntity<RunTracker> findRunTrackerById(@PathVariable long run_id);
+	public ResponseEntity<RunTracker> findRunTrackerById(long run_id);
 
 	public long findCountOfRunTrackerInformation();
 
-	public int addRunTrackerInformation(@RequestBody RunTracker runTracker);
+	public int addRunTrackerInformation(RunTracker runTracker);
 
-	public int updateRunTrackerInformation(@PathVariable long run_id, @RequestBody RunTracker runTrackerDetails);
+	public int updateRunTrackerInformation(long run_id, RunTracker runTrackerDetails);
 
-	public int deleteRunTrackerInformation(@PathVariable long run_id);
+	public int deleteRunTrackerInformation(long run_id);
 
 	public int deleteAllRunTrackerInformation();
 

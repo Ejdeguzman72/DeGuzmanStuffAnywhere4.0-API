@@ -14,19 +14,19 @@ public interface SongDao {
 
 	public List<Song> findAllSongInformation();
 
-	public List<Song> findSongByArtist(@PathVariable String artist);
+	public List<Song> findSongByArtist(String artist);
 
-	public List<Song> findSongsByGenre(@PathVariable String genre);
+	public List<Song> findSongsByGenre(String genre);
 
-	public ResponseEntity<Song> findSongById(@PathVariable int song_id) throws ResourceNotFoundException;
+	public ResponseEntity<Song> findSongById(int song_id) throws ResourceNotFoundException;
 
-	public ResponseEntity<Song> findSongByTitle(@PathVariable String title);
+	public ResponseEntity<Song> findSongByTitle(String title);
 
 	public int findSongCount();
 
-	public int addSongInformation(@RequestBody Song song) throws DuplicateSongTitleException;
+	public int addSongInformation(Song song) throws DuplicateSongTitleException;
 
-	public int updateSongInformation(@PathVariable int song_id, @RequestBody Song songDetails);
+	public int updateSongInformation(int song_id, Song songDetails);
 
 	public int deleteSongInformation(int song_id);
 

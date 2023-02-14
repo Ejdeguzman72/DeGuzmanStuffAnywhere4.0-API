@@ -1,10 +1,12 @@
 package com.deguzman.DeGuzmanStuffAnywhere.daoimpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -27,21 +29,33 @@ public class ExerciseTypeDaoImpl implements ExerciseTypeDao {
 
 	@Override
 	public List<ExerciseType> findAllExerciseTypeInformation() {
-		List<ExerciseType> list = jdbcTemplate.query(GET_ALL_EXERCISE_TYPES,
-				BeanPropertyRowMapper.newInstance(ExerciseType.class));
-
-		LOGGER.info("Retrieving All Exercise Types...");
+		List<ExerciseType> list = new ArrayList<>();
+		
+		try {
+			list = jdbcTemplate.query(GET_ALL_EXERCISE_TYPES,
+					BeanPropertyRowMapper.newInstance(ExerciseType.class));
+			
+			LOGGER.info("Retrieving All Exercise Types...");			
+		} catch (Exception e) {
+			LOGGER.error("Exception: " + e.toString());
+		}
 
 		return list;
 	}
 
 	@Override
-	public ResponseEntity<ExerciseType> findExerciseTypeInformationById(@PathVariable int exercise_type_id) {
-		ExerciseType type = jdbcTemplate.queryForObject(GET_EXERCISE_TYPE_BY_INFORMATION,
-				BeanPropertyRowMapper.newInstance(ExerciseType.class), exercise_type_id);
+	public ResponseEntity<ExerciseType> findExerciseTypeInformationById(int exercise_type_id) {
+		ExerciseType type = new ExerciseType();
+		
+		try {
+			type = jdbcTemplate.queryForObject(GET_EXERCISE_TYPE_BY_INFORMATION,
+					BeanPropertyRowMapper.newInstance(ExerciseType.class), exercise_type_id);
 
-		LOGGER.info("Retrieving Exercise Type by exercise_type_id: " + exercise_type_id);
-
+			LOGGER.info("Retrieving Exercise Type by exercise_type_id: " + exercise_type_id);
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.error("Empty data set: " + e.toString());
+		}
+		
 		return ResponseEntity.ok().body(type);
 	}
 

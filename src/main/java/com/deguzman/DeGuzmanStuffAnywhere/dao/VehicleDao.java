@@ -13,24 +13,24 @@ public interface VehicleDao {
 
 	public List<Vehicle> findAllCarInformation();
 
-	public ResponseEntity<Vehicle> findVehicleInformationById(@PathVariable long vehicleId)
+	public ResponseEntity<Vehicle> findVehicleInformationById(long vehicleId)
 			throws InvalidVehicleException;
 
-	public List<Vehicle> findVehicleInformatioByMake(@PathVariable String make);
+	public List<Vehicle> findVehicleInformatioByMake(String make);
 
-	public List<Vehicle> findVehicleInformationByModel(@PathVariable String model);
+	public List<Vehicle> findVehicleInformationByModel(String model);
 
-	public List<Vehicle> findVehicleInformationByYear(@PathVariable String year);
+	public List<Vehicle> findVehicleInformationByYear(String year);
 
-	public List<Vehicle> findVehicleInformationByTransmission(@PathVariable String transmission);
+	public List<Vehicle> findVehicleInformationByTransmission(String transmission);
 
 	public int getCountofCars();
 
-	public int addCarInformation(@RequestBody Vehicle vehicle);
+	public int addCarInformation(Vehicle vehicle);
 
-	public int updateCarInformation(@PathVariable long vehicleId, @RequestBody Vehicle vehicleDetails);
+	public int updateCarInformation(long vehicleId, Vehicle vehicleDetails);
 
-	public int deleteCarInformation(@PathVariable long vehicleId);
+	public int deleteCarInformation(long vehicleId);
 
 	public int deleteAllVehicleInformation();
 }

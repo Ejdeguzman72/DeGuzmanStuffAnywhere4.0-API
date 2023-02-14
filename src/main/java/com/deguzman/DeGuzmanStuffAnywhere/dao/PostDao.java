@@ -12,9 +12,9 @@ public interface PostDao {
 
 	public List<PostDTO> findAllPosts();
 	
-	public List<PostDTO> findPostsByUser(@PathVariable long user_id);
+	public List<PostDTO> findPostsByUser(long user_id);
 	
-	public int addPost(@RequestBody Post post);
+	public int addPost(Post post);
 	
-	public int deletePost(@PathVariable int post_id);
+	public int deletePost(int post_id);
 }

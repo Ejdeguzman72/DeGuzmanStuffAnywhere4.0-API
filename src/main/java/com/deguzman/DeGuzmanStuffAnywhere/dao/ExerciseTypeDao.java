@@ -11,6 +11,6 @@ public interface ExerciseTypeDao {
 
 	public List<ExerciseType> findAllExerciseTypeInformation();
 
-	public ResponseEntity<ExerciseType> findExerciseTypeInformationById(@PathVariable int exercise_type_id);
+	public ResponseEntity<ExerciseType> findExerciseTypeInformationById(int exercise_type_id);
 
 }

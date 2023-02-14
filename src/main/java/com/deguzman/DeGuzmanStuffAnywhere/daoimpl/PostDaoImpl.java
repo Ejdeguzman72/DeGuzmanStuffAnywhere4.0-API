@@ -1,5 +1,6 @@
 package com.deguzman.DeGuzmanStuffAnywhere.daoimpl;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -38,22 +40,34 @@ public class PostDaoImpl implements PostDao {
 	@Cacheable(value = "postList")
 	public List<PostDTO> findAllPosts() {
 		
-		List<PostDTO> postList = jdbcTemplate.query(GET_ALL_POSTS, BeanPropertyRowMapper.newInstance(PostDTO.class));
+		List<PostDTO> list = new ArrayList<>();
 		
-		LOGGER.info("Retrieving all posts...");
+		try {
+			list = jdbcTemplate.query(GET_ALL_POSTS, BeanPropertyRowMapper.newInstance(PostDTO.class));
+			
+			LOGGER.info("Retrieving all posts...");			
+		} catch (Exception e) {
+			LOGGER.error("Exception: " + e.toString());
+		}
 		
-		return postList;
+		return list;
 	}
 
 	@Override
 	public List<PostDTO> findPostsByUser(long user_id) {
-
-		List<PostDTO> list = jdbcTemplate.query(GET_POSTS_BY_USER, (rs,rowNum) -> new PostDTO(rs.getInt("POST_ID"), 
-																				rs.getString("CONTENT"), 
-																				rs.getDate("CREATEDDATE"), 
-																				rs.getString("USERNAME")), user_id);
+		List<PostDTO> list = new ArrayList<>();
 		
-		LOGGER.info("Retrieving post for user_id:" + " " + user_id);
+		try {
+			list = jdbcTemplate.query(GET_POSTS_BY_USER, (rs,rowNum) -> new PostDTO(rs.getInt("POST_ID"), 
+					rs.getString("CONTENT"), 
+					rs.getDate("CREATEDDATE"), 
+					rs.getString("USERNAME")), user_id);
+			
+			LOGGER.info("Retrieving post for user_id:" + " " + user_id);
+						
+		} catch (Exception e) {
+			LOGGER.error("Exception: " + e.toString());
+		}
 		
 		return list;
 	}
@@ -62,17 +76,25 @@ public class PostDaoImpl implements PostDao {
 	@CachePut(value = "postList")
 	public int addPost(Post post) {
 
-		String content = post.getContent();
-		Date createdDate = post.getCreatedDate();
-		int userId = post.getUser_id();
+		int count = 0;
 		
-		LOGGER.info("Adding post information...");
-		
-		int count = jdbcTemplate.update(ADD_POST, new Object[] {
-				content,
-				createdDate,
-				userId
-		});
+		try {
+			String content = post.getContent();
+			Date createdDate = post.getCreatedDate();
+			int userId = post.getUser_id();
+			
+			LOGGER.info("Adding post information...");
+			
+			count = jdbcTemplate.update(ADD_POST, new Object[] {
+					content,
+					createdDate,
+					userId
+			});
+			
+			return count;			
+		} catch (Exception e) {
+			LOGGER.error("Exception: " + e.toString());
+		}
 		
 		return count;
 	}
@@ -81,9 +103,15 @@ public class PostDaoImpl implements PostDao {
 	@CachePut(value = "postById", key = "#post_id")
 	public int deletePost(int post_id) {
 
-		int count = jdbcTemplate.update(DELETE_POST, post_id);
+		int count = 0;
 		
-		LOGGER.info("Deleting post for post_id: " + post_id);
+		try {
+			count = jdbcTemplate.update(DELETE_POST, post_id);
+			
+			LOGGER.info("Deleting post for post_id: " + post_id);			
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.error("Empty data set: " + e.toString());
+		}
 		
 		return count;
 	}

@@ -13,19 +13,19 @@ public interface AutoShopDao {
 
 	public List<AutoRepairShop> findAllAutoRepairShopInfo();
 
-	public ResponseEntity<AutoRepairShop> findAutoRepairShopById(@PathVariable int auto_shop_id);
+	public ResponseEntity<AutoRepairShop> findAutoRepairShopById(int auto_shop_id);
 
-	public ResponseEntity<AutoRepairShop> findAutoRepairShopByName(@PathVariable String autoShopName);
+	public ResponseEntity<AutoRepairShop> findAutoRepairShopByName(String autoShopName);
 
-	public List<AutoRepairShop> findAutoRepairShopByZip(@PathVariable String zip);
+	public List<AutoRepairShop> findAutoRepairShopByZip(String zip);
 
 	public long getCountOfAutoRepairShops();
 
-	public int addAutoRepairShopInfo(@RequestBody AutoRepairShop autoShop) throws DuplicateAutoShopException;
+	public int addAutoRepairShopInfo(AutoRepairShop autoShop) throws DuplicateAutoShopException;
 
-	public int updateAutoShopInfo(@PathVariable int autoShopId, @RequestBody AutoRepairShop autoRepairShop);
+	public int updateAutoShopInfo(int autoShopId, AutoRepairShop autoRepairShop);
 
-	public int deleteAutoRepairShopInfo(@PathVariable int auto_shop_id);
+	public int deleteAutoRepairShopInfo(int auto_shop_id);
 
 	public int deleteAllAutoShop();
 }

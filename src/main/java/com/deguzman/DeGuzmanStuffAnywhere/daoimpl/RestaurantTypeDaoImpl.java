@@ -1,10 +1,12 @@
 package com.deguzman.DeGuzmanStuffAnywhere.daoimpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -30,30 +32,48 @@ public class RestaurantTypeDaoImpl implements RestaurantTypeDao {
 
 	@Override
 	public List<RestaurantType> findAllRestaurantTypeInformation() {
-		List<RestaurantType> list = jdbcTemplate.query(GET_ALL_RESTAURANT_TYPES,
-				BeanPropertyRowMapper.newInstance(RestaurantType.class));
-
-		LOGGER.info("Retrieving all restaurant type information...");
+		List<RestaurantType> list = new ArrayList<>();
+		
+		try {
+			list = jdbcTemplate.query(GET_ALL_RESTAURANT_TYPES,
+					BeanPropertyRowMapper.newInstance(RestaurantType.class));
+			
+			LOGGER.info("Retrieving all restaurant type information...");			
+		} catch (Exception e) {
+			LOGGER.error("Exception: " + e.toString());
+		}
 
 		return list;
 	}
 
 	@Override
-	public ResponseEntity<RestaurantType> findRestaurantInformationById(@PathVariable int restaurant_type_id) {
-		RestaurantType type = jdbcTemplate.queryForObject(GET_RESTAURANT_INFORMATION_BY_ID,
-				BeanPropertyRowMapper.newInstance(RestaurantType.class), restaurant_type_id);
-
-		LOGGER.info("Getting restaurant type by ID: " + restaurant_type_id);
+	public ResponseEntity<RestaurantType> findRestaurantInformationById(int restaurant_type_id) {
+		RestaurantType type = new RestaurantType();
+		
+		try {
+			type = jdbcTemplate.queryForObject(GET_RESTAURANT_INFORMATION_BY_ID,
+					BeanPropertyRowMapper.newInstance(RestaurantType.class), restaurant_type_id);
+			
+			LOGGER.info("Getting restaurant type by ID: " + restaurant_type_id);			
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.error("Empty data set: " + e.toString());
+		}
 
 		return ResponseEntity.ok().body(type);
 	}
 
 	@Override
 	public ResponseEntity<RestaurantType> findRestaurantTypeByDescr(String descr) {
-		RestaurantType type = jdbcTemplate.queryForObject(GET_RESTAURANT_INFORMATION_BY_DESCR,
-				BeanPropertyRowMapper.newInstance(RestaurantType.class), descr);
-
-		LOGGER.info("Getting restaurant type by Descr: " + descr);
+		RestaurantType type = new RestaurantType();
+		
+		try {
+			type = jdbcTemplate.queryForObject(GET_RESTAURANT_INFORMATION_BY_DESCR,
+					BeanPropertyRowMapper.newInstance(RestaurantType.class), descr);
+			
+			LOGGER.info("Getting restaurant type by Descr: " + descr);			
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.error("Empty data set: " + e.toString());
+		}
 
 		return ResponseEntity.ok().body(type);
 	}
@@ -67,10 +87,16 @@ public class RestaurantTypeDaoImpl implements RestaurantTypeDao {
 		return count;
 	}
 
-	public int retrieveTypeId(@PathVariable String descr) {
-		int id = jdbcTemplate.queryForObject(GET_RESTAURANT_TYPE_ID_BY_DESCR, Integer.class);
-
-		LOGGER.info("Retrieving restaurant_type_id: " + retrieveTypeId(descr));
+	public int retrieveTypeId(String descr) {
+		int id = 0;
+		
+		try {
+			id = jdbcTemplate.queryForObject(GET_RESTAURANT_TYPE_ID_BY_DESCR, Integer.class);
+			
+			LOGGER.info("Retrieving restaurant_type_id: " + retrieveTypeId(descr));			
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.error("Empty data set: " + e.toString());
+		}
 
 		return id;
 	}

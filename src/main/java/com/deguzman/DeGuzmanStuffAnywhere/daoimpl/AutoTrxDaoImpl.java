@@ -160,7 +160,7 @@ public class AutoTrxDaoImpl implements AutoTrxDao {
 
 	@Override
 	@Cacheable(value = "autoTrasactionById", key = "#auto_transaction_id")
-	public ResponseEntity<AutoTrxInfoDTO> findAutoTranasctionInformatioDTOnById(@PathVariable long auto_transaction_id)
+	public ResponseEntity<AutoTrxInfoDTO> findAutoTranasctionInformatioDTOnById(long auto_transaction_id)
 			throws InvalidTransactionException {
 		AutoTrxInfoDTO autoTrxInfo = new AutoTrxInfoDTO();
 		try {
@@ -177,7 +177,7 @@ public class AutoTrxDaoImpl implements AutoTrxDao {
 	}
 	
 	@Override
-	public ResponseEntity<AutoTransaction> findAutoTranasctionInformationById(@PathVariable long auto_transaction_id) throws InvalidTransactionException {
+	public ResponseEntity<AutoTransaction> findAutoTranasctionInformationById(long auto_transaction_id) throws InvalidTransactionException {
 		AutoTransaction transaction = jdbcTemplate.queryForObject(GET_AUTO_TRANSACTION_INFO,
 				BeanPropertyRowMapper.newInstance(AutoTransaction.class), auto_transaction_id);
 		

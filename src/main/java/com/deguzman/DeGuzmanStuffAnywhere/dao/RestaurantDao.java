@@ -15,25 +15,25 @@ public interface RestaurantDao {
 
 	public List<RestaurantInfoDTO> findAllRestaurants();
 
-	public List<RestaurantInfoDTO> findAllRestaurantsByType(@PathVariable int restaurant_type_id);
+	public List<RestaurantInfoDTO> findAllRestaurantsByType(int restaurant_type_id);
 
-	public List<RestaurantInfoDTO> findRestaurantsByZipCode(@PathVariable String zip);
+	public List<RestaurantInfoDTO> findRestaurantsByZipCode(String zip);
 
-	public List<RestaurantInfoDTO> findRestaurantsByDescr(@PathVariable String descr);
+	public List<RestaurantInfoDTO> findRestaurantsByDescr(String descr);
 
-	public ResponseEntity<RestaurantInfoDTO> findRestaurantById(@PathVariable int restaurant_id)
+	public ResponseEntity<RestaurantInfoDTO> findRestaurantById(int restaurant_id)
 			throws InvalidRestaurantException;
 
-	public ResponseEntity<RestaurantInfoDTO> findRestaurantByName(@PathVariable String name);
+	public ResponseEntity<RestaurantInfoDTO> findRestaurantByName(String name);
 
 	public long getRestaurantCount();
 
-	public int addRestaurantInformation(@RequestBody Restaurant restaurant) throws ResourceNotFoundException, DuplicateRestaurantException;
+	public int addRestaurantInformation(Restaurant restaurant) throws ResourceNotFoundException, DuplicateRestaurantException;
 
-	public int updateRestaurantInformation(@PathVariable int restaurant_id, @RequestBody Restaurant restaurantDetails)
+	public int updateRestaurantInformation(int restaurant_id, Restaurant restaurantDetails)
 			throws ResourceNotFoundException;
 
-	public int deleteRestaurantInformation(@PathVariable int restaurant_id);
+	public int deleteRestaurantInformation(int restaurant_id);
 
 	public int deleteAllRestaurantInformation();
 

@@ -14,27 +14,27 @@ public interface MedicalTrxDao {
 
 	public List<MedicalTrxInfoDTO> findAllMedicalTransactionInformation();
 
-	public List<MedicalTrxInfoDTO> findMedicalTransactionsByFacility(@PathVariable int facility_id);
+	public List<MedicalTrxInfoDTO> findMedicalTransactionsByFacility(int facility_id);
 
-	public List<MedicalTrxInfoDTO> findMedicalTransactionsByType(@PathVariable long transaction_type_id);
+	public List<MedicalTrxInfoDTO> findMedicalTransactionsByType(long transaction_type_id);
 
-	public List<MedicalTrxInfoDTO> findAllMedicalTransactionbyUser(@PathVariable long user_id);
+	public List<MedicalTrxInfoDTO> findAllMedicalTransactionbyUser(long user_id);
 
 	public ResponseEntity<MedicalTrxInfoDTO> findMedicalTransactionInformationDTOById(
-			@PathVariable long medical_transaction_id) throws ResourceNotFoundException;
+			long medical_transaction_id) throws ResourceNotFoundException;
 	
 	public ResponseEntity<MedicalTransaction> findMedicalTransactionInformationById(
-			@PathVariable long medical_transaction_id) throws ResourceNotFoundException;
+			long medical_transaction_id) throws ResourceNotFoundException;
 
 	public long getCountOfMedicalTransactions();
 
-	public int addMedicalTransactionInformation(@RequestBody MedicalTransaction medicalTransaction)
+	public int addMedicalTransactionInformation(MedicalTransaction medicalTransaction)
 			throws ResourceNotFoundException;
 
-	public int updateMedicalTransaction(@PathVariable long medicalTransactionId,
-			@RequestBody MedicalTransaction medicalTransactionDetails);
+	public int updateMedicalTransaction(long medicalTransactionId,
+			MedicalTransaction medicalTransactionDetails);
 
-	public int deleteMedicalTraansactionInformation(@PathVariable long medical_transaction_id);
+	public int deleteMedicalTraansactionInformation(long medical_transaction_id);
 
 	public int deleteAllMedicalTransactions();
 

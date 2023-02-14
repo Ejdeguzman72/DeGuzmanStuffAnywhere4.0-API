@@ -13,21 +13,21 @@ public interface UtilityDao {
 
 	public List<UtilityInfoDTO> findAllUtilityInformation();
 
-	public List<UtilityInfoDTO> findUtilityInformationByDueDate(@PathVariable String dueDate);
+	public List<UtilityInfoDTO> findUtilityInformationByDueDate(String dueDate);
 
-	public ResponseEntity<UtilityInfoDTO> findUtilityInformationById(@PathVariable long utility_id);
+	public ResponseEntity<UtilityInfoDTO> findUtilityInformationById(long utility_id);
 
-	public ResponseEntity<UtilityInfoDTO> findUtilityInformationByName(@PathVariable String name);
+	public ResponseEntity<UtilityInfoDTO> findUtilityInformationByName(String name);
 
-	public ResponseEntity<UtilityInfoDTO> findUtilityInformationByType(@PathVariable int utility_type_id);
+	public ResponseEntity<UtilityInfoDTO> findUtilityInformationByType(int utility_type_id);
 
 	public long findUtilityCount();
 
-	public int addUtilityInformation(@RequestBody Utility utility);
+	public int addUtilityInformation(Utility utility);
 
-	public int updateUtilityInformation(@PathVariable long utility_id, @RequestBody Utility utilityDetails);
+	public int updateUtilityInformation(long utility_id, Utility utilityDetails);
 
-	public int deleteUtilityInformation(@PathVariable long utility_id);
+	public int deleteUtilityInformation(long utility_id);
 
 	public int deleteAllUtilityInformation();
 

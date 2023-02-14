@@ -13,18 +13,18 @@ public interface MedicalOfficeDao {
 
 	public List<MedicalOffice> findAllMedicalOfficeInformation();
 
-	public List<MedicalOffice> findMedicalOfficesByZip(@PathVariable String zip);
+	public List<MedicalOffice> findMedicalOfficesByZip(String zip);
 
-	public ResponseEntity<MedicalOffice> findMedicalOfficeInformationById(@PathVariable long medicalOfficeId);
+	public ResponseEntity<MedicalOffice> findMedicalOfficeInformationById(long medicalOfficeId);
 
 	public int getMedicalOfficeCount();
 
-	public int addMedicalOfficeInformation(@RequestBody MedicalOffice medicalOffice) throws DuplicateOfficeException;
+	public int addMedicalOfficeInformation(MedicalOffice medicalOffice) throws DuplicateOfficeException;
 
-	public int updateMedicalOfficeInformation(@PathVariable long medicalOfficeId,
-			@RequestBody MedicalOffice medicalOffice);
+	public int updateMedicalOfficeInformation(long medicalOfficeId,
+			MedicalOffice medicalOffice);
 
-	public int deleteMedicalOfficeById(@PathVariable long medicalOfficeId);
+	public int deleteMedicalOfficeById(long medicalOfficeId);
 
 	public int deleteAllMedicalOfficeInformation();
 

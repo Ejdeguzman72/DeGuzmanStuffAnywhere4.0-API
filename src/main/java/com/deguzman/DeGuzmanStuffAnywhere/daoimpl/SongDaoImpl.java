@@ -1,5 +1,6 @@
 package com.deguzman.DeGuzmanStuffAnywhere.daoimpl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,6 +9,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -41,33 +44,54 @@ public class SongDaoImpl implements SongDao {
 	@Override
 	@Cacheable(value = "songList")
 	public List<Song> findAllSongInformation() {
-		List<Song> list = jdbcTemplate.query(GET_ALL_SONGS, BeanPropertyRowMapper.newInstance(Song.class));
+		List<Song> list = new ArrayList<>();
+		
+		try {
+			list = jdbcTemplate.query(GET_ALL_SONGS, BeanPropertyRowMapper.newInstance(Song.class));
 
-		LOGGER.info("Retrieving all songs...");
+			LOGGER.info("Retrieving all songs...");
+		} catch (Exception e) {
+			LOGGER.error("Exception: " + e.toString());
+			e.printStackTrace();
+		}
 
 		return list;
 	}
 
 	@Override
-	public List<Song> findSongByArtist(@PathVariable String artist) {
-		List<Song> songListArtist = jdbcTemplate.query(GET_SONG_INFORMATION_BY_ARTIST,
-				(rs, rowNum) -> new Song(rs.getInt("song_id"), rs.getString("artist"), rs.getString("genre"),
-						rs.getString("title")),
-				artist);
+	public List<Song> findSongByArtist(String artist) {
+		List<Song> songListArtist = new ArrayList<>();
+		
+		try {
+			songListArtist = jdbcTemplate.query(GET_SONG_INFORMATION_BY_ARTIST,
+					(rs, rowNum) -> new Song(rs.getInt("song_id"), rs.getString("artist"), rs.getString("genre"),
+							rs.getString("title")),
+					artist);
 
-		LOGGER.info("Retrieving music by artist: " + artist);
+			LOGGER.info("Retrieving music by artist: " + artist);
+		} catch (Exception e) {
+			LOGGER.error("Exception: " + e.toString());
+			e.printStackTrace();
+		}
 
 		return songListArtist;
 	}
 
 	@Override
-	public List<Song> findSongsByGenre(@PathVariable String genre) {
-		List<Song> songListGenre = jdbcTemplate.query(GET_SONG_INFORMATION_BY_GENRE,
-				(rs, rowNum) -> new Song(rs.getInt("song_id"), rs.getString("title"), rs.getString("artist"),
-						rs.getString("genre")),
-				genre);
+	public List<Song> findSongsByGenre(String genre) {
+		List<Song> songListGenre = new ArrayList<>();
+		
+		try {
+			songListGenre = jdbcTemplate.query(GET_SONG_INFORMATION_BY_GENRE,
+					(rs, rowNum) -> new Song(rs.getInt("song_id"), rs.getString("title"), rs.getString("artist"),
+							rs.getString("genre")),
+					genre);
 
-		LOGGER.info("Retrieving music by genre: " + genre);
+			LOGGER.info("Retrieving music by genre: " + genre);
+		} catch (Exception e) {
+			LOGGER.error("Exception: " + e.toString());
+			e.printStackTrace();
+		}
 
 		return songListGenre;
 	}
@@ -75,20 +99,34 @@ public class SongDaoImpl implements SongDao {
 	@Override
 	@Cacheable(value = "songById", key = "#song_id")
 	public ResponseEntity<Song> findSongById(int song_id) throws ResourceNotFoundException {
-		Song song = jdbcTemplate.queryForObject(GET_SONG_INFORMATION_BY_ID,
-				BeanPropertyRowMapper.newInstance(Song.class), song_id);
+		Song song = new Song();
+		
+		try {
+			song = jdbcTemplate.queryForObject(GET_SONG_INFORMATION_BY_ID,
+					BeanPropertyRowMapper.newInstance(Song.class), song_id);
 
-		LOGGER.info("Retrieved Song Information: " + song.getTitle() + " " + song.getArtist());
+			LOGGER.info("Retrieved Song Information: " + song.getTitle() + " " + song.getArtist());
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.error("Empty data set: " + e.toString());
+			e.printStackTrace();
+		}
 
 		return ResponseEntity.ok().body(song);
 	}
 
 	@Override
 	public ResponseEntity<Song> findSongByTitle(String title) {
-		Song song = jdbcTemplate.queryForObject(GET_SONG_INFORMATION_BY_TITLE,
-				BeanPropertyRowMapper.newInstance(Song.class), title);
+		Song song = new Song();
+		
+		try {
+			song = jdbcTemplate.queryForObject(GET_SONG_INFORMATION_BY_TITLE,
+					BeanPropertyRowMapper.newInstance(Song.class), title);
 
-		LOGGER.info("Retrieved Song Information: " + " " + song.getTitle() + " " + song.getArtist());
+			LOGGER.info("Retrieved Song Information: " + " " + song.getTitle() + " " + song.getArtist());
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.error("Empty data set: " + e.toString());
+			e.printStackTrace();
+		}
 
 		return ResponseEntity.ok().body(song);
 	}
@@ -120,18 +158,26 @@ public class SongDaoImpl implements SongDao {
 	@Override
 	@CachePut(value = "songList")
 	public int addSongInformation(Song song) throws DuplicateSongTitleException {
+		int result = 0;
+		
+		try {
+			String title = song.getTitle();
+			String artist = song.getArtist();
+			String genre = song.getGenre();
 
-		String title = song.getTitle();
-		String artist = song.getArtist();
-		String genre = song.getGenre();
+			if (checkSongTitles(title)) {
+				throw new DuplicateSongTitleException("Song Already Exists");
+			}
+			
+			LOGGER.info("Adding Song Information: " + title + " " + "by " + artist);
 
-		if (checkSongTitles(title)) {
-			throw new DuplicateSongTitleException("Song Already Exists");
+			result = jdbcTemplate.update(ADD_SONG_INFORMATION, new Object[] { title, artist, genre });
+		} catch (Exception e) {
+			LOGGER.error("Exception: " + e.toString());
+			e.printStackTrace();
 		}
 		
-		LOGGER.info("Adding Song Information: " + title + " " + "by " + artist);
-
-		return jdbcTemplate.update(ADD_SONG_INFORMATION, new Object[] { title, artist, genre });
+		return result;
 	}
 
 	@Override
@@ -140,23 +186,35 @@ public class SongDaoImpl implements SongDao {
 
 		int result = 0;
 		
-		Song song = jdbcTemplate.queryForObject(GET_SONG_INFORMATION_BY_ID,
-				BeanPropertyRowMapper.newInstance(Song.class), song_id);
+		Song song = new Song();
+		try {
+			song = jdbcTemplate.queryForObject(GET_SONG_INFORMATION_BY_ID,
+					BeanPropertyRowMapper.newInstance(Song.class), song_id);
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.error("Empty data set: " + e.toString());
+			e.printStackTrace();
+		}
 		
-		if (song != null) {
-			song.setTitle(songDetails.getTitle());
-			song.setArtist(songDetails.getArtist());
-			song.setGenre(songDetails.getGenre());
-			song.setSong_id(song_id);
-			
-			result = jdbcTemplate.update(UPDATE_SONG_INFORMATION, new Object[] {
-					song.getTitle(),
-					song.getArtist(),
-					song.getGenre(),
-					song.getSong_id()
-			});
-			
-			LOGGER.info("Updating song info for song_id: " + song_id);
+		
+		try {
+			if (song != null) {
+				song.setTitle(songDetails.getTitle());
+				song.setArtist(songDetails.getArtist());
+				song.setGenre(songDetails.getGenre());
+				song.setSong_id(song_id);
+				
+				result = jdbcTemplate.update(UPDATE_SONG_INFORMATION, new Object[] {
+						song.getTitle(),
+						song.getArtist(),
+						song.getGenre(),
+						song.getSong_id()
+				});
+				
+				LOGGER.info("Updating song info for song_id: " + song_id);
+			}
+		} catch (Exception e) {
+			LOGGER.error("Exception: " + e.toString());
+			e.printStackTrace();
 		}
 		
 		return result;
@@ -165,9 +223,16 @@ public class SongDaoImpl implements SongDao {
 	@Override
 	@CachePut(value = "songById", key = "#song_id")
 	public int deleteSongInformation(int song_id) {
-		int count = jdbcTemplate.update(DELETE_SONG_INFORMATION_BY_ID, song_id);
+		int count = 0;
+		
+		try {
+			count = jdbcTemplate.update(DELETE_SONG_INFORMATION_BY_ID, song_id);
 
-		LOGGER.info("Deleting song with ID: " + song_id);
+			LOGGER.info("Deleting song with ID: " + song_id);
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.error("Empty data set: " + e.toString());
+			e.printStackTrace();
+		}
 
 		return count;
 	}
@@ -175,9 +240,16 @@ public class SongDaoImpl implements SongDao {
 	@Override
 	@Cacheable(value = "songList")
 	public int deleteAllSongs() {
-		int count = jdbcTemplate.update(DELETE_ALL_SONG_INFORMATION);
+		int count = 0;
+		
+		try {
+			count = jdbcTemplate.update(DELETE_ALL_SONG_INFORMATION);
 
-		LOGGER.info("Deleting all songs...");
+			LOGGER.info("Deleting all songs...");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		return count;
 	}

@@ -1,5 +1,6 @@
 package com.deguzman.DeGuzmanStuffAnywhere.daoimpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -26,9 +27,15 @@ public class HomeInfoDaoImpl implements HomeInfoDao {
 	@Override
 	@Cacheable(value = "homeInfoList")
 	public List<HomeInfo> getAllHomeInfo() {
-		List<HomeInfo> list = jdbcTemplate.query(GET_HOME_INFO, BeanPropertyRowMapper.newInstance(HomeInfo.class));
-
-		LOGGER.info("Getting All Home Info...");
+		List<HomeInfo> list = new ArrayList<>();
+		
+		try {
+			list = jdbcTemplate.query(GET_HOME_INFO, BeanPropertyRowMapper.newInstance(HomeInfo.class));
+			
+			LOGGER.info("Getting All Home Info...");
+		} catch (Exception e) {
+			LOGGER.error("Exception: " + e.toString());
+		}
 
 		return list;
 	}

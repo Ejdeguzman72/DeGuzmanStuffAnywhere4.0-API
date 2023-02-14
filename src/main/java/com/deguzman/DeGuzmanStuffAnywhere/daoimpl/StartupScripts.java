@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -41,16 +42,22 @@ public class StartupScripts {
 			+ "('MEDICAL - PRESCRIPTION'), ('MEDICAL - HOSPITAL BILLS')";
 	
 	public int startUpExerciseTypes() {
-		List<ExerciseType> list = exerciseTypeDaoImpl.findAllExerciseTypeInformation();
-		int result = 0;
-		
-		if (list.size() == 0) {
-			result = jdbcTemplate.update(INSERT_EXERCISE_TYPES);
+		try {
+			List<ExerciseType> list = exerciseTypeDaoImpl.findAllExerciseTypeInformation();
+			int result = 0;
 			
-			LOGGER.info("List is empty, inserting records now...");
+			if (list.size() == 0) {
+				result = jdbcTemplate.update(INSERT_EXERCISE_TYPES);
+				
+				LOGGER.info("List is empty, inserting records now...");
+			}
+			
+			return result;
+		} catch (Exception e) {
+			LOGGER.error("Exception: " + e.toString());
+			e.printStackTrace();
 		}
-		
-		return result;
+		return 0;
 	}
 	
 	public int startupRestaurantTypes() {

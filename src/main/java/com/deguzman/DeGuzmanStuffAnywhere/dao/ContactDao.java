@@ -15,23 +15,23 @@ public interface ContactDao {
 
 	public List<Person> findAllPersonInformation() throws SecurityException, IOException;
 
-	public ResponseEntity<Person> findPersonById(@PathVariable int personid)
+	public ResponseEntity<Person> findPersonById(int personid)
 			throws ResourceNotFoundException, SecurityException, IOException;
 
-	public ResponseEntity<Person> findPersonByLastName(@PathVariable String lastname);
+	public ResponseEntity<Person> findPersonByLastName(String lastname);
 
-	public ResponseEntity<Person> findPersonByEmail(@PathVariable String email);
+	public ResponseEntity<Person> findPersonByEmail(String email);
 
-	public ResponseEntity<Person> findPersonByPhone(@PathVariable String phone);
+	public ResponseEntity<Person> findPersonByPhone(String phone);
 
 	public long getCountOfPersonInformation();
 
-	public int addPersonInformation(@RequestBody Person person) throws SecurityException, IOException, DuplicateContactException;
+	public int addPersonInformation(Person person) throws SecurityException, IOException, DuplicateContactException;
 
-	public int updatePersonInformation(@PathVariable int personId, @RequestBody Person personDetails)
+	public int updatePersonInformation(int personId, Person personDetails)
 			throws SecurityException, IOException;
 
-	public int deletePersonInformation(@PathVariable int personid) throws SecurityException, IOException;
+	public int deletePersonInformation(int personid) throws SecurityException, IOException;
 
 	public int deleteAllPersonInformation();
 }

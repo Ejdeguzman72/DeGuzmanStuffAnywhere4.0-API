@@ -14,24 +14,24 @@ public interface GeneralTrxDao {
 
 	public List<GeneralTrxInfoDTO> findAllTransactionInformation();
 
-	public List<GeneralTrxInfoDTO> findTransactionsByUser(@PathVariable long user_id);
+	public List<GeneralTrxInfoDTO> findTransactionsByUser(long user_id);
 
-	public List<GeneralTrxInfoDTO> findTransactionsByType(@PathVariable long transaction_type_id);
+	public List<GeneralTrxInfoDTO> findTransactionsByType(long transaction_type_id);
 
-	public ResponseEntity<GeneralTrxInfoDTO> findTransactionInformationDTOById(@PathVariable long transaction_id)
+	public ResponseEntity<GeneralTrxInfoDTO> findTransactionInformationDTOById(long transaction_id)
 			throws ResourceNotFoundException;
 	
-	public ResponseEntity<GeneralTransaction> findTransactionInformationById(@PathVariable long transaction_id)
+	public ResponseEntity<GeneralTransaction> findTransactionInformationById(long transaction_id)
 			throws ResourceNotFoundException;
 
 	public long findCountOfGeneralTransaction();
 
-	public int addTransactionInformation(@RequestBody GeneralTransaction transaction) throws ResourceNotFoundException;
+	public int addTransactionInformation(GeneralTransaction transaction) throws ResourceNotFoundException;
 
-	public int updateTransactionInformation(@PathVariable Long transaction_id,
-			@RequestBody GeneralTransaction transactionDetails);
+	public int updateTransactionInformation(Long transaction_id,
+			GeneralTransaction transactionDetails);
 
-	public int deleteTransactionInformation(@PathVariable long transaction_id);
+	public int deleteTransactionInformation(long transaction_id);
 
 	public int deleteAllTransactions();
 

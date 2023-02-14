@@ -60,7 +60,7 @@ public class AutoRepairShopDaoImpl implements AutoShopDao {
 
 	@Override
 	@Cacheable(value="autoShopById", key="#auto_shop_id")
-	public ResponseEntity<AutoRepairShop> findAutoRepairShopById(@PathVariable int auto_shop_id) {
+	public ResponseEntity<AutoRepairShop> findAutoRepairShopById(int auto_shop_id) {
 		AutoRepairShop autoShop = new AutoRepairShop();
 		try {
 			autoShop = jdbcTemplate.queryForObject(GET_AUTO_SHOP_BY_ID,
@@ -76,7 +76,7 @@ public class AutoRepairShopDaoImpl implements AutoShopDao {
 	}
 
 	@Override
-	public ResponseEntity<AutoRepairShop> findAutoRepairShopByName(@PathVariable String autoShopName) {
+	public ResponseEntity<AutoRepairShop> findAutoRepairShopByName(String autoShopName) {
 		AutoRepairShop autoShop = new AutoRepairShop();
 		try {
 			autoShop = jdbcTemplate.queryForObject(GET_AUTO_SHOP_BY_NAME,
@@ -92,7 +92,7 @@ public class AutoRepairShopDaoImpl implements AutoShopDao {
 	}
 
 	@Override
-	public List<AutoRepairShop> findAutoRepairShopByZip(@PathVariable String zip) {
+	public List<AutoRepairShop> findAutoRepairShopByZip(String zip) {
 		List<AutoRepairShop> autoShopList = new ArrayList<>();
 		try {
 			autoShopList = jdbcTemplate.query(GET_AUTO_REPAIR_SHOP_BY_ZIP,
@@ -153,7 +153,7 @@ public class AutoRepairShopDaoImpl implements AutoShopDao {
 
 	@Override
 	@CachePut(value = "autoShopById", key = "#auto_shop_id")
-	public int updateAutoShopInfo(@PathVariable int auto_shop_id, @RequestBody AutoRepairShop shopDetails) {
+	public int updateAutoShopInfo(int auto_shop_id, AutoRepairShop shopDetails) {
 		
 		int result = 0;
 		
@@ -195,7 +195,7 @@ public class AutoRepairShopDaoImpl implements AutoShopDao {
 
 	@Override
 	@CachePut(value = "autoShopById", key = "#auto_shop_id")
-	public int deleteAutoRepairShopInfo(@PathVariable int auto_shop_id) {
+	public int deleteAutoRepairShopInfo(int auto_shop_id) {
 		int count = 0;
 		
 		try {
