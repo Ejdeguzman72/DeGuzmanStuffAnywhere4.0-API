@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.MedicalOfficeDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalOfficeListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateOfficeException;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_dao.MedicalOfficeJpaDao;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_model.MedicalOffice;
@@ -27,8 +28,12 @@ public class MedicalOfficeService {
 	@Autowired
 	private MedicalOfficeJpaDao medOfficeJpaDao;
 	
-	public List<com.deguzman.DeGuzmanStuffAnywhere.model.MedicalOffice> findAllmedicalOfficeInformation() {
-		return medicalOfficeDaoImpl.findAllMedicalOfficeInformation();
+	public MedicalOfficeListResponse findAllmedicalOfficeInformation() {
+		MedicalOfficeListResponse response = new MedicalOfficeListResponse();
+		List<com.deguzman.DeGuzmanStuffAnywhere.model.MedicalOffice> list = medicalOfficeDaoImpl.findAllMedicalOfficeInformation();
+		
+		response.setList(list);
+		return response;
 	}
 
 	public ResponseEntity<Map<String, Object>> getAllMedicalOfficesPagination(
@@ -65,8 +70,12 @@ public class MedicalOfficeService {
 		}
 	}
 	
-	public List<com.deguzman.DeGuzmanStuffAnywhere.model.MedicalOffice> findMedicalofficesByZip(String zip) {
-		return medicalOfficeDaoImpl.findMedicalOfficesByZip(zip);
+	public MedicalOfficeListResponse findMedicalofficesByZip(String zip) {
+		MedicalOfficeListResponse response = new MedicalOfficeListResponse();
+		List<com.deguzman.DeGuzmanStuffAnywhere.model.MedicalOffice> list = medicalOfficeDaoImpl.findMedicalOfficesByZip(zip);
+		
+		response.setList(list);
+		return response;
 	}
 	
 	public long getMedicalOfficeCount() {

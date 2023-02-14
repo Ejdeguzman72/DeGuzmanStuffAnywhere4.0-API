@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.GeneralTrxDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.GeneralTrxListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.GeneralTrxInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_dao.GeneralTrxJpaDao;
@@ -30,8 +31,12 @@ public class GeneralTrxService {
 	@Autowired
 	private GeneralTrxJpaDao generalTrxDao;
 	
-	public List<GeneralTrxInfoDTO> findAllTransactionInformation() {
-		return generalTrxDaoImpl.findAllTransactionInformation();
+	public GeneralTrxListResponse findAllTransactionInformation() {
+		GeneralTrxListResponse response = new GeneralTrxListResponse();
+		List<GeneralTrxInfoDTO> list = generalTrxDaoImpl.findAllTransactionInformation();
+		
+		response.setList(list);
+		return response;
 	}
 	
 	public ResponseEntity<Map<String, Object>> getAllTransactionsPagination(@RequestParam(required = false) String paymentDate,
@@ -67,12 +72,20 @@ public class GeneralTrxService {
 		}
 	}
 	
-	public List<GeneralTrxInfoDTO> findTransactionsByUser(@PathVariable long user_id) {
-		return generalTrxDaoImpl.findTransactionsByUser(user_id);
+	public GeneralTrxListResponse findTransactionsByUser(@PathVariable long user_id) {
+		GeneralTrxListResponse response = new GeneralTrxListResponse();
+		List<GeneralTrxInfoDTO> list = generalTrxDaoImpl.findTransactionsByUser(user_id);
+		
+		response.setList(list);
+		return response;
 	}
 	
-	public List<GeneralTrxInfoDTO> findTransactionsByType(@PathVariable long transaction_type_id) {
-		return generalTrxDaoImpl.findTransactionsByType(transaction_type_id);
+	public GeneralTrxListResponse findTransactionsByType(@PathVariable long transaction_type_id) {
+		GeneralTrxListResponse response = new GeneralTrxListResponse();
+		List<GeneralTrxInfoDTO> list = generalTrxDaoImpl.findTransactionsByType(transaction_type_id);
+		
+		response.setList(list);
+		return response;
 	}
 	
 	public ResponseEntity<GeneralTrxInfoDTO> findTranactionInformationDTOById(@PathVariable long transaction_id) throws ResourceNotFoundException {

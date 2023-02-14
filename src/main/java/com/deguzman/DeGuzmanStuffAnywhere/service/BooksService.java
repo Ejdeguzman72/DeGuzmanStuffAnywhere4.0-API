@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.BooksDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.BooksListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateBookNameException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_dao.BooksJpaDao;
@@ -30,8 +31,12 @@ public class BooksService {
 	@Autowired
 	private BooksDaoImpl booksDaoImpl;
 
-	public List<com.deguzman.DeGuzmanStuffAnywhere.model.Books> findAllBookInformation() {
-		return booksDaoImpl.findAllBooksInformation();
+	public BooksListResponse findAllBookInformation() {
+		BooksListResponse response = new BooksListResponse();
+		List<com.deguzman.DeGuzmanStuffAnywhere.model.Books> list = booksDaoImpl.findAllBooksInformation();
+		
+		response.setList(list);
+		return response;
 	}
 	
 	public ResponseEntity<Map<String, Object>> getAllBooksPagination(@RequestParam(required = false) String title,
@@ -67,8 +72,12 @@ public class BooksService {
 		}
 	}
 	
-	public List<com.deguzman.DeGuzmanStuffAnywhere.model.Books> findAllBooksByAuthor(@PathVariable String author) {
-		return booksDaoImpl.findAllBooksByAuthor(author);
+	public BooksListResponse findAllBooksByAuthor(@PathVariable String author) {
+		BooksListResponse response = new BooksListResponse();
+		List<com.deguzman.DeGuzmanStuffAnywhere.model.Books> list = booksDaoImpl.findAllBooksByAuthor(author);
+		
+		response.setList(list);
+		return response;
 	}
 	
 	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.Books> findBookInfomrationById(@PathVariable int book_id) throws ResourceNotFoundException {

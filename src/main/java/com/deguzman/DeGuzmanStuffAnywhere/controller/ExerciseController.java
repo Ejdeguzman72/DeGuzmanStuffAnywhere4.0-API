@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.ExerciseDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.ExerciseListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.ExerciseInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.model.Exercise;
 import com.deguzman.DeGuzmanStuffAnywhere.service.ExerciseService;
@@ -31,8 +32,9 @@ public class ExerciseController {
 
 	@GetMapping("/all")
 	@CrossOrigin
-	public List<ExerciseInfoDTO> getAllExerciseInformation() {
-		return exerciseInfoService.findAllExerciseInformation();
+	public ExerciseListResponse getAllExerciseInformation() {
+		ExerciseListResponse response = exerciseInfoService.findAllExerciseInformation();
+		return response;
 	}
 	
 	@GetMapping("/all-exercises")
@@ -44,14 +46,16 @@ public class ExerciseController {
 
 	@GetMapping("/all/name/{user_id}")
 	@CrossOrigin
-	public List<ExerciseInfoDTO> getExerciseInformationByUser(@PathVariable long user_id) {
-		return exerciseInfoService.findExerciseInformationByUser(user_id);
+	public ExerciseListResponse getExerciseInformationByUser(@PathVariable long user_id) {
+		ExerciseListResponse response = exerciseInfoService.findExerciseInformationByUser(user_id);
+		return response;
 	}
 
 	@GetMapping("/all/exercise-type/{exercise_type_id}")
 	@CrossOrigin
-	public List<ExerciseInfoDTO> getExerciseInformationbyType(@PathVariable int exercise_type_id) {
-		return exerciseInfoService.findExerciseInformationByType(exercise_type_id);
+	public ExerciseListResponse getExerciseInformationbyType(@PathVariable int exercise_type_id) {
+		ExerciseListResponse response = exerciseInfoService.findExerciseInformationByType(exercise_type_id);
+		return response;
 	}
 
 	@GetMapping("/exercise/{exercise_id}")

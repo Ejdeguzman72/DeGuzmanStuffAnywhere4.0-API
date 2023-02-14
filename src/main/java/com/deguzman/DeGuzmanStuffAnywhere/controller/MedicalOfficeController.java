@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.MedicalOfficeDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalOfficeListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateOfficeException;
 import com.deguzman.DeGuzmanStuffAnywhere.model.MedicalOffice;
 import com.deguzman.DeGuzmanStuffAnywhere.service.MedicalOfficeService;
@@ -32,8 +33,9 @@ public class MedicalOfficeController {
 
 	@GetMapping("/all")
 	@CrossOrigin
-	public List<MedicalOffice> getAllMedicalOfficeInformation() {
-		return medOfficeService.findAllmedicalOfficeInformation();
+	public MedicalOfficeListResponse getAllMedicalOfficeInformation() {
+		MedicalOfficeListResponse response = medOfficeService.findAllmedicalOfficeInformation();
+		return response;
 	}
 
 	@GetMapping("all-medical-offices")
@@ -46,8 +48,9 @@ public class MedicalOfficeController {
 
 	@GetMapping("/medical-office/zip/{zip}")
 	@CrossOrigin
-	public List<MedicalOffice> getAllMedicalOfficeInformationByZipCode(@PathVariable String zip) {
-		return medOfficeService.findMedicalofficesByZip(zip);
+	public MedicalOfficeListResponse getAllMedicalOfficeInformationByZipCode(@PathVariable String zip) {
+		MedicalOfficeListResponse response = medOfficeService.findMedicalofficesByZip(zip);
+		return response;
 	}
 
 	@GetMapping("/medical-office/{medicalOfficeId}")

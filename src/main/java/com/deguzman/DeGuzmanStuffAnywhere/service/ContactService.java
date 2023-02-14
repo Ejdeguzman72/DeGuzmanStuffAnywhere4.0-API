@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.ContactDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.ContactListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateContactException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_dao.PersonJpaDao;
@@ -31,8 +32,12 @@ public class ContactService {
 	@Autowired
 	private PersonJpaDao personJpaDao;
 
-	public List<com.deguzman.DeGuzmanStuffAnywhere.model.Person> findAllPersonInformation() throws IOException {
-		return contactDaoImpl.findAllPersonInformation();
+	public ContactListResponse findAllPersonInformation() throws IOException {
+		ContactListResponse response = new ContactListResponse(); 
+		List<com.deguzman.DeGuzmanStuffAnywhere.model.Person> list =  contactDaoImpl.findAllPersonInformation();
+		
+		response.setList(list);
+		return response;
 	}
 	
 	public ResponseEntity<Map<String, Object>> getAllPersonsPagination(@RequestParam(required = false) String firstname,

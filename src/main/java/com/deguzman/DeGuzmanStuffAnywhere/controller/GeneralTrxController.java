@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.GeneralTrxDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.GeneralTrxListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.GeneralTrxInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
 import com.deguzman.DeGuzmanStuffAnywhere.model.GeneralTransaction;
@@ -32,8 +33,9 @@ public class GeneralTrxController {
 
 	@GetMapping("/all")
 	@CrossOrigin
-	public List<GeneralTrxInfoDTO> getAllGeneralTransactionInformation() {
-		return generalTrxService.findAllTransactionInformation();
+	public GeneralTrxListResponse getAllGeneralTransactionInformation() {
+		GeneralTrxListResponse response = generalTrxService.findAllTransactionInformation();
+		return response;
 	}
 	
 	@GetMapping("/all-transactions")
@@ -44,14 +46,16 @@ public class GeneralTrxController {
 
 	@GetMapping("/all/type/{transaction_type_id}")
 	@CrossOrigin
-	public List<GeneralTrxInfoDTO> getTransactionsByType(@PathVariable long transaction_type_id) {
-		return generalTrxService.findTransactionsByType(transaction_type_id);
+	public GeneralTrxListResponse getTransactionsByType(@PathVariable long transaction_type_id) {
+		GeneralTrxListResponse response = generalTrxService.findTransactionsByType(transaction_type_id);
+		return response;
 	}
 
 	@GetMapping("/all/user/{user_id}")
 	@CrossOrigin
-	public List<GeneralTrxInfoDTO> getTransactionsByUser(@PathVariable long user_id) {
-		return generalTrxService.findTransactionsByUser(user_id);
+	public GeneralTrxListResponse getTransactionsByUser(@PathVariable long user_id) {
+		GeneralTrxListResponse response = generalTrxService.findTransactionsByUser(user_id);
+		return response;
 	}
 
 	@GetMapping("/transaction-dto/{transaction_id}")

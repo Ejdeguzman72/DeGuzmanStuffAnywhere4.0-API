@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.ExerciseDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.ExerciseListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.ExerciseInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_dao.ExerciseJpaDao;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_model.Exercise;
@@ -29,8 +30,12 @@ public class ExerciseService {
 	@Autowired
 	private ExerciseJpaDao exerciseDao;
 	
-	public List<ExerciseInfoDTO> findAllExerciseInformation() {
-		return exerciseDaoImpl.findAllExerciseInformation();
+	public ExerciseListResponse findAllExerciseInformation() {
+		ExerciseListResponse response = new ExerciseListResponse();
+		List<ExerciseInfoDTO> list = exerciseDaoImpl.findAllExerciseInformation();
+		
+		response.setList(list);
+		return response;
 	}
 	
 	public ResponseEntity<Map<String, Object>> getAllExercisePagination(@RequestParam(required = false) String exerciseName,
@@ -66,12 +71,20 @@ public class ExerciseService {
 		}
 	}
 	
-	public List<ExerciseInfoDTO> findExerciseInformationByUser(@PathVariable long user_id) {
-		return exerciseDaoImpl.findExerciseInformationByUser(user_id);
+	public ExerciseListResponse findExerciseInformationByUser(@PathVariable long user_id) {
+		ExerciseListResponse response = new ExerciseListResponse();
+		List<ExerciseInfoDTO> list = exerciseDaoImpl.findExerciseInformationByUser(user_id);
+		
+		response.setList(list);
+		return response;
 	}
 	
-	public List<ExerciseInfoDTO> findExerciseInformationByType(int exercise_type_id) {
-		return exerciseDaoImpl.findExerciseInformationByType(exercise_type_id);
+	public ExerciseListResponse findExerciseInformationByType(int exercise_type_id) {
+		ExerciseListResponse response = new ExerciseListResponse();
+		List<ExerciseInfoDTO> list = exerciseDaoImpl.findExerciseInformationByType(exercise_type_id);
+		
+		response.setList(list);
+		return response;
 	}
 	
 	public ResponseEntity<ExerciseInfoDTO> findExerciseDTOById(@PathVariable int exercise_id) {

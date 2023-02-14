@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.AutoRepairShopDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoShopListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateAutoShopException;
 import com.deguzman.DeGuzmanStuffAnywhere.model.AutoRepairShop;
 import com.deguzman.DeGuzmanStuffAnywhere.service.AutoRepairShopService;
@@ -33,8 +34,9 @@ public class AutoShopController {
 
 	@GetMapping("/all")
 	@CrossOrigin
-	public List<AutoRepairShop> getAllAutoRepairShopInformation() {
-		return autoShopService.findAllAutoRepairShopInfo();
+	public AutoShopListResponse getAllAutoRepairShopInformation() {
+		AutoShopListResponse response = autoShopService.findAllAutoRepairShopInfo();
+		return response;
 	}
 
 	@GetMapping("/all-shops")
@@ -59,8 +61,9 @@ public class AutoShopController {
 
 	@GetMapping("/repair-shop/zip/{zip}")
 	@CrossOrigin
-	public List<AutoRepairShop> getAutoRepairShopByZip(@PathVariable String zip) {
-		return autoShopService.findAutoRepairShopByZip(zip);
+	public AutoShopListResponse getAutoRepairShopByZip(@PathVariable String zip) {
+		AutoShopListResponse response = autoShopService.findAutoRepairShopByZip(zip);
+		return response;
 	}
 
 	@GetMapping("/repair-shop/count")

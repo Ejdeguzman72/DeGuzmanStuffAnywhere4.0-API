@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.AutoRepairShopDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoShopListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateAutoShopException;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_dao.AutoRepairShopJpaDao;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_model.AutoRepairShop;
@@ -29,8 +30,13 @@ public class AutoRepairShopService {
 	@Autowired
 	private AutoRepairShopJpaDao autoShopDao;
 
-	public List<com.deguzman.DeGuzmanStuffAnywhere.model.AutoRepairShop> findAllAutoRepairShopInfo() {
-		return autoRepairShopDaoImpl.findAllAutoRepairShopInfo();
+	public AutoShopListResponse findAllAutoRepairShopInfo() {
+		AutoShopListResponse response = new AutoShopListResponse();
+		List<com.deguzman.DeGuzmanStuffAnywhere.model.AutoRepairShop> list = autoRepairShopDaoImpl.findAllAutoRepairShopInfo();
+		
+		response.setList(list);
+		
+		return response;
 	}
 	
 	public ResponseEntity<Map<String, Object>> getAllAutoShopsPagination(
@@ -71,8 +77,13 @@ public class AutoRepairShopService {
 		return autoRepairShopDaoImpl.findAutoRepairShopByName(autoShopName);
 	}
 	
-	public List<com.deguzman.DeGuzmanStuffAnywhere.model.AutoRepairShop> findAutoRepairShopByZip(@PathVariable String zip) {
-		return autoRepairShopDaoImpl.findAutoRepairShopByZip(zip);
+	public AutoShopListResponse findAutoRepairShopByZip(@PathVariable String zip) {
+		AutoShopListResponse response = new AutoShopListResponse();
+		List<com.deguzman.DeGuzmanStuffAnywhere.model.AutoRepairShop> list = autoRepairShopDaoImpl.findAutoRepairShopByZip(zip);
+		
+		response.setList(list);
+		
+		return response;
 	}
 	
 	public long getCountOfAutoRepairShops() {

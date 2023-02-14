@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.AutoTrxDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoShopListResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoTrxListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.AutoTrxInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.InvalidAutoShopException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.InvalidTransactionException;
@@ -36,8 +38,9 @@ public class AutoTrxController {
 
 	@GetMapping("/all")
 	@CrossOrigin(origins = "*", maxAge = 3600)
-	public List<AutoTrxInfoDTO> getAllAutoTransactionInformation() {
-		return autoTrxService.findAllAutoTransactionInformation();
+	public AutoTrxListResponse getAllAutoTransactionInformation() {
+		AutoTrxListResponse response = autoTrxService.findAllAutoTransactionInformation();
+		return response;
 	}
 	
 	@GetMapping("/all-transactions")
@@ -48,20 +51,23 @@ public class AutoTrxController {
 
 	@GetMapping("/all/vehicle/{vehicle_id}")
 	@CrossOrigin
-	public List<AutoTrxInfoDTO> getAutoTransactionsByVehicle(@PathVariable long vehicle_id) {
-		return autoTrxService.findAutoTransactionsByVehicle(vehicle_id);
+	public AutoTrxListResponse getAutoTransactionsByVehicle(@PathVariable long vehicle_id) {
+		AutoTrxListResponse response = autoTrxService.findAutoTransactionsByVehicle(vehicle_id);
+		return response;
 	}
 
 	@GetMapping("/all/users/{user_id}")
 	@CrossOrigin
-	public List<AutoTrxInfoDTO> getAutoTransactionsByUser(@PathVariable long user_id) {
-		return autoTrxService.findAutoTransactionsByUser(user_id);
+	public AutoTrxListResponse getAutoTransactionsByUser(@PathVariable long user_id) {
+		AutoTrxListResponse response = autoTrxService.findAutoTransactionsByUser(user_id);
+		return response;
 	}
 
 	@GetMapping("/all/type/{transaction_type_id}")
 	@CrossOrigin
-	public List<AutoTrxInfoDTO> getAutoTransactionsByType(@PathVariable long transaction_type_id) {
-		return autoTrxService.findAutoTransactionsByType(transaction_type_id);
+	public AutoTrxListResponse getAutoTransactionsByType(@PathVariable long transaction_type_id) {
+		AutoTrxListResponse response = autoTrxService.findAutoTransactionsByType(transaction_type_id);
+		return response;
 	}
 
 	@GetMapping("/auto-transaction-dto/{auto_transaction_id}")

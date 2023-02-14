@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.AutoTrxDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoShopListResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoTrxListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.AutoTrxInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.InvalidAutoShopException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.InvalidTransactionException;
@@ -34,8 +36,12 @@ public class AutoTrxService {
 	@Autowired
 	private AutoTrxJpaDao autoTrxDao;
 	
-	public List<AutoTrxInfoDTO> findAllAutoTransactionInformation() {
-		return autoTrxDaoImpl.findAllAutoTransactionInformation();
+	public AutoTrxListResponse findAllAutoTransactionInformation() {
+		AutoTrxListResponse response = new AutoTrxListResponse();
+		List<AutoTrxInfoDTO> list = autoTrxDaoImpl.findAllAutoTransactionInformation();
+		
+		response.setList(list);
+		return response;
 	}
 	
 	public ResponseEntity<Map<String, Object>> getAllTransactionsPagination(@RequestParam(required = false) String paymentDate,
@@ -71,16 +77,28 @@ public class AutoTrxService {
 		}
 	}
 	
-	public List<AutoTrxInfoDTO> findAutoTransactionsByVehicle(long vehicle_id) {
-		return autoTrxDaoImpl.findAutoTransactionsByVehicle(vehicle_id);
+	public AutoTrxListResponse findAutoTransactionsByVehicle(long vehicle_id) {
+		AutoTrxListResponse response = new AutoTrxListResponse();
+		List<AutoTrxInfoDTO> list = autoTrxDaoImpl.findAutoTransactionsByVehicle(vehicle_id);
+		
+		response.setList(list);
+		return response;
 	}
 	
-	public List<AutoTrxInfoDTO> findAutoTransactionsByUser(long user_id) {
-		return autoTrxDaoImpl.findAutoTransactionsByUser(user_id);
+	public AutoTrxListResponse findAutoTransactionsByUser(long user_id) {
+		AutoTrxListResponse response = new AutoTrxListResponse();
+		List<AutoTrxInfoDTO> list =autoTrxDaoImpl.findAutoTransactionsByUser(user_id);
+		
+		response.setList(list);
+		return response;
 	}
 	
-	public List<AutoTrxInfoDTO> findAutoTransactionsByType(long transaction_type_id) {
-		return autoTrxDaoImpl.findAutoTransactionsByType(transaction_type_id);
+	public AutoTrxListResponse findAutoTransactionsByType(long transaction_type_id) {
+		AutoTrxListResponse response = new AutoTrxListResponse();
+		List<AutoTrxInfoDTO> list = autoTrxDaoImpl.findAutoTransactionsByType(transaction_type_id);
+		
+		response.setList(list);
+		return response;
 	}
 	
 	public ResponseEntity<AutoTrxInfoDTO> findAutoTransactionInformationDTOById(@PathVariable long auto_shop_id) throws InvalidTransactionException {

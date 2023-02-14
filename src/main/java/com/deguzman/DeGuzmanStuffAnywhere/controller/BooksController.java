@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.BooksDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.BooksListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateBookNameException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
 import com.deguzman.DeGuzmanStuffAnywhere.model.Books;
@@ -33,8 +34,9 @@ public class BooksController {
 
 	@GetMapping("/all")
 	@CrossOrigin(origins = "*", maxAge = 3600)
-	public List<Books> getAllBooksInformation() {
-		return bookService.findAllBookInformation();
+	public BooksListResponse getAllBooksInformation() {
+		BooksListResponse response = bookService.findAllBookInformation();
+		return response;
 	}
 
 	@GetMapping("/all-books")
@@ -46,8 +48,9 @@ public class BooksController {
 
 	@GetMapping("/book/artist/{author}")
 	@CrossOrigin(origins = "*", maxAge = 3600)
-	public List<Books> getBooksInformationByAuthor(@PathVariable String author) {
-		return bookService.findAllBooksByAuthor(author);
+	public BooksListResponse getBooksInformationByAuthor(@PathVariable String author) {
+		BooksListResponse response = bookService.findAllBooksByAuthor(author);
+		return response;
 	}
 
 	@GetMapping("/book/{book_id}")

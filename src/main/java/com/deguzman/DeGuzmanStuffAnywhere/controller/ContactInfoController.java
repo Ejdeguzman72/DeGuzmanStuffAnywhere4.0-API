@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.ContactDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.ContactListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateContactException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
 import com.deguzman.DeGuzmanStuffAnywhere.model.Person;
@@ -33,8 +34,9 @@ public class ContactInfoController {
 
 	@GetMapping("/all")
 	@CrossOrigin
-	public List<Person> getAllPersonInfo() throws SecurityException, IOException {
-		return contactInfoService.findAllPersonInformation();
+	public ContactListResponse getAllPersonInfo() throws SecurityException, IOException {
+		ContactListResponse response = contactInfoService.findAllPersonInformation();
+		return response;
 	}
 
 	@GetMapping("/all-contacts")
