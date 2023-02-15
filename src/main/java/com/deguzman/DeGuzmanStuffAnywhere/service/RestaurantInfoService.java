@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.RestaurantDaoImpl;
-import com.deguzman.DeGuzmanStuffAnywhere.domain.RestaurantAddRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.RestaurantAddUpdateRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.RestaurantAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.RestaurantListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.RestaurantInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateRestaurantException;
@@ -111,8 +112,25 @@ public class RestaurantInfoService {
 		return restaurantDaoImpl.getRestaurantCount();
 	}
 	
-	public int addRestaurantInformation(RestaurantAddRequest request) throws ResourceNotFoundException, DuplicateRestaurantException {
-		return restaurantDaoImpl.addRestaurantInformation(request);
+	public RestaurantAddUpdateResponse addRestaurantInformation(RestaurantAddUpdateRequest request) throws ResourceNotFoundException, DuplicateRestaurantException {
+		RestaurantAddUpdateResponse response = new RestaurantAddUpdateResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.Restaurant restaurant = null;
+		int count = 0;
+		
+		count = restaurantDaoImpl.addRestaurantInformation(request);
+		if (count > 0) {
+			restaurant.setAddress(request.getAddress());
+			restaurant.setCity(request.getCity());
+			restaurant.setName(request.getName());
+			restaurant.setRestaurant_type_id(request.getRestaurant_type_id());
+			restaurant.setState(request.getState());
+			restaurant.setZip(request.getZip());
+			if (restaurant != null) {
+				response.setRestaurant(restaurant);
+			}
+		}
+		
+		return response;
 	}
 	
 	public int updateRestaurantInformation(int restaurant_id, com.deguzman.DeGuzmanStuffAnywhere.model.Restaurant restaurantDetails) throws ResourceNotFoundException {

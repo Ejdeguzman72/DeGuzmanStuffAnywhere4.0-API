@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.ContactDaoImpl;
-import com.deguzman.DeGuzmanStuffAnywhere.domain.ContactAddRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.ContactAddUpdateRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.ContactListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateContactException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
@@ -82,7 +82,7 @@ public class ContactInfoController {
 
 	@PostMapping("/add-person-information")
 	@CrossOrigin
-	public int saveContactInformation(@RequestBody @Valid ContactAddRequest request) throws SecurityException, IOException, DuplicateContactException {
+	public int saveContactInformation(@RequestBody @Valid ContactAddUpdateRequest request) throws SecurityException, IOException, DuplicateContactException {
 		return contactInfoService.addPersonInformation(request);
 	}
 	

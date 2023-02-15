@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.AutoRepairShopDaoImpl;
-import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoShopAddRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoShopAddUpdateRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoShopAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoShopListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateAutoShopException;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_dao.AutoRepairShopJpaDao;
@@ -78,7 +79,7 @@ public class AutoRepairShopService {
 		return autoRepairShopDaoImpl.findAutoRepairShopByName(autoShopName);
 	}
 	
-	public AutoShopListResponse findAutoRepairShopByZip(@PathVariable String zip) {
+	public AutoShopListResponse findAutoRepairShopByZip(String zip) {
 		AutoShopListResponse response = new AutoShopListResponse();
 		List<com.deguzman.DeGuzmanStuffAnywhere.model.AutoRepairShop> list = autoRepairShopDaoImpl.findAutoRepairShopByZip(zip);
 		
@@ -91,8 +92,22 @@ public class AutoRepairShopService {
 		return autoRepairShopDaoImpl.getCountOfAutoRepairShops();
 	}
 	
-	public int addAutoRepairShopInfo(AutoShopAddRequest request) throws DuplicateAutoShopException {
-		return autoRepairShopDaoImpl.addAutoRepairShopInfo(request);
+	public AutoShopAddUpdateResponse addAutoRepairShopInfo(AutoShopAddUpdateRequest request) throws DuplicateAutoShopException {
+		AutoShopAddUpdateResponse response = new AutoShopAddUpdateResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.AutoRepairShop autoShop = new com.deguzman.DeGuzmanStuffAnywhere.model.AutoRepairShop();
+		int count = 0;
+		
+		count = autoRepairShopDaoImpl.addAutoRepairShopInfo(request);
+		if (count > 0) {
+			autoShop.setAddress(request.getAddress());
+			autoShop.setAutoShopName(request.getAutoShopName());
+			autoShop.setCity(request.getCity());
+			autoShop.setState(request.getState());
+			autoShop.setZip(request.getZip());
+		}
+		
+		response.setAutoShop(autoShop);
+		return response;
 	}
 	
 	public int updateAutoShopInfo(int auto_shop_id, com.deguzman.DeGuzmanStuffAnywhere.model.AutoRepairShop shopDetails) {

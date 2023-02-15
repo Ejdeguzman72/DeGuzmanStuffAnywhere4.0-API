@@ -2,7 +2,7 @@ package com.deguzman.DeGuzmanStuffAnywhere.domain;
 
 import com.deguzman.DeGuzmanStuffAnywhere.model.AutoRepairShop;
 
-public class AutoShopAddRequest extends AutoRepairShop {
+public class AutoShopAddUpdateRequest extends AutoRepairShop {
 
 	/**
 	 * 

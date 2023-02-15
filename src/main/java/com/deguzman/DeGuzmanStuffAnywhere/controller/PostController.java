@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.PostDaoImpl;
-import com.deguzman.DeGuzmanStuffAnywhere.domain.PostAddRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.PostAddUpdateRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.PostListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.PostDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.model.Post;
@@ -52,7 +52,7 @@ public class PostController {
 	}
 	
 	@PostMapping("/add-post")
-	public int addPostInformation(@RequestBody @Valid PostAddRequest request) {
+	public int addPostInformation(@RequestBody @Valid PostAddUpdateRequest request) {
 		return socialMediaService.addPost(request);
 	}
 	

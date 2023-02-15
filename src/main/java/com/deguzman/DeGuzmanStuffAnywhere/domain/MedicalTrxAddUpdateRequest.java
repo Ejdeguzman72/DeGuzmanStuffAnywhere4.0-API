@@ -2,7 +2,7 @@ package com.deguzman.DeGuzmanStuffAnywhere.domain;
 
 import com.deguzman.DeGuzmanStuffAnywhere.model.MedicalTransaction;
 
-public class MedicalTrxAddRequest extends MedicalTransaction {
+public class MedicalTrxAddUpdateRequest extends MedicalTransaction {
 
 	/**
 	 * 

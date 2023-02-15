@@ -2,7 +2,7 @@ package com.deguzman.DeGuzmanStuffAnywhere.domain;
 
 import com.deguzman.DeGuzmanStuffAnywhere.model.AutoTransaction;
 
-public class AutoTrxAddRequest extends AutoTransaction {
+public class AutoTrxAddUpdateRequest extends AutoTransaction {
 
 	/**
 	 * 

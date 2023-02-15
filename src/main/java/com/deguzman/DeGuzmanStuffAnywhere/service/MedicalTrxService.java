@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.MedicalTrxDaoImpl;
-import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalTrxAddRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalTrxAddUpdateRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalTrxAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalTrxListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.MedicalTrxInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
@@ -104,8 +105,24 @@ public class MedicalTrxService {
 		return medicalTrxDaoImpl.getCountOfMedicalTransactions();
 	}
 	
-	public int addMedicalTranactionInformation(MedicalTrxAddRequest request) throws ResourceNotFoundException {
-		return medicalTrxDaoImpl.addMedicalTransactionInformation(request);
+	public MedicalTrxAddUpdateResponse addMedicalTranactionInformation(MedicalTrxAddUpdateRequest request) throws ResourceNotFoundException {
+		MedicalTrxAddUpdateResponse response = new MedicalTrxAddUpdateResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.MedicalTransaction transaction = null;
+		int count = 0;
+		
+		count = medicalTrxDaoImpl.addMedicalTransactionInformation(request);
+		if (count > 0) {
+			transaction.setAmount(request.getAmount());
+			transaction.setMedical_office_id(request.getMedical_office_id());
+			transaction.setMedical_transaction_date(request.getMedical_transaction_date());
+			transaction.setTransaction_type_id(request.getTransaction_type_id());
+			transaction.setUser_id(request.getUser_id());
+			if (transaction != null) {
+				response.setTransaction(transaction);
+			}
+		}
+		
+		return response;
 	}
 	
 	public int updateMedicalTransaction(long medical_transaction_id, com.deguzman.DeGuzmanStuffAnywhere.model.MedicalTransaction medicalTransactionDetails) {

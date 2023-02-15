@@ -2,7 +2,7 @@ package com.deguzman.DeGuzmanStuffAnywhere.domain;
 
 import com.deguzman.DeGuzmanStuffAnywhere.model.GeneralTransaction;
 
-public class GeneralTrxAddRequest extends GeneralTransaction {
+public class GeneralTrxAddUpdateRequest extends GeneralTransaction {
 
 	/**
 	 * 

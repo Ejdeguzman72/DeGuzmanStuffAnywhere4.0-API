@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.AutoTrxDaoImpl;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoShopListResponse;
-import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoTrxAddRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoTrxAddUpdateRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoTrxAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoTrxListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.AutoTrxInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.InvalidAutoShopException;
@@ -114,8 +115,25 @@ public class AutoTrxService {
 		return autoTrxDaoImpl.getCountOfAutoTransactions();
 	}
 	
-	public int addAutoTranactionInformation(AutoTrxAddRequest request) throws InvalidAutoShopException, InvalidUserException, InvalidTransactionTypeException, InvalidVehicleException {
-		return autoTrxDaoImpl.addAutoTransactionInformation(request);
+	public AutoTrxAddUpdateResponse addAutoTranactionInformation(AutoTrxAddUpdateRequest request) throws InvalidAutoShopException, InvalidUserException, InvalidTransactionTypeException, InvalidVehicleException {
+		AutoTrxAddUpdateResponse response = new AutoTrxAddUpdateResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.AutoTransaction transaction = null;
+		int count = 0;
+		
+		count = autoTrxDaoImpl.addAutoTransactionInformation(request);
+		if (count > 0) {
+			transaction.setAmount(request.getAmount());
+			transaction.setAuto_shop_id(request.getAuto_shop_id());
+			transaction.setAuto_transaction_date(request.getAuto_transaction_date());
+			transaction.setTransaction_type_id(request.getTransaction_type_id());
+			transaction.setUser_id(request.getUser_id());
+			transaction.setVehicle_id(request.getVehicle_id());
+			if (transaction != null) {
+				response.setTransaction(transaction);
+			}
+		}
+		
+		return response;
 	}
 	
 	public int updateTransactionInformation(long auto_transaction_id, com.deguzman.DeGuzmanStuffAnywhere.model.AutoTransaction autoTransactionDetails) throws InvalidAutoShopException, InvalidVehicleException, InvalidTransactionTypeException, InvalidUserException {

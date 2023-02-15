@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.BooksDaoImpl;
-import com.deguzman.DeGuzmanStuffAnywhere.domain.BooksAddRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.BooksAddUpdateRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.BooksAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.BooksListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateBookNameException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
@@ -93,8 +94,23 @@ public class BooksService {
 		return booksDaoImpl.getBookCount();
 	}
 	
-	public int addBooksInformation(BooksAddRequest request) throws DuplicateBookNameException {
-		return booksDaoImpl.addBooksInformation(request);
+	public BooksAddUpdateResponse addBooksInformation(BooksAddUpdateRequest request) throws DuplicateBookNameException {
+		BooksAddUpdateResponse response = new BooksAddUpdateResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.Books book = null;
+		int count = 0;
+		
+		count = booksDaoImpl.addBooksInformation(request);
+		
+		if (count > 0) {
+			book.setAuthor(request.getAuthor());
+			book.setDescr(request.getDescr());
+			book.setTitle(request.getTitle());
+			if (book != null) {
+				response.setBook(book);
+			}
+		}
+		
+		return response;
 	}
 	
 	public int updateBooksInformation(int book_id, com.deguzman.DeGuzmanStuffAnywhere.model.Books book) {

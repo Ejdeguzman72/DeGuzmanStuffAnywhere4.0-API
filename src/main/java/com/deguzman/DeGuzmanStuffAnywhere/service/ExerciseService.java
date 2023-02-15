@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.ExerciseDaoImpl;
-import com.deguzman.DeGuzmanStuffAnywhere.domain.ExerciseAddRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.ExerciseAddUpdateRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.ExerciseAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.ExerciseListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.ExerciseInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_dao.ExerciseJpaDao;
@@ -92,8 +93,28 @@ public class ExerciseService {
 		return exerciseDaoImpl.findExerciseDTOById(exercise_id);
 	}
 	
-	public int addExerciseInformation(ExerciseAddRequest request) {
-		return exerciseDaoImpl.addExerciseInformation(request);
+	public ExerciseAddUpdateResponse addExerciseInformation(ExerciseAddUpdateRequest request) {
+		ExerciseAddUpdateResponse response = new ExerciseAddUpdateResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.Exercise exercise = null;
+		int count = 0;
+
+		count = exerciseDaoImpl.addExerciseInformation(request);
+		
+		if (count > 0) {
+			exercise.setDate(request.getDate());
+			exercise.setExerciseName(request.getExerciseName());
+			exercise.setExercise_type_id(request.getExercise_type_id());
+			exercise.setReps(request.getReps());
+			exercise.setSets(request.getSets());
+			exercise.setUser_id(request.getUser_id());
+			exercise.setWeight(request.getWeight());
+			
+			if (exercise != null) {
+				response.setExercise(exercise);
+			}
+		}
+		
+		return response;
 	}
 	
 	public int updateExerciseInformation(int exercise_id, com.deguzman.DeGuzmanStuffAnywhere.model.Exercise exerciseDetails) {

@@ -2,7 +2,7 @@ package com.deguzman.DeGuzmanStuffAnywhere.domain;
 
 import com.deguzman.DeGuzmanStuffAnywhere.model.Restaurant;
 
-public class RestaurantAddRequest extends Restaurant {
+public class RestaurantAddUpdateRequest extends Restaurant {
 
 	/**
 	 * 

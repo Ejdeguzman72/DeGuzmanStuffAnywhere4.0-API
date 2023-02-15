@@ -14,7 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.MedicalOfficeDaoImpl;
-import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalOfficeAddRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalOfficeAddUpdateRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalOfficeAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalOfficeListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateOfficeException;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_dao.MedicalOfficeJpaDao;
@@ -83,8 +84,25 @@ public class MedicalOfficeService {
 		return medicalOfficeDaoImpl.getMedicalOfficeCount();
 	}
 	
-	public int addMedicalOfficeInformation(MedicalOfficeAddRequest request) throws DuplicateOfficeException {
-		return medicalOfficeDaoImpl.addMedicalOfficeInformation(request);
+	public MedicalOfficeAddUpdateResponse addMedicalOfficeInformation(MedicalOfficeAddUpdateRequest request) throws DuplicateOfficeException {
+		MedicalOfficeAddUpdateResponse response = new MedicalOfficeAddUpdateResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.MedicalOffice office = null;
+		int count = 0;
+		
+		count = medicalOfficeDaoImpl.addMedicalOfficeInformation(request);
+		if (count > 0) {
+			office.setAddress(request.getAddress());
+			office.setCity(request.getCity());
+			office.setMedicalOfficeId(request.getMedicalOfficeId());
+			office.setName(request.getName());
+			office.setState(request.getState());
+			office.setZip(request.getZip());
+			if (office != null) {
+				response.setOffice(office);
+			}
+		}
+		
+		return response;
 	}
 	
 	public int updateMedicalOfficeInformation(long medicalOfficeId, com.deguzman.DeGuzmanStuffAnywhere.model.MedicalOffice officeDetails) {

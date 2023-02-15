@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.SongDaoImpl;
-import com.deguzman.DeGuzmanStuffAnywhere.domain.SongAddRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SongAddUpdateRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SongAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.SongListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateSongTitleException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
@@ -100,8 +101,22 @@ public class SongService {
 		return songDaoImpl.findSongCount();
 	}
 	
-	public int addSongInformation(SongAddRequest request) throws DuplicateSongTitleException {
-		return songDaoImpl.addSongInformation(request);
+	public SongAddUpdateResponse addSongInformation(SongAddUpdateRequest request) throws DuplicateSongTitleException {
+		SongAddUpdateResponse response = new SongAddUpdateResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.Song song = null;
+		int count = 0;
+		
+		count = songDaoImpl.addSongInformation(request);
+		if (count > 0) {
+			song.setArtist(request.getArtist());
+			song.setGenre(request.getGenre());
+			song.setTitle(request.getTitle());
+			if (song != null) {
+				response.setSong(song);
+			}
+		}
+		
+		return response;
 	}
 	
 	public int updateSongInformation(int song_id, com.deguzman.DeGuzmanStuffAnywhere.model.Song songDetails) {

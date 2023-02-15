@@ -16,7 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.GeneralTrxDaoImpl;
-import com.deguzman.DeGuzmanStuffAnywhere.domain.GeneralTrxAddRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.GeneralTrxAddUpdateRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.GeneralTrxAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.GeneralTrxListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.GeneralTrxInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
@@ -97,8 +98,25 @@ public class GeneralTrxService {
 		return generalTrxDaoImpl.findCountOfGeneralTransaction();
 	}
 	
-	public int addTransactionInformation(GeneralTrxAddRequest request) throws ResourceNotFoundException {
-		return generalTrxDaoImpl.addTransactionInformation(request);
+	public GeneralTrxAddUpdateResponse addTransactionInformation(GeneralTrxAddUpdateRequest request) throws ResourceNotFoundException {
+		GeneralTrxAddUpdateResponse response = new GeneralTrxAddUpdateResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.GeneralTransaction transaction = null;
+		int count = 0;
+		
+		count = generalTrxDaoImpl.addTransactionInformation(request);
+		if (count > 0) {
+			transaction.setAmount(request.getAmount());
+			transaction.setEntity(request.getEntity());
+			transaction.setPayment_date(request.getPayment_date());
+			transaction.setTransaction_type_id(request.getTransaction_type_id());
+			transaction.setUser_id(request.getUser_id());
+			
+			if (transaction != null) {
+				response.setTransaction(transaction);
+			}
+		}
+		
+		return response;
 	}
 	
 	public int updateTransactionInformation(Long transaction_id, com.deguzman.DeGuzmanStuffAnywhere.model.GeneralTransaction transaction) {

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.VehicleDaoImpl;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.VehicleListResponse;
-import com.deguzman.DeGuzmanStuffAnywhere.domain.VehilceAddRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.VehilceAddUpdateRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.InvalidVehicleException;
 import com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle;
 import com.deguzman.DeGuzmanStuffAnywhere.service.VehicleService;
@@ -90,14 +90,14 @@ public class VehicleController {
 
 	@PostMapping("/add-vehicle-information")
 	@CrossOrigin
-	public int addVehicleInformation(@RequestBody @Valid VehilceAddRequest request) {
+	public int addVehicleInformation(@RequestBody @Valid VehilceAddUpdateRequest request) {
 		return vehicleService.addVehicleInformation(request);
 	}
 	
 	@PutMapping("/vehicle/{vehicleId}")
 	@CrossOrigin
-	public int updateVehicleInformation(@PathVariable int vehicleId, @RequestBody Vehicle vehicleDetails) {
-		return vehicleService.updateVehicleInfomration(vehicleId, vehicleDetails);
+	public int updateVehicleInformation(@PathVariable int vehicleId, @RequestBody @Valid VehilceAddUpdateRequest request) {
+		return vehicleService.updateVehicleInfomration(vehicleId, request);
 	}
 
 	@DeleteMapping("/vehicle/{vehicleId}")

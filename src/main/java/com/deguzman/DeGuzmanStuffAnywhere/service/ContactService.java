@@ -17,7 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.ContactDaoImpl;
-import com.deguzman.DeGuzmanStuffAnywhere.domain.ContactAddRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.ContactAddUpdateRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.ContactAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.ContactListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateContactException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
@@ -94,8 +95,30 @@ public class ContactService {
 		return contactDaoImpl.getCountOfPersonInformation();
 	}
 	
-	public int addPersonInformation(ContactAddRequest request) throws SecurityException, IOException, DuplicateContactException {
-		return contactDaoImpl.addPersonInformation(request);
+	public ContactAddUpdateResponse addPersonInformation(ContactAddUpdateRequest request) throws SecurityException, IOException, DuplicateContactException {
+		ContactAddUpdateResponse response = new ContactAddUpdateResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.Person person = null;
+		int count = 0;
+		
+		count = contactDaoImpl.addPersonInformation(request);
+		if (count != 0) {
+			person.setFirstname(request.getFirstname());
+			person.setMiddleInitial(request.getMiddleInitial());
+			person.setLastname(request.getLastname());
+			person.setAddress01(request.getAddress01());
+			person.setAddress02(request.getAddress02());
+			person.setCity(request.getCity());
+			person.setState(request.getState());
+			person.setZipcode(request.getZipcode());
+			person.setBirthdate(request.getBirthdate());
+			person.setEmail(request.getEmail());
+			person.setPhone(request.getPhone());
+			if (person != null) {
+				response.setPerson(person);
+			}
+		}
+		
+		return response;
 	}
 	
 	public int updatePersonInformation(int personId, com.deguzman.DeGuzmanStuffAnywhere.model.Person personDetails) throws SecurityException, IOException {

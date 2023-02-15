@@ -2,7 +2,7 @@ package com.deguzman.DeGuzmanStuffAnywhere.domain;
 
 import com.deguzman.DeGuzmanStuffAnywhere.model.RunTracker;
 
-public class RunTrackerAddRequest extends RunTracker {
+public class RunTrackerAddUpdateRequest extends RunTracker {
 
 	/**
 	 * 

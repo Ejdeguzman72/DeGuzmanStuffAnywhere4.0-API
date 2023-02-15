@@ -2,7 +2,7 @@ package com.deguzman.DeGuzmanStuffAnywhere.domain;
 
 import com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle;
 
-public class VehilceAddRequest extends Vehicle {
+public class VehilceAddUpdateRequest extends Vehicle {
 
 	/**
 	 * 

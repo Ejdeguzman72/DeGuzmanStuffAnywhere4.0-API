@@ -2,7 +2,7 @@ package com.deguzman.DeGuzmanStuffAnywhere.domain;
 
 import com.deguzman.DeGuzmanStuffAnywhere.model.MedicalOffice;
 
-public class MedicalOfficeAddRequest extends MedicalOffice {
+public class MedicalOfficeAddUpdateRequest extends MedicalOffice {
 
 	/**
 	 * 

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.ExerciseDaoImpl;
-import com.deguzman.DeGuzmanStuffAnywhere.domain.ExerciseAddRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.ExerciseAddUpdateRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.ExerciseListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.ExerciseInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.model.Exercise;
@@ -75,7 +75,7 @@ public class ExerciseController {
 
 	@PostMapping("/add-exercise-information")
 	@CrossOrigin
-	public int addExerciseInformation(@RequestBody @Valid ExerciseAddRequest request) {
+	public int addExerciseInformation(@RequestBody @Valid ExerciseAddUpdateRequest request) {
 		return exerciseInfoService.addExerciseInformation(request);
 	}
 	

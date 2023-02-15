@@ -2,7 +2,7 @@ package com.deguzman.DeGuzmanStuffAnywhere.domain;
 
 import com.deguzman.DeGuzmanStuffAnywhere.model.Exercise;
 
-public class ExerciseAddRequest extends Exercise {
+public class ExerciseAddUpdateRequest extends Exercise {
 
 	/**
 	 * 

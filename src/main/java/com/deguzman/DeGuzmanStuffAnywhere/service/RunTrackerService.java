@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.RunTrackerDaoImpl;
-import com.deguzman.DeGuzmanStuffAnywhere.domain.RunTrackerAddRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.RunTrackerAddUpdateRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.RunTrackerAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.RunTrackerListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.RunTrackerInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_dao.RunTrackerJpaDao;
@@ -91,8 +92,23 @@ public class RunTrackerService {
 		return runTrackerDaoImpl.findCountOfRunTrackerInformation();
 	}
 	
-	public int addRunTrackerInfomration(RunTrackerAddRequest request) {
-		return runTrackerDaoImpl.addRunTrackerInformation(request);
+	public RunTrackerAddUpdateResponse addRunTrackerInfomration(RunTrackerAddUpdateRequest request) {
+		RunTrackerAddUpdateResponse response = new RunTrackerAddUpdateResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.RunTracker runTracker = null;
+		int count = 0;
+		
+		count = runTrackerDaoImpl.addRunTrackerInformation(request);
+		if (count > 0) {
+			runTracker.setRunDate(request.getRunDate());
+			runTracker.setRunDistance(request.getRunDistance());
+			runTracker.setRunTime(request.getRunTime());
+			runTracker.setUser_id(request.getUser_id());
+			if (runTracker != null) {
+				response.setRunTracker(runTracker);
+			}
+		}
+		
+		return response;
 	}
 	
 	public int updateRunTrackerInformation(long run_id, com.deguzman.DeGuzmanStuffAnywhere.model.RunTracker runTrackerDetails) {
