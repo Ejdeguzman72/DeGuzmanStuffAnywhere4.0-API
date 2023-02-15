@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.ContactDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.ContactAddRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.ContactListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateContactException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
@@ -73,15 +74,15 @@ public class ContactService {
 		}
 	}
 	
-	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.Person> findPersonById(@PathVariable int personId) throws ResourceNotFoundException, SecurityException, IOException {
+	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.Person> findPersonById(int personId) throws ResourceNotFoundException, SecurityException, IOException {
 		return contactDaoImpl.findPersonById(personId);
 	}
 	
-	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.Person> findPersonByLastname(@PathVariable String lastname) {
+	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.Person> findPersonByLastname(String lastname) {
 		return contactDaoImpl.findPersonByLastName(lastname);
 	}
 	
-	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.Person> findPersonByEmail(@PathVariable String email) {
+	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.Person> findPersonByEmail(String email) {
 		return contactDaoImpl.findPersonByEmail(email);
 	}
 	
@@ -93,15 +94,15 @@ public class ContactService {
 		return contactDaoImpl.getCountOfPersonInformation();
 	}
 	
-	public int addPersonInformation(@RequestBody com.deguzman.DeGuzmanStuffAnywhere.model.Person person) throws SecurityException, IOException, DuplicateContactException {
-		return contactDaoImpl.addPersonInformation(person);
+	public int addPersonInformation(ContactAddRequest request) throws SecurityException, IOException, DuplicateContactException {
+		return contactDaoImpl.addPersonInformation(request);
 	}
 	
-	public int updatePersonInformation(@PathVariable int personId, @RequestBody com.deguzman.DeGuzmanStuffAnywhere.model.Person personDetails) throws SecurityException, IOException {
+	public int updatePersonInformation(int personId, com.deguzman.DeGuzmanStuffAnywhere.model.Person personDetails) throws SecurityException, IOException {
 		return contactDaoImpl.updatePersonInformation(personId, personDetails);
 	}
 	
-	public int deletePersonInformation(@PathVariable int personId) throws SecurityException, IOException {
+	public int deletePersonInformation(int personId) throws SecurityException, IOException {
 		return contactDaoImpl.deletePersonInformation(personId);
 	}
 	

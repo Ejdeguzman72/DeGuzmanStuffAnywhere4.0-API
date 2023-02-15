@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.RestaurantDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.RestaurantAddRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.RestaurantListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.RestaurantInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateRestaurantException;
@@ -110,8 +111,8 @@ public class RestaurantInfoService {
 		return restaurantDaoImpl.getRestaurantCount();
 	}
 	
-	public int addRestaurantInformation(@RequestBody com.deguzman.DeGuzmanStuffAnywhere.model.Restaurant restaurant) throws ResourceNotFoundException, DuplicateRestaurantException {
-		return restaurantDaoImpl.addRestaurantInformation(restaurant);
+	public int addRestaurantInformation(RestaurantAddRequest request) throws ResourceNotFoundException, DuplicateRestaurantException {
+		return restaurantDaoImpl.addRestaurantInformation(request);
 	}
 	
 	public int updateRestaurantInformation(int restaurant_id, com.deguzman.DeGuzmanStuffAnywhere.model.Restaurant restaurantDetails) throws ResourceNotFoundException {

@@ -3,6 +3,8 @@ package com.deguzman.DeGuzmanStuffAnywhere.controller;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.MedicalOfficeDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalOfficeAddRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalOfficeListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateOfficeException;
 import com.deguzman.DeGuzmanStuffAnywhere.model.MedicalOffice;
@@ -67,8 +70,8 @@ public class MedicalOfficeController {
 
 	@PostMapping("/add-medical-office-information")
 	@CrossOrigin
-	public int addMedicalOfficeInformation(@RequestBody MedicalOffice medicalOffice) throws DuplicateOfficeException {
-		return medOfficeService.addMedicalOfficeInformation(medicalOffice);
+	public int addMedicalOfficeInformation(@RequestBody @Valid MedicalOfficeAddRequest request) throws DuplicateOfficeException {
+		return medOfficeService.addMedicalOfficeInformation(request);
 	}
 	
 	@PutMapping("/medical-office/{medicalOfficeId}")

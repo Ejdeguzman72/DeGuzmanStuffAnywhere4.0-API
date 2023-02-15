@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.GeneralTrxDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.GeneralTrxAddRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.GeneralTrxListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.GeneralTrxInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
@@ -72,7 +73,7 @@ public class GeneralTrxService {
 		}
 	}
 	
-	public GeneralTrxListResponse findTransactionsByUser(@PathVariable long user_id) {
+	public GeneralTrxListResponse findTransactionsByUser(long user_id) {
 		GeneralTrxListResponse response = new GeneralTrxListResponse();
 		List<GeneralTrxInfoDTO> list = generalTrxDaoImpl.findTransactionsByUser(user_id);
 		
@@ -80,7 +81,7 @@ public class GeneralTrxService {
 		return response;
 	}
 	
-	public GeneralTrxListResponse findTransactionsByType(@PathVariable long transaction_type_id) {
+	public GeneralTrxListResponse findTransactionsByType(long transaction_type_id) {
 		GeneralTrxListResponse response = new GeneralTrxListResponse();
 		List<GeneralTrxInfoDTO> list = generalTrxDaoImpl.findTransactionsByType(transaction_type_id);
 		
@@ -88,7 +89,7 @@ public class GeneralTrxService {
 		return response;
 	}
 	
-	public ResponseEntity<GeneralTrxInfoDTO> findTranactionInformationDTOById(@PathVariable long transaction_id) throws ResourceNotFoundException {
+	public ResponseEntity<GeneralTrxInfoDTO> findTranactionInformationDTOById(long transaction_id) throws ResourceNotFoundException {
 		return generalTrxDaoImpl.findTransactionInformationDTOById(transaction_id);
 	}
 	
@@ -96,15 +97,15 @@ public class GeneralTrxService {
 		return generalTrxDaoImpl.findCountOfGeneralTransaction();
 	}
 	
-	public int addTransactionInformation(@RequestBody com.deguzman.DeGuzmanStuffAnywhere.model.GeneralTransaction transaction) throws ResourceNotFoundException {
-		return generalTrxDaoImpl.addTransactionInformation(transaction);
+	public int addTransactionInformation(GeneralTrxAddRequest request) throws ResourceNotFoundException {
+		return generalTrxDaoImpl.addTransactionInformation(request);
 	}
 	
-	public int updateTransactionInformation(@PathVariable Long transaction_id, @RequestBody com.deguzman.DeGuzmanStuffAnywhere.model.GeneralTransaction transaction) {
+	public int updateTransactionInformation(Long transaction_id, com.deguzman.DeGuzmanStuffAnywhere.model.GeneralTransaction transaction) {
 		return generalTrxDaoImpl.updateTransactionInformation(transaction_id, transaction);
 	}
 	
-	public int deleteTransactioninformation(@PathVariable long transaction_id) {
+	public int deleteTransactioninformation(long transaction_id) {
 		return generalTrxDaoImpl.deleteTransactionInformation(transaction_id);
 	}
 	

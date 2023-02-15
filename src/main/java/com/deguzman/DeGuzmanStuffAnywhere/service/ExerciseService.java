@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.ExerciseDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.ExerciseAddRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.ExerciseListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.ExerciseInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_dao.ExerciseJpaDao;
@@ -71,7 +72,7 @@ public class ExerciseService {
 		}
 	}
 	
-	public ExerciseListResponse findExerciseInformationByUser(@PathVariable long user_id) {
+	public ExerciseListResponse findExerciseInformationByUser(long user_id) {
 		ExerciseListResponse response = new ExerciseListResponse();
 		List<ExerciseInfoDTO> list = exerciseDaoImpl.findExerciseInformationByUser(user_id);
 		
@@ -87,15 +88,15 @@ public class ExerciseService {
 		return response;
 	}
 	
-	public ResponseEntity<ExerciseInfoDTO> findExerciseDTOById(@PathVariable int exercise_id) {
+	public ResponseEntity<ExerciseInfoDTO> findExerciseDTOById(int exercise_id) {
 		return exerciseDaoImpl.findExerciseDTOById(exercise_id);
 	}
 	
-	public int addExerciseInformation(com.deguzman.DeGuzmanStuffAnywhere.model.Exercise exercise) {
-		return exerciseDaoImpl.addExerciseInformation(exercise);
+	public int addExerciseInformation(ExerciseAddRequest request) {
+		return exerciseDaoImpl.addExerciseInformation(request);
 	}
 	
-	public int updateExerciseInformation(@PathVariable int exercise_id, @RequestBody com.deguzman.DeGuzmanStuffAnywhere.model.Exercise exerciseDetails) {
+	public int updateExerciseInformation(int exercise_id, com.deguzman.DeGuzmanStuffAnywhere.model.Exercise exerciseDetails) {
 		return exerciseDaoImpl.updateExerciseInformation(exercise_id, exerciseDetails);
 	}
 	

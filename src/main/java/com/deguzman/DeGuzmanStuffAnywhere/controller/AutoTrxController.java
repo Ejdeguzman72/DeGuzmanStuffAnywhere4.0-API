@@ -3,6 +3,8 @@ package com.deguzman.DeGuzmanStuffAnywhere.controller;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.AutoTrxDaoImpl;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoShopListResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoTrxAddRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoTrxListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.AutoTrxInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.InvalidAutoShopException;
@@ -92,10 +95,10 @@ public class AutoTrxController {
 
 	@PostMapping("/add-auto-transaction-information")
 	@CrossOrigin
-	public int addAutoTransactionInformation(@RequestBody AutoTransaction autoTransaction)
+	public int addAutoTransactionInformation(@RequestBody @Valid AutoTrxAddRequest request)
 			throws InvalidAutoShopException, InvalidUserException, InvalidTransactionTypeException,
 			InvalidVehicleException {
-		return autoTrxService.addAutoTranactionInformation(autoTransaction);
+		return autoTrxService.addAutoTranactionInformation(request);
 	}
 	
 	@PutMapping("/auto-transaction/{auto_transaction_id}")

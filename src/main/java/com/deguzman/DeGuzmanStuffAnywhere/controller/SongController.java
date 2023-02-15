@@ -3,6 +3,8 @@ package com.deguzman.DeGuzmanStuffAnywhere.controller;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.SongDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SongAddRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.SongListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateSongTitleException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
@@ -73,8 +76,8 @@ public class SongController {
 
 	@PostMapping("/add-song-information")
 	@CrossOrigin
-	public int addSongInformation(@RequestBody Song song) throws DuplicateSongTitleException {
-		return songService.addSongInformation(song);
+	public int addSongInformation(@RequestBody @Valid SongAddRequest request) throws DuplicateSongTitleException {
+		return songService.addSongInformation(request);
 	}
 	
 	@PutMapping("/song/{song_id}")

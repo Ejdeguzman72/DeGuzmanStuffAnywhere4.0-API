@@ -3,6 +3,8 @@ package com.deguzman.DeGuzmanStuffAnywhere.controller;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.GeneralTrxDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.GeneralTrxAddRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.GeneralTrxListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.GeneralTrxInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
@@ -80,9 +83,9 @@ public class GeneralTrxController {
 
 	@PostMapping("/add-general-transaction-information")
 	@CrossOrigin
-	public int addGeneralTrasactionInformation(@RequestBody GeneralTransaction transaction)
+	public int addGeneralTrasactionInformation(@RequestBody @Valid GeneralTrxAddRequest request)
 			throws ResourceNotFoundException {
-		return generalTrxService.addTransactionInformation(transaction);
+		return generalTrxService.addTransactionInformation(request);
 	}
 	
 	@PutMapping("/transaction/{transaction_id}")

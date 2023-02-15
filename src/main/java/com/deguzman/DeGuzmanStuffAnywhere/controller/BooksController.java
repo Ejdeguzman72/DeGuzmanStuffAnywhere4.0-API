@@ -3,6 +3,8 @@ package com.deguzman.DeGuzmanStuffAnywhere.controller;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.BooksDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.BooksAddRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.BooksListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateBookNameException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
@@ -67,8 +70,8 @@ public class BooksController {
 
 	@PostMapping("/add-book-information")
 	@CrossOrigin
-	public int addBookInformation(@RequestBody Books book) throws DuplicateBookNameException {
-		return bookService.addBooksInformation(book);
+	public int addBookInformation(@RequestBody @Valid BooksAddRequest request) throws DuplicateBookNameException {
+		return bookService.addBooksInformation(request);
 	}
 	
 	@PutMapping("/book/{book_id}")

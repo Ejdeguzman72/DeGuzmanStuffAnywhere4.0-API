@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.VehicleDaoImpl;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.VehicleListResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.VehilceAddRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.InvalidVehicleException;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_dao.VehicleJpaDao;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_model.Vehicle;
@@ -71,11 +72,11 @@ public class VehicleService {
 		}
 	}
 	
-	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle> findVehicleInformationById(@PathVariable long vehicleId) throws InvalidVehicleException {
+	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle> findVehicleInformationById(long vehicleId) throws InvalidVehicleException {
 		return vehicleDaoImpl.findVehicleInformationById(vehicleId);
 	}
 	
-	public VehicleListResponse findVehicleInformationByMake(@PathVariable String make) {
+	public VehicleListResponse findVehicleInformationByMake(String make) {
 		VehicleListResponse response = new VehicleListResponse();
 		List<com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle> list = vehicleDaoImpl.findVehicleInformatioByMake(make);
 		
@@ -83,7 +84,7 @@ public class VehicleService {
 		return response;
 	}
 	
-	public VehicleListResponse findVehicleInformationbyModel(@PathVariable String model) {
+	public VehicleListResponse findVehicleInformationbyModel(String model) {
 		VehicleListResponse response = new VehicleListResponse();
 		List<com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle> list = vehicleDaoImpl.findVehicleInformationByModel(model);
 		
@@ -91,7 +92,7 @@ public class VehicleService {
 		return response;
 	}
 	
-	public VehicleListResponse findVehicleInformationByYear(@PathVariable String year) {
+	public VehicleListResponse findVehicleInformationByYear(String year) {
 		VehicleListResponse response = new VehicleListResponse();
 		List<com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle> list = vehicleDaoImpl.findVehicleInformationByYear(year);
 		
@@ -99,7 +100,7 @@ public class VehicleService {
 		return response;
 	}
 	 
-	public VehicleListResponse findVehicleInformationByTransmission(@PathVariable String transmission) {
+	public VehicleListResponse findVehicleInformationByTransmission(String transmission) {
 		VehicleListResponse response = new VehicleListResponse();
 		List<com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle> list = vehicleDaoImpl.findVehicleInformationByTransmission(transmission);
 		
@@ -107,15 +108,15 @@ public class VehicleService {
 		return response;
 	}
 	
-	public int addVehicleInformation(@RequestBody com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle vehicle) {
-		return vehicleDaoImpl.addCarInformation(vehicle);
+	public int addVehicleInformation(VehilceAddRequest request) {
+		return vehicleDaoImpl.addCarInformation(request);
 	}
 	
 	public int updateVehicleInfomration(long vehicleId, com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle vehicleDetails) {
 		return vehicleDaoImpl.updateCarInformation(vehicleId, vehicleDetails);
 	}
 	
-	public int deleteVehicleInformation(@PathVariable long vehicleId) {
+	public int deleteVehicleInformation(long vehicleId) {
 		return vehicleDaoImpl.deleteCarInformation(vehicleId);
 	}
 	

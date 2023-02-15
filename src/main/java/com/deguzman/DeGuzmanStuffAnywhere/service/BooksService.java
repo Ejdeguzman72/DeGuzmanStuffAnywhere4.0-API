@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.BooksDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.BooksAddRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.BooksListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateBookNameException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
@@ -72,7 +73,7 @@ public class BooksService {
 		}
 	}
 	
-	public BooksListResponse findAllBooksByAuthor(@PathVariable String author) {
+	public BooksListResponse findAllBooksByAuthor(String author) {
 		BooksListResponse response = new BooksListResponse();
 		List<com.deguzman.DeGuzmanStuffAnywhere.model.Books> list = booksDaoImpl.findAllBooksByAuthor(author);
 		
@@ -80,11 +81,11 @@ public class BooksService {
 		return response;
 	}
 	
-	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.Books> findBookInfomrationById(@PathVariable int book_id) throws ResourceNotFoundException {
+	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.Books> findBookInfomrationById(int book_id) throws ResourceNotFoundException {
 		return booksDaoImpl.findBooksInformationById(book_id);
 	}
 	
-	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.Books> findBookInformationByName(@PathVariable String name) {
+	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.Books> findBookInformationByName(String name) {
 		return booksDaoImpl.findBookInformationByName(name);
 	}
 	
@@ -92,15 +93,15 @@ public class BooksService {
 		return booksDaoImpl.getBookCount();
 	}
 	
-	public int addBooksInformation(com.deguzman.DeGuzmanStuffAnywhere.model.Books book) throws DuplicateBookNameException {
-		return booksDaoImpl.addBooksInformation(book);
+	public int addBooksInformation(BooksAddRequest request) throws DuplicateBookNameException {
+		return booksDaoImpl.addBooksInformation(request);
 	}
 	
-	public int updateBooksInformation(@PathVariable int book_id, @RequestBody com.deguzman.DeGuzmanStuffAnywhere.model.Books book) {
+	public int updateBooksInformation(int book_id, com.deguzman.DeGuzmanStuffAnywhere.model.Books book) {
 		return booksDaoImpl.updateBooksInformation(book_id, book);
 	}
 	
-	public int deleteBookInformation(@PathVariable int book_id) {
+	public int deleteBookInformation(int book_id) {
 		return booksDaoImpl.deleteBookInformation(book_id);
 	}
 	

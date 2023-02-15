@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.PostDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.PostAddRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.PostListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.PostDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_dao.PostsJpaDao;
@@ -78,8 +79,8 @@ public class PostsService {
 		return response;
 	}
 	
-	public int addPost(com.deguzman.DeGuzmanStuffAnywhere.model.Post post) {
-		return postDaoImpl.addPost(post);
+	public int addPost(PostAddRequest request) {
+		return postDaoImpl.addPost(request);
 	}
 	
 	public int deletePost(int post_id) {

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.AutoRepairShopDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoShopAddRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoShopListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateAutoShopException;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_dao.AutoRepairShopJpaDao;
@@ -73,7 +74,7 @@ public class AutoRepairShopService {
 		}
 	}
 	
-	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.AutoRepairShop> findAutoRepairShopByName(@PathVariable String autoShopName) {
+	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.AutoRepairShop> findAutoRepairShopByName(String autoShopName) {
 		return autoRepairShopDaoImpl.findAutoRepairShopByName(autoShopName);
 	}
 	
@@ -90,15 +91,15 @@ public class AutoRepairShopService {
 		return autoRepairShopDaoImpl.getCountOfAutoRepairShops();
 	}
 	
-	public int addAutoRepairShopInfo(com.deguzman.DeGuzmanStuffAnywhere.model.AutoRepairShop autoShop) throws DuplicateAutoShopException {
-		return autoRepairShopDaoImpl.addAutoRepairShopInfo(autoShop);
+	public int addAutoRepairShopInfo(AutoShopAddRequest request) throws DuplicateAutoShopException {
+		return autoRepairShopDaoImpl.addAutoRepairShopInfo(request);
 	}
 	
-	public int updateAutoShopInfo(@PathVariable int auto_shop_id, @RequestBody com.deguzman.DeGuzmanStuffAnywhere.model.AutoRepairShop shopDetails) {
+	public int updateAutoShopInfo(int auto_shop_id, com.deguzman.DeGuzmanStuffAnywhere.model.AutoRepairShop shopDetails) {
 		return autoRepairShopDaoImpl.updateAutoShopInfo(auto_shop_id, shopDetails);
 	}
 	
-	public int deleteAutoRepairShopInfo(@PathVariable int auto_shop_id) {
+	public int deleteAutoRepairShopInfo(int auto_shop_id) {
 		return autoRepairShopDaoImpl.deleteAutoRepairShopInfo(auto_shop_id);
 	}
 	

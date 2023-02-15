@@ -3,6 +3,8 @@ package com.deguzman.DeGuzmanStuffAnywhere.controller;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.ExerciseDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.ExerciseAddRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.ExerciseListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.ExerciseInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.model.Exercise;
@@ -72,8 +75,8 @@ public class ExerciseController {
 
 	@PostMapping("/add-exercise-information")
 	@CrossOrigin
-	public int addExerciseInformation(@RequestBody Exercise exercise) {
-		return exerciseInfoService.addExerciseInformation(exercise);
+	public int addExerciseInformation(@RequestBody @Valid ExerciseAddRequest request) {
+		return exerciseInfoService.addExerciseInformation(request);
 	}
 	
 	@PutMapping("/exercise/{exercise_id}")

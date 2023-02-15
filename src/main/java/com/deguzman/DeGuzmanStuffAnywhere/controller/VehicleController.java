@@ -3,6 +3,8 @@ package com.deguzman.DeGuzmanStuffAnywhere.controller;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.VehicleDaoImpl;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.VehicleListResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.VehilceAddRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.InvalidVehicleException;
 import com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle;
 import com.deguzman.DeGuzmanStuffAnywhere.service.VehicleService;
@@ -87,8 +90,8 @@ public class VehicleController {
 
 	@PostMapping("/add-vehicle-information")
 	@CrossOrigin
-	public int addVehicleInformation(@RequestBody Vehicle vehicle) {
-		return vehicleService.addVehicleInformation(vehicle);
+	public int addVehicleInformation(@RequestBody @Valid VehilceAddRequest request) {
+		return vehicleService.addVehicleInformation(request);
 	}
 	
 	@PutMapping("/vehicle/{vehicleId}")

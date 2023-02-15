@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.AutoTrxDaoImpl;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoShopListResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoTrxAddRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoTrxListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.AutoTrxInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.InvalidAutoShopException;
@@ -101,11 +102,11 @@ public class AutoTrxService {
 		return response;
 	}
 	
-	public ResponseEntity<AutoTrxInfoDTO> findAutoTransactionInformationDTOById(@PathVariable long auto_shop_id) throws InvalidTransactionException {
+	public ResponseEntity<AutoTrxInfoDTO> findAutoTransactionInformationDTOById(long auto_shop_id) throws InvalidTransactionException {
 		return autoTrxDaoImpl.findAutoTranasctionInformatioDTOnById(auto_shop_id);
 	}
 	
-	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.AutoTransaction> findAutoTransactionInformationById(@PathVariable long auto_transaction_id) throws InvalidTransactionException {
+	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.AutoTransaction> findAutoTransactionInformationById(long auto_transaction_id) throws InvalidTransactionException {
 		return autoTrxDaoImpl.findAutoTranasctionInformationById(auto_transaction_id);
 	}
 	
@@ -113,8 +114,8 @@ public class AutoTrxService {
 		return autoTrxDaoImpl.getCountOfAutoTransactions();
 	}
 	
-	public int addAutoTranactionInformation(com.deguzman.DeGuzmanStuffAnywhere.model.AutoTransaction autoTransaction) throws InvalidAutoShopException, InvalidUserException, InvalidTransactionTypeException, InvalidVehicleException {
-		return autoTrxDaoImpl.addAutoTransactionInformation(autoTransaction);
+	public int addAutoTranactionInformation(AutoTrxAddRequest request) throws InvalidAutoShopException, InvalidUserException, InvalidTransactionTypeException, InvalidVehicleException {
+		return autoTrxDaoImpl.addAutoTransactionInformation(request);
 	}
 	
 	public int updateTransactionInformation(long auto_transaction_id, com.deguzman.DeGuzmanStuffAnywhere.model.AutoTransaction autoTransactionDetails) throws InvalidAutoShopException, InvalidVehicleException, InvalidTransactionTypeException, InvalidUserException {

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.RunTrackerDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.RunTrackerAddRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.RunTrackerListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.RunTrackerInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_dao.RunTrackerJpaDao;
@@ -70,7 +71,7 @@ public class RunTrackerService {
 		}
 	}
 	
-	public RunTrackerListResponse findRunTrackerInformationByUser(@PathVariable long user_id) {
+	public RunTrackerListResponse findRunTrackerInformationByUser(long user_id) {
 		RunTrackerListResponse response = new RunTrackerListResponse();
 		List<RunTrackerInfoDTO> list = runTrackerDaoImpl.findRunTrackerInformationByUser(user_id);
 		
@@ -78,11 +79,11 @@ public class RunTrackerService {
 		return response;
 	}
 	
-	public ResponseEntity<RunTrackerInfoDTO> findRunTrackerInformationDTOById(@PathVariable long run_id) {
+	public ResponseEntity<RunTrackerInfoDTO> findRunTrackerInformationDTOById(long run_id) {
 		return runTrackerDaoImpl.findRunTrackerInformationDTOById(run_id);
 	}
 	
-	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.RunTracker> findRunTrackerById(@PathVariable long run_id) {
+	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.RunTracker> findRunTrackerById(long run_id) {
 		return runTrackerDaoImpl.findRunTrackerById(run_id);
 	}
 	
@@ -90,15 +91,15 @@ public class RunTrackerService {
 		return runTrackerDaoImpl.findCountOfRunTrackerInformation();
 	}
 	
-	public int addRunTrackerInfomration(com.deguzman.DeGuzmanStuffAnywhere.model.RunTracker runTracker) {
-		return runTrackerDaoImpl.addRunTrackerInformation(runTracker);
+	public int addRunTrackerInfomration(RunTrackerAddRequest request) {
+		return runTrackerDaoImpl.addRunTrackerInformation(request);
 	}
 	
 	public int updateRunTrackerInformation(long run_id, com.deguzman.DeGuzmanStuffAnywhere.model.RunTracker runTrackerDetails) {
 		return runTrackerDaoImpl.updateRunTrackerInformation(run_id, runTrackerDetails);
 	}
 	
-	public int deleteRunTrackerInformation(@PathVariable long run_id) {
+	public int deleteRunTrackerInformation(long run_id) {
 		return runTrackerDaoImpl.deleteRunTrackerInformation(run_id);
 	}
 	

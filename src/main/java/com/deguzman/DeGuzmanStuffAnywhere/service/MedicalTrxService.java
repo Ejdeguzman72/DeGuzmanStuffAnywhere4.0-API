@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.MedicalTrxDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalTrxAddRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalTrxListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.MedicalTrxInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
@@ -71,7 +72,7 @@ public class MedicalTrxService {
 		}
 	}
 	
-	public MedicalTrxListResponse findAllMedicalTranactionsByFacility(@PathVariable int facility_id) {
+	public MedicalTrxListResponse findAllMedicalTranactionsByFacility(int facility_id) {
 		MedicalTrxListResponse response = new MedicalTrxListResponse();
 		List<MedicalTrxInfoDTO> list = medicalTrxDaoImpl.findMedicalTransactionsByFacility(facility_id);
 		
@@ -79,7 +80,7 @@ public class MedicalTrxService {
 		return response;
 	}
 	
-	public MedicalTrxListResponse findMedicalTransactionsByType(@PathVariable long transaction_type_id) {
+	public MedicalTrxListResponse findMedicalTransactionsByType(long transaction_type_id) {
 		MedicalTrxListResponse response = new MedicalTrxListResponse();
 		List<MedicalTrxInfoDTO> list = medicalTrxDaoImpl.findMedicalTransactionsByType(transaction_type_id);
 		
@@ -87,7 +88,7 @@ public class MedicalTrxService {
 		return response;
 	}
 	
-	public MedicalTrxListResponse findmedicalTransactionsByUser(@PathVariable long user_id) {
+	public MedicalTrxListResponse findmedicalTransactionsByUser(long user_id) {
 		MedicalTrxListResponse response = new MedicalTrxListResponse();
 		List<MedicalTrxInfoDTO> list = medicalTrxDaoImpl.findAllMedicalTransactionbyUser(user_id);
 		
@@ -95,7 +96,7 @@ public class MedicalTrxService {
 		return response;
 	}
 	
-	public ResponseEntity<MedicalTrxInfoDTO> findMedicalTransasctionInformationDTOById(@PathVariable long medical_transaction_id) throws ResourceNotFoundException {
+	public ResponseEntity<MedicalTrxInfoDTO> findMedicalTransasctionInformationDTOById(long medical_transaction_id) throws ResourceNotFoundException {
 		return medicalTrxDaoImpl.findMedicalTransactionInformationDTOById(medical_transaction_id);
 	}
 	
@@ -103,8 +104,8 @@ public class MedicalTrxService {
 		return medicalTrxDaoImpl.getCountOfMedicalTransactions();
 	}
 	
-	public int addMedicalTranactionInformation(com.deguzman.DeGuzmanStuffAnywhere.model.MedicalTransaction medicalTransaction) throws ResourceNotFoundException {
-		return medicalTrxDaoImpl.addMedicalTransactionInformation(medicalTransaction);
+	public int addMedicalTranactionInformation(MedicalTrxAddRequest request) throws ResourceNotFoundException {
+		return medicalTrxDaoImpl.addMedicalTransactionInformation(request);
 	}
 	
 	public int updateMedicalTransaction(long medical_transaction_id, com.deguzman.DeGuzmanStuffAnywhere.model.MedicalTransaction medicalTransactionDetails) {
