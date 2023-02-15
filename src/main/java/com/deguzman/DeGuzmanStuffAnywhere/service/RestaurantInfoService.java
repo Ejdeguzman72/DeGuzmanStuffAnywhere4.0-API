@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.RestaurantDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.RestaurantListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.RestaurantInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateRestaurantException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.InvalidRestaurantException;
@@ -31,8 +32,12 @@ public class RestaurantInfoService {
 	@Autowired
 	private RestaurantJpaDao restaurantJpaDao;
 	
-	public List<RestaurantInfoDTO> findAllRestaurants() {
-		return restaurantDaoImpl.findAllRestaurants();
+	public RestaurantListResponse findAllRestaurants() {
+		RestaurantListResponse response = new RestaurantListResponse();
+		List<RestaurantInfoDTO> list = restaurantDaoImpl.findAllRestaurants();
+		
+		response.setList(list);
+		return response;
 	}
 	
 	public ResponseEntity<Map<String, Object>> getAllRestaurantsPagination(
@@ -69,20 +74,32 @@ public class RestaurantInfoService {
 		}
 	}
 	
-	public List<RestaurantInfoDTO> findAllRestaurantsByType(int restaurant_type_id) {
-		return restaurantDaoImpl.findAllRestaurantsByType(restaurant_type_id);
+	public RestaurantListResponse findAllRestaurantsByType(int restaurant_type_id) {
+		RestaurantListResponse response = new RestaurantListResponse();
+		List<RestaurantInfoDTO> list = restaurantDaoImpl.findAllRestaurantsByType(restaurant_type_id);
+		
+		response.setList(list);
+		return response;
 	}
 	
 	public ResponseEntity<RestaurantInfoDTO> findRestaurantById(int restaurant_id) throws InvalidRestaurantException {
 		return restaurantDaoImpl.findRestaurantById(restaurant_id);
 	}
 	
-	public List<RestaurantInfoDTO> findRestaurantByZipCode(String zip) {
-		return restaurantDaoImpl.findRestaurantsByZipCode(zip);
+	public RestaurantListResponse findRestaurantByZipCode(String zip) {
+		RestaurantListResponse response = new RestaurantListResponse();
+		List<RestaurantInfoDTO> list = restaurantDaoImpl.findRestaurantsByZipCode(zip);
+		
+		response.setList(list);
+		return response;
 	}
 	
-	public List<RestaurantInfoDTO> findRestaurantsByDescr(String descr) {
-		return restaurantDaoImpl.findRestaurantsByDescr(descr);
+	public RestaurantListResponse findRestaurantsByDescr(String descr) {
+		RestaurantListResponse response = new RestaurantListResponse();
+		List<RestaurantInfoDTO> list = restaurantDaoImpl.findRestaurantsByDescr(descr);
+		
+		response.setList(list);
+		return response;
 	}
 	
 	public ResponseEntity<RestaurantInfoDTO> findRestaurantByName(String name) {

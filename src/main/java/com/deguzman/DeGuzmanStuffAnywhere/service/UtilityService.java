@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.UtilityDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.UtilityListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.UtilityInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.model.Utility;
 
@@ -17,12 +18,20 @@ public class UtilityService {
 	@Autowired
 	private UtilityDaoImpl utilityDaoImpl;
 	
-	public List<UtilityInfoDTO> findAllUtilityInformation() {
-		return utilityDaoImpl.findAllUtilityInformation();
+	public UtilityListResponse findAllUtilityInformation() {
+		UtilityListResponse response = new UtilityListResponse();
+		List<UtilityInfoDTO> list = utilityDaoImpl.findAllUtilityInformation();
+		
+		response.setList(list);
+		return response;
 	}
 	
-	public List<UtilityInfoDTO> findUtilityInformationByDueDate(String dueDate) {
-		return utilityDaoImpl.findUtilityInformationByDueDate(dueDate);
+	public UtilityListResponse findUtilityInformationByDueDate(String dueDate) {
+		UtilityListResponse response = new UtilityListResponse();
+		List<UtilityInfoDTO> list = utilityDaoImpl.findUtilityInformationByDueDate(dueDate);
+		
+		response.setList(list);
+		return response;
 	}
 	
 	public ResponseEntity<UtilityInfoDTO> findUtilityInformationById(long utility_id) {

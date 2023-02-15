@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.RunTrackerDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.RunTrackerListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.RunTrackerInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_dao.RunTrackerJpaDao;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_model.RunTracker;
@@ -28,8 +29,12 @@ public class RunTrackerService {
 	@Autowired
 	private RunTrackerJpaDao runTrackerDao;
 	
-	public List<RunTrackerInfoDTO> findAllRunTrackerInformation() {
-		return runTrackerDaoImpl.findAllRunTrackerInformation();
+	public RunTrackerListResponse findAllRunTrackerInformation() {
+		RunTrackerListResponse response = new RunTrackerListResponse();
+		List<RunTrackerInfoDTO> list = runTrackerDaoImpl.findAllRunTrackerInformation();
+		
+		response.setList(list);
+		return response;
 	}
 	
 	public ResponseEntity<Map<String, Object>> getAllRunInfoPagination(@RequestParam(required = false) String runDate,
@@ -65,8 +70,12 @@ public class RunTrackerService {
 		}
 	}
 	
-	public List<RunTrackerInfoDTO> findRunTrackerInformationByUser(@PathVariable long user_id) {
-		return runTrackerDaoImpl.findRunTrackerInformationByUser(user_id);
+	public RunTrackerListResponse findRunTrackerInformationByUser(@PathVariable long user_id) {
+		RunTrackerListResponse response = new RunTrackerListResponse();
+		List<RunTrackerInfoDTO> list = runTrackerDaoImpl.findRunTrackerInformationByUser(user_id);
+		
+		response.setList(list);
+		return response;
 	}
 	
 	public ResponseEntity<RunTrackerInfoDTO> findRunTrackerInformationDTOById(@PathVariable long run_id) {

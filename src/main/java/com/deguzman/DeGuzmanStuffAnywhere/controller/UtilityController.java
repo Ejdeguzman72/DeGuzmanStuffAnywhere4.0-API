@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.UtilityDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.UtilityListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.UtilityInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.model.Utility;
 import com.deguzman.DeGuzmanStuffAnywhere.service.UtilityService;
@@ -27,14 +28,16 @@ public class UtilityController {
 
 	@GetMapping("/all")
 	@CrossOrigin
-	public List<UtilityInfoDTO> getAllUtilityInformation() {
-		return utilityService.findAllUtilityInformation();
+	public UtilityListResponse getAllUtilityInformation() {
+		UtilityListResponse response = utilityService.findAllUtilityInformation();
+		return response;
 	}
 
 	@GetMapping("/dueDate")
 	@CrossOrigin
-	public List<UtilityInfoDTO> getUtilityInformationByDueDate(@PathVariable String dueDate) {
-		return utilityService.findUtilityInformationByDueDate(dueDate);
+	public UtilityListResponse getUtilityInformationByDueDate(@PathVariable String dueDate) {
+		UtilityListResponse response = utilityService.findUtilityInformationByDueDate(dueDate);
+		return response;
 	}
 
 	@GetMapping("/utility/{utility_id}")

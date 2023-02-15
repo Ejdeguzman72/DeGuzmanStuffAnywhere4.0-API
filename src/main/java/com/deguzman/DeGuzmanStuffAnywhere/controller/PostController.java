@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.PostDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.PostListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.PostDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.model.Post;
 import com.deguzman.DeGuzmanStuffAnywhere.service.PostsService;
@@ -29,8 +30,9 @@ public class PostController {
 	private PostsService socialMediaService;
 	
 	@GetMapping("/all")
-	public List<PostDTO> getAllPosts() {
-		return socialMediaService.findAllPosts();
+	public PostListResponse getAllPosts() {
+		PostListResponse response = socialMediaService.findAllPosts();
+		return response;
 	}
 	
 	@GetMapping("/all-posts")
@@ -41,8 +43,9 @@ public class PostController {
 	}
 	
 	@GetMapping("/user/{user_id}")
-	public List<PostDTO> getPostsByUser(@PathVariable long user_id) {
-		return socialMediaService.findPostsByUser(user_id);
+	public PostListResponse getPostsByUser(@PathVariable long user_id) {
+		PostListResponse response = socialMediaService.findPostsByUser(user_id);
+		return response;
 	}
 	
 	@PostMapping("/add-post")

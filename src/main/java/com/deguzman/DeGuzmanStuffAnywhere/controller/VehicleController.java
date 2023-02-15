@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.VehicleDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.VehicleListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.InvalidVehicleException;
 import com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle;
 import com.deguzman.DeGuzmanStuffAnywhere.service.VehicleService;
@@ -31,8 +32,9 @@ public class VehicleController {
 
 	@GetMapping("/all")
 	@CrossOrigin
-	public List<Vehicle> getAllVehicleInformation() {
-		return vehicleService.findAllVehicleInformation();
+	public VehicleListResponse getAllVehicleInformation() {
+		VehicleListResponse response = vehicleService.findAllVehicleInformation();
+		return response;
 	}
 
 	@GetMapping("/all-vehicles")
@@ -51,26 +53,30 @@ public class VehicleController {
 
 	@GetMapping("/vehicle/make/{make}")
 	@CrossOrigin
-	public List<Vehicle> getVehicleInformationByMake(@PathVariable String make) {
-		return vehicleService.findVehicleInformationByMake(make);
+	public VehicleListResponse getVehicleInformationByMake(@PathVariable String make) {
+		VehicleListResponse response = vehicleService.findVehicleInformationByMake(make);
+		return response;
 	}
 
 	@GetMapping("/vehicle/model/{model}")
 	@CrossOrigin
-	public List<Vehicle> getVehicleInformationByModel(@PathVariable String model) {
-		return vehicleService.findVehicleInformationbyModel(model);
+	public VehicleListResponse getVehicleInformationByModel(@PathVariable String model) {
+		VehicleListResponse response = vehicleService.findVehicleInformationbyModel(model);
+		return response;
 	}
 
 	@GetMapping("/vehicle/year/{year}")
 	@CrossOrigin
-	public List<Vehicle> getVehicleInformationByYear(@PathVariable String year) {
-		return vehicleService.findVehicleInformationByYear(year);
+	public VehicleListResponse getVehicleInformationByYear(@PathVariable String year) {
+		VehicleListResponse response = vehicleService.findVehicleInformationByYear(year);
+		return response;
 	}
 
 	@GetMapping("/vehicle/transmission/{transmission}")
 	@CrossOrigin
-	public List<Vehicle> getVehicleInformationByTransmission(@PathVariable String transmission) {
-		return vehicleService.findVehicleInformationByTransmission(transmission);
+	public VehicleListResponse getVehicleInformationByTransmission(@PathVariable String transmission) {
+		VehicleListResponse response = vehicleService.findVehicleInformationByTransmission(transmission);
+		return response;
 	}
 
 	@GetMapping("/vehicle-count")

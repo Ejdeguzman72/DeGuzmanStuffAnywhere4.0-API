@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.VehicleDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.VehicleListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.InvalidVehicleException;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_dao.VehicleJpaDao;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_model.Vehicle;
@@ -29,8 +30,12 @@ public class VehicleService {
 	@Autowired
 	private VehicleJpaDao vehicleJpaDao;
 	
-	public List<com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle> findAllVehicleInformation() {
-		return vehicleDaoImpl.findAllCarInformation();
+	public VehicleListResponse findAllVehicleInformation() {
+		VehicleListResponse response = new VehicleListResponse();
+		List<com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle> list = vehicleDaoImpl.findAllCarInformation();
+		
+		response.setList(list);
+		return response;
 	}
 
 	public ResponseEntity<Map<String, Object>> getAllVehiclesPagination(@RequestParam(required = false) String model,
@@ -70,20 +75,36 @@ public class VehicleService {
 		return vehicleDaoImpl.findVehicleInformationById(vehicleId);
 	}
 	
-	public List<com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle> findVehicleInformationByMake(@PathVariable String make) {
-		return vehicleDaoImpl.findVehicleInformatioByMake(make);
+	public VehicleListResponse findVehicleInformationByMake(@PathVariable String make) {
+		VehicleListResponse response = new VehicleListResponse();
+		List<com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle> list = vehicleDaoImpl.findVehicleInformatioByMake(make);
+		
+		response.setList(list);
+		return response;
 	}
 	
-	public List<com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle> findVehicleInformationbyModel(@PathVariable String model) {
-		return vehicleDaoImpl.findVehicleInformationByModel(model);
+	public VehicleListResponse findVehicleInformationbyModel(@PathVariable String model) {
+		VehicleListResponse response = new VehicleListResponse();
+		List<com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle> list = vehicleDaoImpl.findVehicleInformationByModel(model);
+		
+		response.setList(list);
+		return response;
 	}
 	
-	public List<com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle> findVehicleInformationByYear(@PathVariable String year) {
-		return vehicleDaoImpl.findVehicleInformationByYear(year);
+	public VehicleListResponse findVehicleInformationByYear(@PathVariable String year) {
+		VehicleListResponse response = new VehicleListResponse();
+		List<com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle> list = vehicleDaoImpl.findVehicleInformationByYear(year);
+		
+		response.setList(list);
+		return response;
 	}
 	 
-	public List<com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle> findVehicleInformationByTransmission(@PathVariable String transmission) {
-		return vehicleDaoImpl.findVehicleInformationByTransmission(transmission);
+	public VehicleListResponse findVehicleInformationByTransmission(@PathVariable String transmission) {
+		VehicleListResponse response = new VehicleListResponse();
+		List<com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle> list = vehicleDaoImpl.findVehicleInformationByTransmission(transmission);
+		
+		response.setList(list);
+		return response;
 	}
 	
 	public int addVehicleInformation(@RequestBody com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle vehicle) {

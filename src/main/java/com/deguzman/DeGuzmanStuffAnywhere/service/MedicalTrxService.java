@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.MedicalTrxDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalTrxListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.MedicalTrxInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_dao.MedicalTrxJpaDao;
@@ -29,8 +30,12 @@ public class MedicalTrxService {
 	@Autowired
 	private MedicalTrxJpaDao medicalTrxDao;
 	
-	public List<MedicalTrxInfoDTO> findAllMedicalTransactionInformation() {
-		return medicalTrxDaoImpl.findAllMedicalTransactionInformation();
+	public MedicalTrxListResponse findAllMedicalTransactionInformation() {
+		MedicalTrxListResponse response = new MedicalTrxListResponse();
+		List<MedicalTrxInfoDTO> list = medicalTrxDaoImpl.findAllMedicalTransactionInformation();
+		
+		response.setList(list);
+		return response; 
 	}
 	
 	public ResponseEntity<Map<String, Object>> getAllTransactionsPagination(@RequestParam(required = false) String paymentDate,
@@ -66,16 +71,28 @@ public class MedicalTrxService {
 		}
 	}
 	
-	public List<MedicalTrxInfoDTO> findAllMedicalTranactionsByFacility(@PathVariable int facility_id) {
-		return medicalTrxDaoImpl.findMedicalTransactionsByFacility(facility_id);
+	public MedicalTrxListResponse findAllMedicalTranactionsByFacility(@PathVariable int facility_id) {
+		MedicalTrxListResponse response = new MedicalTrxListResponse();
+		List<MedicalTrxInfoDTO> list = medicalTrxDaoImpl.findMedicalTransactionsByFacility(facility_id);
+		
+		response.setList(list);
+		return response;
 	}
 	
-	public List<MedicalTrxInfoDTO> findMedicalTransactionsByType(@PathVariable long transaction_type_id) {
-		return medicalTrxDaoImpl.findMedicalTransactionsByType(transaction_type_id);
+	public MedicalTrxListResponse findMedicalTransactionsByType(@PathVariable long transaction_type_id) {
+		MedicalTrxListResponse response = new MedicalTrxListResponse();
+		List<MedicalTrxInfoDTO> list = medicalTrxDaoImpl.findMedicalTransactionsByType(transaction_type_id);
+		
+		response.setList(list);
+		return response;
 	}
 	
-	public List<MedicalTrxInfoDTO> findmedicalTransactionsByUser(@PathVariable long user_id) {
-		return medicalTrxDaoImpl.findAllMedicalTransactionbyUser(user_id);
+	public MedicalTrxListResponse findmedicalTransactionsByUser(@PathVariable long user_id) {
+		MedicalTrxListResponse response = new MedicalTrxListResponse();
+		List<MedicalTrxInfoDTO> list = medicalTrxDaoImpl.findAllMedicalTransactionbyUser(user_id);
+		
+		response.setList(list);
+		return response;
 	}
 	
 	public ResponseEntity<MedicalTrxInfoDTO> findMedicalTransasctionInformationDTOById(@PathVariable long medical_transaction_id) throws ResourceNotFoundException {

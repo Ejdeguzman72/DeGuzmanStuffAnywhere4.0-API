@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.RestaurantDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.RestaurantListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.RestaurantInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateRestaurantException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.InvalidRestaurantException;
@@ -34,8 +35,9 @@ public class RestaurantController {
 
 	@GetMapping("/all")
 	@CrossOrigin
-	public List<RestaurantInfoDTO> getAllRestaurantInformation() {
-		return restaurantInfoService.findAllRestaurants();
+	public RestaurantListResponse getAllRestaurantInformation() {
+		RestaurantListResponse response = restaurantInfoService.findAllRestaurants();
+		return response;
 	}
 	
 	@GetMapping("/all-restaurants")
@@ -46,20 +48,23 @@ public class RestaurantController {
 
 	@GetMapping("/restaurant/type/{restaurant_type_id}")
 	@CrossOrigin
-	public List<RestaurantInfoDTO> getAllRestaurantInformationByType(@PathVariable int restaurant_type_id) {
-		return restaurantInfoService.findAllRestaurantsByType(restaurant_type_id);
+	public RestaurantListResponse getAllRestaurantInformationByType(@PathVariable int restaurant_type_id) {
+		RestaurantListResponse response = restaurantInfoService.findAllRestaurantsByType(restaurant_type_id);
+		return response;
 	}
 
 	@GetMapping("/restaurant/zip/{zip}")
 	@CrossOrigin
-	public List<RestaurantInfoDTO> getAllRestaurantInformationByZip(@PathVariable String zip) {
-		return restaurantInfoService.findRestaurantByZipCode(zip);
+	public RestaurantListResponse getAllRestaurantInformationByZip(@PathVariable String zip) {
+		RestaurantListResponse response = restaurantInfoService.findRestaurantByZipCode(zip);
+		return response;
 	}
 
 	@GetMapping("/restaurant/descr/{descr}")
 	@CrossOrigin
-	public List<RestaurantInfoDTO> getAllRestaurantInformationByDescr(@PathVariable String descr) {
-		return restaurantInfoService.findRestaurantsByDescr(descr);
+	public RestaurantListResponse getAllRestaurantInformationByDescr(@PathVariable String descr) {
+		RestaurantListResponse response = restaurantInfoService.findRestaurantsByDescr(descr);
+		return response;
 	}
 
 	@GetMapping("/restaurant-dto/{restaurant_id}")

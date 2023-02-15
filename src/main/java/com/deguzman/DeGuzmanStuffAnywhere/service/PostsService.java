@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.PostDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.PostListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.PostDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_dao.PostsJpaDao;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_model.Post;
@@ -27,8 +28,12 @@ public class PostsService {
 	@Autowired
 	private PostsJpaDao postDao;
 	
-	public List<PostDTO> findAllPosts() {
-		return postDaoImpl.findAllPosts();
+	public PostListResponse findAllPosts() {
+		PostListResponse response = new PostListResponse();
+		List<PostDTO> list = postDaoImpl.findAllPosts();
+		
+		response.setList(list);
+		return response;
 	}
 	
 	public ResponseEntity<Map<String, Object>> findAllPostsPagination(
@@ -65,8 +70,12 @@ public class PostsService {
 		}
 	}
 	
-	public List<PostDTO> findPostsByUser(long user_id) {
-		return postDaoImpl.findPostsByUser(user_id);
+	public PostListResponse findPostsByUser(long user_id) {
+		PostListResponse response = new PostListResponse();
+		List<PostDTO> list = postDaoImpl.findPostsByUser(user_id);
+		
+		response.setList(list);
+		return response;
 	}
 	
 	public int addPost(com.deguzman.DeGuzmanStuffAnywhere.model.Post post) {

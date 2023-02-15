@@ -2,17 +2,17 @@ package com.deguzman.DeGuzmanStuffAnywhere.domain;
 
 import java.util.List;
 
-import com.deguzman.DeGuzmanStuffAnywhere.model.RunTracker;
+import com.deguzman.DeGuzmanStuffAnywhere.dto.RunTrackerInfoDTO;
 
 public class RunTrackerListResponse {
 
-	List<RunTracker> list;
+	List<RunTrackerInfoDTO> list;
 
-	public List<RunTracker> getList() {
+	public List<RunTrackerInfoDTO> getList() {
 		return list;
 	}
 
-	public void setList(List<RunTracker> list) {
+	public void setList(List<RunTrackerInfoDTO> list) {
 		this.list = list;
 	}
 }

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.SongDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SongListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateSongTitleException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_dao.SongJpaDao;
@@ -29,8 +30,12 @@ public class SongService {
 	@Autowired
 	private SongJpaDao songJpaDao;
 	
-	public List<com.deguzman.DeGuzmanStuffAnywhere.model.Song> findAllSongInformation() {
-		return songDaoImpl.findAllSongInformation();
+	public SongListResponse findAllSongInformation() {
+		SongListResponse response = new SongListResponse();
+		List<com.deguzman.DeGuzmanStuffAnywhere.model.Song> list = songDaoImpl.findAllSongInformation();
+		
+		response.setList(list);
+		return response;
 	}
 
 	public ResponseEntity<Map<String, Object>> getAllSongsPagination(@RequestParam(required = false) String title,
@@ -66,12 +71,20 @@ public class SongService {
 		}
 	}
 	
-	public List<com.deguzman.DeGuzmanStuffAnywhere.model.Song> findSongByArtist(@PathVariable String artist) {
-		return songDaoImpl.findSongByArtist(artist);
+	public SongListResponse findSongByArtist(@PathVariable String artist) {
+		SongListResponse response = new SongListResponse();
+		List<com.deguzman.DeGuzmanStuffAnywhere.model.Song> list = songDaoImpl.findSongByArtist(artist);
+		
+		response.setList(list);
+		return response;
 	}
 	
-	public List<com.deguzman.DeGuzmanStuffAnywhere.model.Song> findSongsByGenre(@PathVariable String genre) {
-		return songDaoImpl.findSongsByGenre(genre);
+	public SongListResponse findSongsByGenre(@PathVariable String genre) {
+		SongListResponse response = new SongListResponse();
+		List<com.deguzman.DeGuzmanStuffAnywhere.model.Song> list = songDaoImpl.findSongsByGenre(genre);
+		
+		response.setList(list);
+		return response;
 	}
 	
 	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.Song> findSongById(int song_id) throws ResourceNotFoundException {

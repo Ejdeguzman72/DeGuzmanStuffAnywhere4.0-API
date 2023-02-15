@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.SongDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SongListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateSongTitleException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
 import com.deguzman.DeGuzmanStuffAnywhere.model.Song;
@@ -32,8 +33,9 @@ public class SongController {
 
 	@GetMapping("/all")
 	@CrossOrigin
-	public List<Song> getAllSongInformation() {
-		return songService.findAllSongInformation();
+	public SongListResponse getAllSongInformation() {
+		SongListResponse response = songService.findAllSongInformation();
+		return response;
 	}
 
 	@GetMapping("all-songs")
@@ -51,14 +53,16 @@ public class SongController {
 
 	@GetMapping("/song/artist/{artist}")
 	@CrossOrigin
-	public List<Song> getSongInformationByArtist(@PathVariable String artist) {
-		return songService.findSongByArtist(artist);
+	public SongListResponse getSongInformationByArtist(@PathVariable String artist) {
+		SongListResponse response = songService.findSongByArtist(artist);
+		return response;
 	}
 
 	@GetMapping("/song/genre/{genre}")
 	@CrossOrigin
-	public List<Song> getSongInformationByGenre(@PathVariable String genre) {
-		return songService.findSongsByGenre(genre);
+	public SongListResponse getSongInformationByGenre(@PathVariable String genre) {
+		SongListResponse response =  songService.findSongsByGenre(genre);
+		return response;
 	}
 
 	@GetMapping("/count-of-songs")
