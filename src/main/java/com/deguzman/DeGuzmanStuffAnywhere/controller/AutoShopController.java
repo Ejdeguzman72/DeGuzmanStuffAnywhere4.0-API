@@ -52,15 +52,16 @@ public class AutoShopController {
 
 	@GetMapping("/repair-shop/{auto_shop_id}")
 	@CrossOrigin
-	public ResponseEntity<AutoShopSearchResponse> getAutoRepairShopInfoById(@PathVariable int auto_shop_id) {
-		AutoRepairShop response = autoShopService.findAutoRepairShopById(auto_shop_id);
-		return ResponseEntity<>(response);
+	public AutoShopSearchResponse getAutoRepairShopInfoById(@PathVariable int auto_shop_id) {
+		AutoShopSearchResponse response = autoShopService.findAutoRepairShopById(auto_shop_id);
+		return response;
 	} 
 
 	@GetMapping("/repair-shop/name/{autoShopName}")
 	@CrossOrigin
-	public ResponseEntity<AutoRepairShop> getAutoRepairShopByName(@PathVariable String autoShopName) {
-		return autoShopService.findAutoRepairShopByName(autoShopName);
+	public AutoShopSearchResponse getAutoRepairShopByName(@PathVariable String autoShopName) {
+		AutoShopSearchResponse response = autoShopService.findAutoRepairShopByName(autoShopName);
+		return response;
 	}
 
 	@GetMapping("/repair-shop/zip/{zip}")

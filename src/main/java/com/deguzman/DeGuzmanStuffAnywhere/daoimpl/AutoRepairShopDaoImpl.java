@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import com.deguzman.DeGuzmanStuffAnywhere.dao.AutoShopDao;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoShopSearchResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateAutoShopException;
 import com.deguzman.DeGuzmanStuffAnywhere.model.AutoRepairShop;
 @Repository

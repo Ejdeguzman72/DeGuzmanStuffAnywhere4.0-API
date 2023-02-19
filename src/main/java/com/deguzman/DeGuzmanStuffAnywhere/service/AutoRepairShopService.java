@@ -155,8 +155,14 @@ public class AutoRepairShopService {
 		return response;
 	}
 
-	public com.deguzman.DeGuzmanStuffAnywhere.model.AutoRepairShop findAutoRepairShopById(
+	public AutoShopSearchResponse findAutoRepairShopById(
 			int auto_shop_id) {
-		return autoRepairShopDaoImpl.findAutoRepairShopById(auto_shop_id);
+		AutoShopSearchResponse response = new AutoShopSearchResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.AutoRepairShop autoShop = null;
+		int count = 0;
+		
+		autoShop = autoRepairShopDaoImpl.findAutoRepairShopById(auto_shop_id);
+		response.setAutoShop(autoShop);
+		return response;
 	}
 }
