@@ -4,11 +4,6 @@ import com.deguzman.DeGuzmanStuffAnywhere.model.RunTracker;
 
 public class RunTrackerAddUpdateResponse {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 9032344215549782923L;
-
 	RunTracker runTracker;
 
 	public RunTracker getRunTracker() {

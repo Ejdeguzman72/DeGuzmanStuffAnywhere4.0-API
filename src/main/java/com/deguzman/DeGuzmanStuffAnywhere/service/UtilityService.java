@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.UtilityDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.UtilityListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.UtilityInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.model.Utility;
@@ -58,8 +59,12 @@ public class UtilityService {
 		return utilityDaoImpl.deleteUtilityInformation(utility_id);
 	}
 	
-	public int deleteAllUtilityInformation() {
-		return utilityDaoImpl.deleteAllUtilityInformation();
+	public DeleteAllResponse deleteAllUtilityInformation() {
+		DeleteAllResponse response = new DeleteAllResponse();
+		int count = utilityDaoImpl.deleteAllUtilityInformation();
+		
+		response.setCount(count);
+		return response;
 	}
 
 	public ResponseEntity<UtilityInfoDTO> findUtilityInformationByName(String name) {

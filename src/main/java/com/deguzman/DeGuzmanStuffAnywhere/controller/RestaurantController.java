@@ -1,6 +1,5 @@
 package com.deguzman.DeGuzmanStuffAnywhere.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -18,14 +17,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.RestaurantDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.RestaurantAddUpdateRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.RestaurantAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.RestaurantListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.RestaurantInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateRestaurantException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.InvalidRestaurantException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
-import com.deguzman.DeGuzmanStuffAnywhere.model.Restaurant;
 import com.deguzman.DeGuzmanStuffAnywhere.service.RestaurantInfoService;
 
 @RestController
@@ -97,14 +96,16 @@ public class RestaurantController {
 
 	@PostMapping("/add-restaurant-information")
 	@CrossOrigin
-	public int addRestaurantInformation(@RequestBody @Valid RestaurantAddUpdateRequest request) throws ResourceNotFoundException, DuplicateRestaurantException {
-		return restaurantInfoService.addRestaurantInformation(request);
+	public RestaurantAddUpdateResponse addRestaurantInformation(@RequestBody @Valid RestaurantAddUpdateRequest request) throws ResourceNotFoundException, DuplicateRestaurantException {
+		RestaurantAddUpdateResponse response = restaurantInfoService.addRestaurantInformation(request);
+		return response;
 	}
 
 	@PutMapping("/restaurant/{restaurant_id}")
 	@CrossOrigin
-	public int updateRestaurantInformation(@PathVariable int restaurant_id, @RequestBody Restaurant restaurantDetails) throws ResourceNotFoundException {
-		return restaurantInfoService.updateRestaurantInformation(restaurant_id, restaurantDetails);
+	public RestaurantAddUpdateResponse updateRestaurantInformation(@RequestBody @Valid RestaurantAddUpdateRequest request) throws ResourceNotFoundException {
+		RestaurantAddUpdateResponse response = restaurantInfoService.updateRestaurantInformation(request);
+		return response;
 	}
 	
 	@DeleteMapping("/restaurant/{restaurant_id}")
@@ -115,7 +116,8 @@ public class RestaurantController {
 
 	@DeleteMapping("/delete-all-restaurant")
 	@CrossOrigin
-	public int deleteAllRestaurantInformation() {
-		return restaurantInfoService.deleteAllRestaurantInformation();
+	public DeleteAllResponse deleteAllRestaurantInformation() {
+		DeleteAllResponse response = restaurantInfoService.deleteAllRestaurantInformation();
+		return response;
 	}
 }

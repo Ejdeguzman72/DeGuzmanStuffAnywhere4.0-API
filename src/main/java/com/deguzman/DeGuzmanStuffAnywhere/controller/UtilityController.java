@@ -1,7 +1,5 @@
 package com.deguzman.DeGuzmanStuffAnywhere.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -12,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.UtilityDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.UtilityListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.UtilityInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.model.Utility;
@@ -78,7 +76,8 @@ public class UtilityController {
 
 	@DeleteMapping("/delete-all-utilties")
 	@CrossOrigin
-	public int deleteAllUtilityInformation() {
-		return utilityService.deleteAllUtilityInformation();
+	public DeleteAllResponse deleteAllUtilityInformation() {
+		DeleteAllResponse response = utilityService.deleteAllUtilityInformation();
+		return response;
 	}
 }

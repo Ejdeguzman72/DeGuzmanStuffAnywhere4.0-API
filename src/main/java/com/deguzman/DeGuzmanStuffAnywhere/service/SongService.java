@@ -11,10 +11,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.SongDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.SongAddUpdateRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.SongAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.SongListResponse;
@@ -119,15 +119,33 @@ public class SongService {
 		return response;
 	}
 	
-	public int updateSongInformation(int song_id, com.deguzman.DeGuzmanStuffAnywhere.model.Song songDetails) {
-		return songDaoImpl.updateSongInformation(song_id, songDetails);
+	public SongAddUpdateResponse updateSongInformation(SongAddUpdateRequest request) {
+		SongAddUpdateResponse response = new SongAddUpdateResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.Song song = null;
+		int count = 0;
+		
+		count = songDaoImpl.updateSongInformation(request.getSong_id(),request);
+		if (count > 0) {
+			song.setArtist(request.getArtist());
+			song.setGenre(request.getGenre());
+			song.setTitle(request.getTitle());
+			if (song != null) {
+				response.setSong(song);
+			}
+		}
+		
+		return response;
 	}
 	
 	public int deleteSongInformation(int song_id) {
 		return songDaoImpl.deleteSongInformation(song_id);
 	}
 	
-	public int deleteAllSongs() {
-		return songDaoImpl.deleteAllSongs();
+	public DeleteAllResponse deleteAllSongs() {
+		DeleteAllResponse response = new DeleteAllResponse();
+		int count = songDaoImpl.deleteAllSongs();
+		
+		response.setCount(count);
+		return response;
 	}
 }

@@ -1,6 +1,5 @@
 package com.deguzman.DeGuzmanStuffAnywhere.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -18,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.AutoTrxDaoImpl;
-import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoShopListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoTrxAddUpdateRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoTrxAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoTrxListResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.AutoTrxInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.InvalidAutoShopException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.InvalidTransactionException;
@@ -95,16 +94,18 @@ public class AutoTrxController {
 
 	@PostMapping("/add-auto-transaction-information")
 	@CrossOrigin
-	public int addAutoTransactionInformation(@RequestBody @Valid AutoTrxAddUpdateRequest request)
+	public AutoTrxAddUpdateResponse addAutoTransactionInformation(@RequestBody @Valid AutoTrxAddUpdateRequest request)
 			throws InvalidAutoShopException, InvalidUserException, InvalidTransactionTypeException,
 			InvalidVehicleException {
-		return autoTrxService.addAutoTranactionInformation(request);
+		AutoTrxAddUpdateResponse response = autoTrxService.addAutoTranactionInformation(request);
+		return response;
 	}
 	
 	@PutMapping("/auto-transaction/{auto_transaction_id}")
 	@CrossOrigin
-	public int updateAutoTransactionInformation(@PathVariable long auto_transaction_id, @RequestBody AutoTransaction autoTransactionDetails) throws InvalidAutoShopException, InvalidVehicleException, InvalidTransactionTypeException, InvalidUserException {
-		return autoTrxService.updateTransactionInformation(auto_transaction_id, autoTransactionDetails);
+	public AutoTrxAddUpdateResponse updateAutoTransactionInformation(@RequestBody @Valid AutoTrxAddUpdateRequest request) throws InvalidAutoShopException, InvalidVehicleException, InvalidTransactionTypeException, InvalidUserException {
+		AutoTrxAddUpdateResponse response = autoTrxService.updateTransactionInformation(request);
+		return response;
 	}
 
 	@DeleteMapping("/auto-transaction/{auto_transaction_id}")
@@ -115,7 +116,8 @@ public class AutoTrxController {
 
 	@DeleteMapping("/delete-all-transactions")
 	@CrossOrigin
-	public int deleteAllAutoTransactions() {
-		return autoTrxService.deleteAllAutoTransactions();
+	public DeleteAllResponse deleteAllAutoTransactions() {
+		DeleteAllResponse response = autoTrxService.deleteAllAutoTransactions();
+		return response;
 	}
 }

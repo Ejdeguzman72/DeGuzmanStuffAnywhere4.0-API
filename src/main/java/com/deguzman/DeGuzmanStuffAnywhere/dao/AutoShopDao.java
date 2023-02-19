@@ -3,9 +3,6 @@ package com.deguzman.DeGuzmanStuffAnywhere.dao;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateAutoShopException;
 import com.deguzman.DeGuzmanStuffAnywhere.model.AutoRepairShop;
 
@@ -13,9 +10,9 @@ public interface AutoShopDao {
 
 	public List<AutoRepairShop> findAllAutoRepairShopInfo();
 
-	public ResponseEntity<AutoRepairShop> findAutoRepairShopById(int auto_shop_id);
+	public AutoRepairShop findAutoRepairShopById(int auto_shop_id);
 
-	public ResponseEntity<AutoRepairShop> findAutoRepairShopByName(String autoShopName);
+	public AutoRepairShop findAutoRepairShopByName(String autoShopName);
 
 	public List<AutoRepairShop> findAutoRepairShopByZip(String zip);
 

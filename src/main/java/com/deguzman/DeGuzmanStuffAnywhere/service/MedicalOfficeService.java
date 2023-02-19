@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.MedicalOfficeDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalOfficeAddUpdateRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalOfficeAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalOfficeListResponse;
@@ -105,16 +106,37 @@ public class MedicalOfficeService {
 		return response;
 	}
 	
-	public int updateMedicalOfficeInformation(long medicalOfficeId, com.deguzman.DeGuzmanStuffAnywhere.model.MedicalOffice officeDetails) {
-		return medicalOfficeDaoImpl.updateMedicalOfficeInformation(medicalOfficeId, officeDetails);
+	public MedicalOfficeAddUpdateResponse updateMedicalOfficeInformation(MedicalOfficeAddUpdateRequest request) {
+		MedicalOfficeAddUpdateResponse response = new MedicalOfficeAddUpdateResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.MedicalOffice office = null;
+		int count = 0;
+		
+		count = medicalOfficeDaoImpl.updateMedicalOfficeInformation(request.getMedicalOfficeId(), request);
+		if (count > 0) {
+			office.setAddress(request.getAddress());
+			office.setCity(request.getCity());
+			office.setMedicalOfficeId(request.getMedicalOfficeId());
+			office.setName(request.getName());
+			office.setState(request.getState());
+			office.setZip(request.getZip());
+			if (office != null) {
+				response.setOffice(office);
+			}
+		}
+		
+		return response;
 	}
 	
 	public int deleteMedicalOfficeById(long medicalOfficeId) {
 		return medicalOfficeDaoImpl.deleteMedicalOfficeById(medicalOfficeId);
 	}
 	
-	public int deleteAllMedicalOfficeInformation() {
-		return medicalOfficeDaoImpl.deleteAllMedicalOfficeInformation();
+	public DeleteAllResponse deleteAllMedicalOfficeInformation() {
+		DeleteAllResponse response = new DeleteAllResponse();
+		int count = medicalOfficeDaoImpl.deleteAllMedicalOfficeInformation();
+		
+		response.setCount(count);
+		return response;
 	}
 
 	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.MedicalOffice> findMedicalOfficeInformationById(

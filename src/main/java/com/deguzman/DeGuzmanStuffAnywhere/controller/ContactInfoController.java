@@ -1,7 +1,6 @@
 package com.deguzman.DeGuzmanStuffAnywhere.controller;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -19,9 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.ContactDaoImpl;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.ContactAddUpdateRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.ContactAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.ContactListResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateContactException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
 import com.deguzman.DeGuzmanStuffAnywhere.model.Person;
@@ -82,20 +82,23 @@ public class ContactInfoController {
 
 	@PostMapping("/add-person-information")
 	@CrossOrigin
-	public int saveContactInformation(@RequestBody @Valid ContactAddUpdateRequest request) throws SecurityException, IOException, DuplicateContactException {
-		return contactInfoService.addPersonInformation(request);
+	public ContactAddUpdateResponse saveContactInformation(@RequestBody @Valid ContactAddUpdateRequest request) throws SecurityException, IOException, DuplicateContactException {
+		ContactAddUpdateResponse response = contactInfoService.addPersonInformation(request);
+		return response;
 	}
 	
 	@PutMapping("/person/{personId}")
 	@CrossOrigin
-	public int updateContactInformation(@PathVariable int personId, @RequestBody Person personDetails) throws SecurityException, IOException {
-		return contactInfoService.updatePersonInformation(personId, personDetails);
+	public ContactAddUpdateResponse updateContactInformation(@RequestBody @Valid ContactAddUpdateRequest request) throws SecurityException, IOException {
+		ContactAddUpdateResponse response = contactInfoService.updatePersonInformation(request);
+		return response;
 	}
 
 	@DeleteMapping("/delete-all")
 	@CrossOrigin
-	public int deleteAllContactInformation() {
-		return contactInfoService.deleteAllPersonInformation();
+	public DeleteAllResponse deleteAllContactInformation() {
+		DeleteAllResponse response = contactInfoService.deleteAllPersonInformation();
+		return response;
 	}
 
 	@DeleteMapping("/person/{personId}")

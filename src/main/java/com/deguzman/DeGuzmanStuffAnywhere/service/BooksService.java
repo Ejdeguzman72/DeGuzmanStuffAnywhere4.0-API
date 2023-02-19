@@ -11,14 +11,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.BooksDaoImpl;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.BooksAddUpdateRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.BooksAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.BooksListResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateBookNameException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_dao.BooksJpaDao;
@@ -29,18 +28,18 @@ public class BooksService {
 
 	@Autowired
 	private BooksJpaDao booksJpaDao;
-	
+
 	@Autowired
 	private BooksDaoImpl booksDaoImpl;
 
 	public BooksListResponse findAllBookInformation() {
 		BooksListResponse response = new BooksListResponse();
 		List<com.deguzman.DeGuzmanStuffAnywhere.model.Books> list = booksDaoImpl.findAllBooksInformation();
-		
+
 		response.setList(list);
 		return response;
 	}
-	
+
 	public ResponseEntity<Map<String, Object>> getAllBooksPagination(@RequestParam(required = false) String title,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
 		try {
@@ -73,34 +72,35 @@ public class BooksService {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	public BooksListResponse findAllBooksByAuthor(String author) {
 		BooksListResponse response = new BooksListResponse();
 		List<com.deguzman.DeGuzmanStuffAnywhere.model.Books> list = booksDaoImpl.findAllBooksByAuthor(author);
-		
+
 		response.setList(list);
 		return response;
 	}
-	
-	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.Books> findBookInfomrationById(int book_id) throws ResourceNotFoundException {
+
+	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.Books> findBookInfomrationById(int book_id)
+			throws ResourceNotFoundException {
 		return booksDaoImpl.findBooksInformationById(book_id);
 	}
-	
+
 	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.Books> findBookInformationByName(String name) {
 		return booksDaoImpl.findBookInformationByName(name);
 	}
-	
+
 	public long getBookCount() {
 		return booksDaoImpl.getBookCount();
 	}
-	
+
 	public BooksAddUpdateResponse addBooksInformation(BooksAddUpdateRequest request) throws DuplicateBookNameException {
 		BooksAddUpdateResponse response = new BooksAddUpdateResponse();
 		com.deguzman.DeGuzmanStuffAnywhere.model.Books book = null;
 		int count = 0;
-		
+
 		count = booksDaoImpl.addBooksInformation(request);
-		
+
 		if (count > 0) {
 			book.setAuthor(request.getAuthor());
 			book.setDescr(request.getDescr());
@@ -109,19 +109,35 @@ public class BooksService {
 				response.setBook(book);
 			}
 		}
-		
+
 		return response;
 	}
-	
-	public int updateBooksInformation(int book_id, com.deguzman.DeGuzmanStuffAnywhere.model.Books book) {
-		return booksDaoImpl.updateBooksInformation(book_id, book);
+
+	public BooksAddUpdateResponse updateBooksInformation(BooksAddUpdateRequest request) {
+		BooksAddUpdateResponse response = new BooksAddUpdateResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.Books book = null;
+		int count = 0;
+
+		count = booksDaoImpl.updateBooksInformation(request.getBook_id(), request);
+		if (count > 0) {
+			if (book != null) {
+				response.setBook(book);
+			}
+		}
+
+		return response;
 	}
-	
+
 	public int deleteBookInformation(int book_id) {
 		return booksDaoImpl.deleteBookInformation(book_id);
 	}
-	
-	public int deleteAllBookInformation() {
-		return booksDaoImpl.deleteAllBookInformation();
+
+	public DeleteAllResponse deleteAllBookInformation() {
+		DeleteAllResponse response = new DeleteAllResponse();
+		int count = booksDaoImpl.deleteAllBookInformation();
+
+		response.setCount(count);
+
+		return response;
 	}
 }

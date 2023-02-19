@@ -11,11 +11,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.VehicleDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.VehicleListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.VehilceAddUpdateRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.VehilceAddUpdateResponse;
@@ -137,16 +136,36 @@ public class VehicleService {
 		return response;
 	}
 
-	public int updateVehicleInfomration(long vehicleId, VehilceAddUpdateRequest request) {
-		return vehicleDaoImpl.updateCarInformation(request.getVehicleId(), request);
+	public VehilceAddUpdateResponse updateVehicleInfomration(VehilceAddUpdateRequest request) {
+		VehilceAddUpdateResponse response = new VehilceAddUpdateResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle vehicle = null;
+		int count = 0;
+		
+		count = vehicleDaoImpl.updateCarInformation(request.getVehicleId(), request);
+		if (count > 0) {
+			vehicle.setCapacity(request.getCapacity());
+			vehicle.setMake(request.getMake());
+			vehicle.setModel(request.getModel());
+			vehicle.setTransmission(request.getTransmission());
+			vehicle.setYear(request.getYear());
+			if (vehicle != null) {
+				response.setVehicle(vehicle);
+			}
+		}
+
+		return response;
 	}
 
 	public int deleteVehicleInformation(long vehicleId) {
 		return vehicleDaoImpl.deleteCarInformation(vehicleId);
 	}
 
-	public int deleteAllVehicleInformation() {
-		return vehicleDaoImpl.deleteAllVehicleInformation();
+	public DeleteAllResponse deleteAllVehicleInformation() {
+		DeleteAllResponse response = new DeleteAllResponse();
+		int count = vehicleDaoImpl.deleteAllVehicleInformation();
+		
+		response.setCount(count);
+		return response;
 	}
 
 	public int getCountOfVehicles() {

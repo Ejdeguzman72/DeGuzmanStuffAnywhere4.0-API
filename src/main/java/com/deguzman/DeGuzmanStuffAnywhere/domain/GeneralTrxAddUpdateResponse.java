@@ -3,11 +3,6 @@ package com.deguzman.DeGuzmanStuffAnywhere.domain;
 import com.deguzman.DeGuzmanStuffAnywhere.model.GeneralTransaction;
 
 public class GeneralTrxAddUpdateResponse {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2859772036564149821L;
-	
 	GeneralTransaction transaction;
 
 	public GeneralTransaction getTransaction() {

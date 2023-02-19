@@ -1,6 +1,5 @@
 package com.deguzman.DeGuzmanStuffAnywhere.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -18,9 +17,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.AutoRepairShopDaoImpl;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoShopAddUpdateRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoShopAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoShopListResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoShopSearchResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.UriConstants;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateAutoShopException;
 import com.deguzman.DeGuzmanStuffAnywhere.model.AutoRepairShop;
 import com.deguzman.DeGuzmanStuffAnywhere.service.AutoRepairShopService;
@@ -33,14 +35,14 @@ public class AutoShopController {
 	@Autowired
 	private AutoRepairShopService autoShopService;
 
-	@GetMapping("/all")
+	@GetMapping(value = UriConstants.GET_ALL_AUTO_SHOP)
 	@CrossOrigin
 	public AutoShopListResponse getAllAutoRepairShopInformation() {
 		AutoShopListResponse response = autoShopService.findAllAutoRepairShopInfo();
 		return response;
 	}
 
-	@GetMapping("/all-shops")
+	@GetMapping(value = UriConstants.GET_ALL_AUTO_SHOPS_PAGINATION)
 	@CrossOrigin
 	public ResponseEntity<Map<String, Object>> getAllAutoShopsPagination(
 			@RequestParam(required = false) String autoShopName, @RequestParam(defaultValue = "0") int page,
@@ -50,9 +52,10 @@ public class AutoShopController {
 
 	@GetMapping("/repair-shop/{auto_shop_id}")
 	@CrossOrigin
-	public ResponseEntity<AutoRepairShop> getAutoRepairShopInfoById(@PathVariable int auto_shop_id) {
-		return autoShopService.findAutoRepairShopById(auto_shop_id);
-	}
+	public ResponseEntity<AutoShopSearchResponse> getAutoRepairShopInfoById(@PathVariable int auto_shop_id) {
+		AutoRepairShop response = autoShopService.findAutoRepairShopById(auto_shop_id);
+		return ResponseEntity<>(response);
+	} 
 
 	@GetMapping("/repair-shop/name/{autoShopName}")
 	@CrossOrigin
@@ -67,23 +70,24 @@ public class AutoShopController {
 		return response;
 	}
 
-	@GetMapping("/repair-shop/count")
+	@GetMapping(value = UriConstants.GET_AUTO_SHOP_COUNT)
 	@CrossOrigin
 	public long getCountOfAllRepairShops() {
 		return autoShopService.getCountOfAutoRepairShops();
 	}
 
-	@PostMapping("/add-auto-shop")
+	@PostMapping(value = UriConstants.ADD_AUTO_SHOP)
 	@CrossOrigin
-	public int addAutoRepairShopInformation(@RequestBody @Valid AutoShopAddUpdateRequest request) throws DuplicateAutoShopException {
-		return autoShopService.addAutoRepairShopInfo(request);
+	public AutoShopAddUpdateResponse addAutoRepairShopInformation(@RequestBody @Valid AutoShopAddUpdateRequest request) throws DuplicateAutoShopException {
+		AutoShopAddUpdateResponse response = autoShopService.addAutoRepairShopInfo(request);
+		return response;
 	}
 
 	@PutMapping("/repair-shop/{auto_shop_id}")
 	@CrossOrigin
-	public int updateAutoRepairShopInformation(@PathVariable int auto_shop_id,
-			@RequestBody AutoRepairShop autoRepairShop) {
-		return autoShopService.updateAutoShopInfo(auto_shop_id, autoRepairShop);
+	public AutoShopAddUpdateResponse updateAutoRepairShopInformation(@RequestBody @Valid AutoShopAddUpdateRequest request) {
+		AutoShopAddUpdateResponse response = autoShopService.updateAutoShopInfo(request);
+		return response;
 	}
 
 	@DeleteMapping("/repair-shop/{auto_shop_id}")
@@ -92,9 +96,10 @@ public class AutoShopController {
 		return autoShopService.deleteAutoRepairShopInfo(auto_shop_id);
 	}
 
-	@DeleteMapping("/delete-all")
+	@DeleteMapping(UriConstants.DELETE_ALL_AUTO_SHOPS)
 	@CrossOrigin
-	public int deleteAllAutoRepairShopInformation() {
-		return autoShopService.deleteAllAutoShops();
+	public DeleteAllResponse deleteAllAutoRepairShopInformation() {
+		DeleteAllResponse response =  autoShopService.deleteAllAutoShops();
+		return response;
 	}
 }

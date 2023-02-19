@@ -1,6 +1,5 @@
 package com.deguzman.DeGuzmanStuffAnywhere.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -18,8 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.GeneralTrxDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.GeneralTrxAddUpdateRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.GeneralTrxAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.GeneralTrxListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.GeneralTrxInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
@@ -83,15 +83,17 @@ public class GeneralTrxController {
 
 	@PostMapping("/add-general-transaction-information")
 	@CrossOrigin
-	public int addGeneralTrasactionInformation(@RequestBody @Valid GeneralTrxAddUpdateRequest request)
+	public GeneralTrxAddUpdateResponse addGeneralTrasactionInformation(@RequestBody @Valid GeneralTrxAddUpdateRequest request)
 			throws ResourceNotFoundException {
-		return generalTrxService.addTransactionInformation(request);
+		GeneralTrxAddUpdateResponse response = generalTrxService.addTransactionInformation(request);
+		return response;
 	}
 	
 	@PutMapping("/transaction/{transaction_id}")
 	@CrossOrigin
-	public int updateTransactionInformation(@PathVariable long transaction_id, @RequestBody GeneralTransaction tranasctionDetails) {
-		return generalTrxService.updateTransactionInformation(transaction_id, tranasctionDetails);
+	public GeneralTrxAddUpdateResponse updateTransactionInformation(@RequestBody @Valid GeneralTrxAddUpdateRequest request) {
+		GeneralTrxAddUpdateResponse response = generalTrxService.updateTransactionInformation(request);
+		return response;
 	}
 
 	@DeleteMapping("/transaction/{transaction_id}")
@@ -102,7 +104,8 @@ public class GeneralTrxController {
 
 	@DeleteMapping("/delete-all-transactions")
 	@CrossOrigin
-	public int deleteAllTransactions() {
-		return generalTrxService.deleteAllTransactions();
+	public DeleteAllResponse deleteAllTransactions() {
+		DeleteAllResponse response = generalTrxService.deleteAllTransactions();
+		return response;
 	}
 }

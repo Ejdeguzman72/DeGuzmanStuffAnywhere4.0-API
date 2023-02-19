@@ -1,6 +1,5 @@
 package com.deguzman.DeGuzmanStuffAnywhere.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -17,9 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.BooksDaoImpl;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.BooksAddUpdateRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.BooksAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.BooksListResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateBookNameException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
 import com.deguzman.DeGuzmanStuffAnywhere.model.Books;
@@ -70,14 +70,16 @@ public class BooksController {
 
 	@PostMapping("/add-book-information")
 	@CrossOrigin
-	public int addBookInformation(@RequestBody @Valid BooksAddUpdateRequest request) throws DuplicateBookNameException {
-		return bookService.addBooksInformation(request);
+	public BooksAddUpdateResponse addBookInformation(@RequestBody @Valid BooksAddUpdateRequest request) throws DuplicateBookNameException {
+		BooksAddUpdateResponse response = bookService.addBooksInformation(request);
+		return response;
 	}
 	
 	@PutMapping("/book/{book_id}")
 	@CrossOrigin
-	public int updateBookInformation(@PathVariable int book_id, @RequestBody Books book) {
-		return bookService.updateBooksInformation(book_id, book);
+	public BooksAddUpdateResponse updateBookInformation(@RequestBody @Valid BooksAddUpdateRequest request) {
+		BooksAddUpdateResponse response = bookService.updateBooksInformation(request);
+		return response;
 	}
 
 	@DeleteMapping("/book/{book_id}")
@@ -88,7 +90,8 @@ public class BooksController {
 
 	@DeleteMapping("/delete-all-books")
 	@CrossOrigin
-	public int deleteAllBookInformation() {
-		return bookService.deleteAllBookInformation();
+	public DeleteAllResponse deleteAllBookInformation() {
+		DeleteAllResponse response = bookService.deleteAllBookInformation();
+		return response;
 	}
 }

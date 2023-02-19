@@ -1,9 +1,7 @@
 package com.deguzman.DeGuzmanStuffAnywhere.daoimpl;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -16,9 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-
 import com.deguzman.DeGuzmanStuffAnywhere.dao.AutoShopDao;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateAutoShopException;
 import com.deguzman.DeGuzmanStuffAnywhere.model.AutoRepairShop;
@@ -60,7 +55,7 @@ public class AutoRepairShopDaoImpl implements AutoShopDao {
 
 	@Override
 	@Cacheable(value="autoShopById", key="#auto_shop_id")
-	public ResponseEntity<AutoRepairShop> findAutoRepairShopById(int auto_shop_id) {
+	public AutoRepairShop findAutoRepairShopById(int auto_shop_id) {
 		AutoRepairShop autoShop = new AutoRepairShop();
 		try {
 			autoShop = jdbcTemplate.queryForObject(GET_AUTO_SHOP_BY_ID,
@@ -72,11 +67,11 @@ public class AutoRepairShopDaoImpl implements AutoShopDao {
 		}
 		
 
-		return ResponseEntity.ok().body(autoShop);
+		return autoShop;
 	}
 
 	@Override
-	public ResponseEntity<AutoRepairShop> findAutoRepairShopByName(String autoShopName) {
+	public AutoRepairShop findAutoRepairShopByName(String autoShopName) {
 		AutoRepairShop autoShop = new AutoRepairShop();
 		try {
 			autoShop = jdbcTemplate.queryForObject(GET_AUTO_SHOP_BY_NAME,
@@ -88,7 +83,7 @@ public class AutoRepairShopDaoImpl implements AutoShopDao {
 			LOGGER.error("Empty data set: " + e.toString());
 		}
 		
-		return ResponseEntity.ok().body(autoShop);
+		return autoShop;
 	}
 
 	@Override

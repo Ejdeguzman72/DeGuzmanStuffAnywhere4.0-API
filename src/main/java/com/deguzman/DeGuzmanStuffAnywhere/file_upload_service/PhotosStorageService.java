@@ -1,15 +1,12 @@
 package com.deguzman.DeGuzmanStuffAnywhere.file_upload_service;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.time.LocalDate;
 import java.util.stream.Stream;
 
 import org.apache.commons.compress.utils.FileNameUtils;
@@ -18,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.deguzman.DeGuzmanStuffAnywhere.file_upload_jpa_dao.PhotoUploadDao;

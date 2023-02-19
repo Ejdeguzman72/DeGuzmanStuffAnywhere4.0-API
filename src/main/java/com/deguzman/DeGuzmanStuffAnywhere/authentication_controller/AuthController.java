@@ -17,7 +17,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.deguzman.DeGuzmanStuffAnywhere.authentication_config.JwtUtils;
@@ -31,10 +30,10 @@ import com.deguzman.DeGuzmanStuffAnywhere.authentication_payload_response.Messag
 import com.deguzman.DeGuzmanStuffAnywhere.authentication_repository.RoleRepository;
 import com.deguzman.DeGuzmanStuffAnywhere.authentication_repository.UserRepository;
 import com.deguzman.DeGuzmanStuffAnywhere.authentication_services.UserDetailsImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.UriConstants;
 import com.deguzman.DeGuzmanStuffAnywhere.email_service.EmailService;
 
 @RestController
-@RequestMapping("/api/auth")
 @CrossOrigin(origins = "*", maxAge = 3600)
 public class AuthController {
 
@@ -56,7 +55,7 @@ public class AuthController {
 	@Autowired
 	JwtUtils jwtUtils;
 
-	@PostMapping("/signin")
+	@PostMapping(value = UriConstants.SIGN_IN)
 	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
 		Authentication authentication = authenticationManager.authenticate(
@@ -73,7 +72,7 @@ public class AuthController {
 				new JwtResponse(jwt, userDetails.getId(), userDetails.getUsername(), userDetails.getEmail(), roles));
 	}
 
-	@PostMapping("/signup")
+	@PostMapping(value = UriConstants.SIGN_UP)
 	public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) throws Exception {
 		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
 			return ResponseEntity.badRequest().body(new MessageResponse("Error: Username is already taken!"));

@@ -11,8 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.PathVariable;
-
 import com.deguzman.DeGuzmanStuffAnywhere.dao.ExerciseTypeDao;
 import com.deguzman.DeGuzmanStuffAnywhere.model.ExerciseType;
 

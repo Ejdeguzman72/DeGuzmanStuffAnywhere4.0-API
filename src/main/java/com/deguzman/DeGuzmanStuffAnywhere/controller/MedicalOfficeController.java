@@ -1,6 +1,5 @@
 package com.deguzman.DeGuzmanStuffAnywhere.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -17,8 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.MedicalOfficeDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalOfficeAddUpdateRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalOfficeAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalOfficeListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateOfficeException;
 import com.deguzman.DeGuzmanStuffAnywhere.model.MedicalOffice;
@@ -70,14 +70,16 @@ public class MedicalOfficeController {
 
 	@PostMapping("/add-medical-office-information")
 	@CrossOrigin
-	public int addMedicalOfficeInformation(@RequestBody @Valid MedicalOfficeAddUpdateRequest request) throws DuplicateOfficeException {
-		return medOfficeService.addMedicalOfficeInformation(request);
+	public MedicalOfficeAddUpdateResponse addMedicalOfficeInformation(@RequestBody @Valid MedicalOfficeAddUpdateRequest request) throws DuplicateOfficeException {
+		MedicalOfficeAddUpdateResponse response = medOfficeService.addMedicalOfficeInformation(request);
+		return response;
 	}
 	
 	@PutMapping("/medical-office/{medicalOfficeId}")
 	@CrossOrigin
-	public int updateMedicalOfficeInformation(@PathVariable long medicalOfficeId, @RequestBody MedicalOffice officeDetails) {
-		return medOfficeService.updateMedicalOfficeInformation(medicalOfficeId, officeDetails);
+	public MedicalOfficeAddUpdateResponse updateMedicalOfficeInformation(@RequestBody @Valid MedicalOfficeAddUpdateRequest request) {
+		MedicalOfficeAddUpdateResponse response = medOfficeService.updateMedicalOfficeInformation(request);
+		return response;
 	}
 
 	@DeleteMapping("/medical-office/{medicalOfficeId}")
@@ -88,7 +90,8 @@ public class MedicalOfficeController {
 
 	@DeleteMapping("/delete-all-medical-offices")
 	@CrossOrigin
-	public int deleteAllMedicalOffices() {
-		return medOfficeService.deleteAllMedicalOfficeInformation();
+	public DeleteAllResponse deleteAllMedicalOffices() {
+		DeleteAllResponse response = medOfficeService.deleteAllMedicalOfficeInformation();
+		return response;
 	}
 }

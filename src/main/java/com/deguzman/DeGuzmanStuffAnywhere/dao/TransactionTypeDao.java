@@ -3,8 +3,6 @@ package com.deguzman.DeGuzmanStuffAnywhere.dao;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-
 import com.deguzman.DeGuzmanStuffAnywhere.model.TransactionType;
 
 public interface TransactionTypeDao {

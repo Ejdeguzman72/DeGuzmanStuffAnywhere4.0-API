@@ -1,6 +1,5 @@
 package com.deguzman.DeGuzmanStuffAnywhere.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -18,8 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.SongDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.SongAddUpdateRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SongAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.SongListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateSongTitleException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
@@ -76,14 +76,16 @@ public class SongController {
 
 	@PostMapping("/add-song-information")
 	@CrossOrigin
-	public int addSongInformation(@RequestBody @Valid SongAddUpdateRequest request) throws DuplicateSongTitleException {
-		return songService.addSongInformation(request);
+	public SongAddUpdateResponse addSongInformation(@RequestBody @Valid SongAddUpdateRequest request) throws DuplicateSongTitleException {
+		SongAddUpdateResponse response = songService.addSongInformation(request);
+		return response;
 	}
 	
 	@PutMapping("/song/{song_id}")
 	@CrossOrigin
-	public int updateSongInformation(@PathVariable int song_id, @RequestBody Song songDetails) {
-		return songService.updateSongInformation(song_id, songDetails);
+	public SongAddUpdateResponse updateSongInformation(@RequestBody @Valid SongAddUpdateRequest request) {
+		SongAddUpdateResponse response = songService.updateSongInformation(request);
+		return response;
 	}
 
 	@DeleteMapping("/song/{song_id}")
@@ -94,7 +96,8 @@ public class SongController {
 
 	@DeleteMapping("/delete-all-songs")
 	@CrossOrigin
-	public int deleteAllSongs() {
-		return songService.deleteAllSongs();
+	public DeleteAllResponse deleteAllSongs() {
+		DeleteAllResponse response = songService.deleteAllSongs();
+		return response;
 	}
 }

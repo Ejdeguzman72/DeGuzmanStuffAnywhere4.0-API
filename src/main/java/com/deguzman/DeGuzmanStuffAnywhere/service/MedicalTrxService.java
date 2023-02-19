@@ -11,10 +11,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.MedicalTrxDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalTrxAddUpdateRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalTrxAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalTrxListResponse;
@@ -97,6 +97,10 @@ public class MedicalTrxService {
 		return response;
 	}
 	
+	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.MedicalTransaction> getMedicalTrxById(long medical_transaction_id) throws ResourceNotFoundException {
+		return medicalTrxDaoImpl.findMedicalTransactionInformationById(medical_transaction_id);
+	}
+	
 	public ResponseEntity<MedicalTrxInfoDTO> findMedicalTransasctionInformationDTOById(long medical_transaction_id) throws ResourceNotFoundException {
 		return medicalTrxDaoImpl.findMedicalTransactionInformationDTOById(medical_transaction_id);
 	}
@@ -125,15 +129,35 @@ public class MedicalTrxService {
 		return response;
 	}
 	
-	public int updateMedicalTransaction(long medical_transaction_id, com.deguzman.DeGuzmanStuffAnywhere.model.MedicalTransaction medicalTransactionDetails) {
-		return medicalTrxDaoImpl.updateMedicalTransaction(medical_transaction_id, medicalTransactionDetails);
+	public MedicalTrxAddUpdateResponse updateMedicalTransaction(MedicalTrxAddUpdateRequest request) {
+		MedicalTrxAddUpdateResponse response = new MedicalTrxAddUpdateResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.MedicalTransaction transaction = null;
+		int count = 0;
+		
+		count = medicalTrxDaoImpl.updateMedicalTransaction(request.getMedical_transaction_id(), request);
+		if (count > 0) {
+			transaction.setAmount(request.getAmount());
+			transaction.setMedical_office_id(request.getMedical_office_id());
+			transaction.setMedical_transaction_date(request.getMedical_transaction_date());
+			transaction.setTransaction_type_id(request.getTransaction_type_id());
+			transaction.setUser_id(request.getUser_id());
+			if (transaction != null) {
+				response.setTransaction(transaction);
+			}
+		}
+		
+		return response;
 	}
 	
 	public int deleteMedicalTransactionInformation(long medical_transaction_id) {
 		return medicalTrxDaoImpl.deleteMedicalTraansactionInformation(medical_transaction_id);
 	}
 	
-	public int deleteAllMedicalTransactions() {
-		return medicalTrxDaoImpl.deleteAllMedicalTransactions();
+	public DeleteAllResponse deleteAllMedicalTransactions() {
+		DeleteAllResponse response = new DeleteAllResponse();
+		int count = medicalTrxDaoImpl.deleteAllMedicalTransactions();
+		
+		response.setCount(count);
+		return response;
 	}
 }

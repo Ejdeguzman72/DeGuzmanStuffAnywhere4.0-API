@@ -11,14 +11,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.AutoTrxDaoImpl;
-import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoShopListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoTrxAddUpdateRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoTrxAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoTrxListResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.AutoTrxInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.InvalidAutoShopException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.InvalidTransactionException;
@@ -28,26 +27,26 @@ import com.deguzman.DeGuzmanStuffAnywhere.exception.InvalidVehicleException;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_dao.AutoTrxJpaDao;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_model.AutoTransaction;
 
-
 @Service
 public class AutoTrxService {
-	
+
 	@Autowired
 	private AutoTrxDaoImpl autoTrxDaoImpl;
-	
+
 	@Autowired
 	private AutoTrxJpaDao autoTrxDao;
-	
+
 	public AutoTrxListResponse findAllAutoTransactionInformation() {
 		AutoTrxListResponse response = new AutoTrxListResponse();
 		List<AutoTrxInfoDTO> list = autoTrxDaoImpl.findAllAutoTransactionInformation();
-		
+
 		response.setList(list);
 		return response;
 	}
-	
-	public ResponseEntity<Map<String, Object>> getAllTransactionsPagination(@RequestParam(required = false) String paymentDate,
-			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+
+	public ResponseEntity<Map<String, Object>> getAllTransactionsPagination(
+			@RequestParam(required = false) String paymentDate, @RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int size) {
 		try {
 
 			List<AutoTransaction> shop = autoTrxDao.findAll();
@@ -78,48 +77,52 @@ public class AutoTrxService {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	public AutoTrxListResponse findAutoTransactionsByVehicle(long vehicle_id) {
 		AutoTrxListResponse response = new AutoTrxListResponse();
 		List<AutoTrxInfoDTO> list = autoTrxDaoImpl.findAutoTransactionsByVehicle(vehicle_id);
-		
+
 		response.setList(list);
 		return response;
 	}
-	
+
 	public AutoTrxListResponse findAutoTransactionsByUser(long user_id) {
 		AutoTrxListResponse response = new AutoTrxListResponse();
-		List<AutoTrxInfoDTO> list =autoTrxDaoImpl.findAutoTransactionsByUser(user_id);
-		
+		List<AutoTrxInfoDTO> list = autoTrxDaoImpl.findAutoTransactionsByUser(user_id);
+
 		response.setList(list);
 		return response;
 	}
-	
+
 	public AutoTrxListResponse findAutoTransactionsByType(long transaction_type_id) {
 		AutoTrxListResponse response = new AutoTrxListResponse();
 		List<AutoTrxInfoDTO> list = autoTrxDaoImpl.findAutoTransactionsByType(transaction_type_id);
-		
+
 		response.setList(list);
 		return response;
 	}
-	
-	public ResponseEntity<AutoTrxInfoDTO> findAutoTransactionInformationDTOById(long auto_shop_id) throws InvalidTransactionException {
+
+	public ResponseEntity<AutoTrxInfoDTO> findAutoTransactionInformationDTOById(long auto_shop_id)
+			throws InvalidTransactionException {
 		return autoTrxDaoImpl.findAutoTranasctionInformatioDTOnById(auto_shop_id);
 	}
-	
-	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.AutoTransaction> findAutoTransactionInformationById(long auto_transaction_id) throws InvalidTransactionException {
+
+	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.AutoTransaction> findAutoTransactionInformationById(
+			long auto_transaction_id) throws InvalidTransactionException {
 		return autoTrxDaoImpl.findAutoTranasctionInformationById(auto_transaction_id);
 	}
-	
+
 	public long getCountOfAutoTransactions() {
 		return autoTrxDaoImpl.getCountOfAutoTransactions();
 	}
-	
-	public AutoTrxAddUpdateResponse addAutoTranactionInformation(AutoTrxAddUpdateRequest request) throws InvalidAutoShopException, InvalidUserException, InvalidTransactionTypeException, InvalidVehicleException {
+
+	public AutoTrxAddUpdateResponse addAutoTranactionInformation(AutoTrxAddUpdateRequest request)
+			throws InvalidAutoShopException, InvalidUserException, InvalidTransactionTypeException,
+			InvalidVehicleException {
 		AutoTrxAddUpdateResponse response = new AutoTrxAddUpdateResponse();
 		com.deguzman.DeGuzmanStuffAnywhere.model.AutoTransaction transaction = null;
 		int count = 0;
-		
+
 		count = autoTrxDaoImpl.addAutoTransactionInformation(request);
 		if (count > 0) {
 			transaction.setAmount(request.getAmount());
@@ -132,19 +135,43 @@ public class AutoTrxService {
 				response.setTransaction(transaction);
 			}
 		}
-		
+
 		return response;
 	}
-	
-	public int updateTransactionInformation(long auto_transaction_id, com.deguzman.DeGuzmanStuffAnywhere.model.AutoTransaction autoTransactionDetails) throws InvalidAutoShopException, InvalidVehicleException, InvalidTransactionTypeException, InvalidUserException {
-		return autoTrxDaoImpl.updateTransactionInformation(auto_transaction_id, autoTransactionDetails);
+
+	public AutoTrxAddUpdateResponse updateTransactionInformation(AutoTrxAddUpdateRequest request)
+			throws InvalidAutoShopException, InvalidVehicleException, InvalidTransactionTypeException,
+			InvalidUserException {
+		AutoTrxAddUpdateResponse response = new AutoTrxAddUpdateResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.AutoTransaction transaction = null;
+		int count = 0;
+
+		count = autoTrxDaoImpl.updateTransactionInformation(request.getAuto_transaction_id(), request);
+		if (count > 0) {
+			transaction.setAmount(request.getAmount());
+			transaction.setAuto_shop_id(request.getAuto_shop_id());
+			transaction.setAuto_transaction_date(request.getAuto_transaction_date());
+			transaction.setTransaction_type_id(request.getTransaction_type_id());
+			transaction.setUser_id(request.getUser_id());
+			transaction.setVehicle_id(request.getVehicle_id());
+			if (transaction != null) {
+				response.setTransaction(transaction);
+			}
+		}
+
+		return response;
 	}
-	
+
 	public int deleteAutoTransactionInformation(long auto_transaction_id) {
 		return autoTrxDaoImpl.deleteAutoTransactionInformation(auto_transaction_id);
 	}
-	
-	public int deleteAllAutoTransactions() {
-		return autoTrxDaoImpl.deleteAllAutoTransactions();
+
+	public DeleteAllResponse deleteAllAutoTransactions() {
+		DeleteAllResponse response = new DeleteAllResponse();
+		int count = autoTrxDaoImpl.deleteAllAutoTransactions();
+
+		response.setCount(count);
+
+		return response;
 	}
 }

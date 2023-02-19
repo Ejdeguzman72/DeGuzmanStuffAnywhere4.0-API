@@ -11,11 +11,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.ExerciseDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.ExerciseAddUpdateRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.ExerciseAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.ExerciseListResponse;
@@ -28,20 +27,21 @@ public class ExerciseService {
 
 	@Autowired
 	private ExerciseDaoImpl exerciseDaoImpl;
-	
+
 	@Autowired
 	private ExerciseJpaDao exerciseDao;
-	
+
 	public ExerciseListResponse findAllExerciseInformation() {
 		ExerciseListResponse response = new ExerciseListResponse();
 		List<ExerciseInfoDTO> list = exerciseDaoImpl.findAllExerciseInformation();
-		
+
 		response.setList(list);
 		return response;
 	}
-	
-	public ResponseEntity<Map<String, Object>> getAllExercisePagination(@RequestParam(required = false) String exerciseName,
-			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+
+	public ResponseEntity<Map<String, Object>> getAllExercisePagination(
+			@RequestParam(required = false) String exerciseName, @RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int size) {
 		try {
 
 			List<Exercise> shop = exerciseDao.findAll();
@@ -72,34 +72,34 @@ public class ExerciseService {
 			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	public ExerciseListResponse findExerciseInformationByUser(long user_id) {
 		ExerciseListResponse response = new ExerciseListResponse();
 		List<ExerciseInfoDTO> list = exerciseDaoImpl.findExerciseInformationByUser(user_id);
-		
+
 		response.setList(list);
 		return response;
 	}
-	
+
 	public ExerciseListResponse findExerciseInformationByType(int exercise_type_id) {
 		ExerciseListResponse response = new ExerciseListResponse();
 		List<ExerciseInfoDTO> list = exerciseDaoImpl.findExerciseInformationByType(exercise_type_id);
-		
+
 		response.setList(list);
 		return response;
 	}
-	
+
 	public ResponseEntity<ExerciseInfoDTO> findExerciseDTOById(int exercise_id) {
 		return exerciseDaoImpl.findExerciseDTOById(exercise_id);
 	}
-	
+
 	public ExerciseAddUpdateResponse addExerciseInformation(ExerciseAddUpdateRequest request) {
 		ExerciseAddUpdateResponse response = new ExerciseAddUpdateResponse();
 		com.deguzman.DeGuzmanStuffAnywhere.model.Exercise exercise = null;
 		int count = 0;
 
 		count = exerciseDaoImpl.addExerciseInformation(request);
-		
+
 		if (count > 0) {
 			exercise.setDate(request.getDate());
 			exercise.setExerciseName(request.getExerciseName());
@@ -108,25 +108,48 @@ public class ExerciseService {
 			exercise.setSets(request.getSets());
 			exercise.setUser_id(request.getUser_id());
 			exercise.setWeight(request.getWeight());
-			
+
 			if (exercise != null) {
 				response.setExercise(exercise);
 			}
 		}
-		
+
 		return response;
 	}
-	
-	public int updateExerciseInformation(int exercise_id, com.deguzman.DeGuzmanStuffAnywhere.model.Exercise exerciseDetails) {
-		return exerciseDaoImpl.updateExerciseInformation(exercise_id, exerciseDetails);
+
+	public ExerciseAddUpdateResponse updateExerciseInformation(ExerciseAddUpdateRequest request) {
+		ExerciseAddUpdateResponse response = new ExerciseAddUpdateResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.Exercise exercise = null;
+		int count = 0;
+
+		count = exerciseDaoImpl.updateExerciseInformation(request.getExercise_id(), request);
+		if (count > 0) {
+			exercise.setDate(request.getDate());
+			exercise.setExercise_type_id(request.getExercise_type_id());
+			exercise.setExerciseName(request.getExerciseName());
+			exercise.setReps(request.getReps());
+			exercise.setSets(request.getSets());
+			exercise.setUser_id(request.getUser_id());
+			exercise.setWeight(request.getWeight());
+			if (exercise != null) {
+				response.setExercise(exercise);
+			}
+		}
+
+		return response;
 	}
-	
+
 	public int deleteExerciseInformationbyId(int exercise_id) {
 		return exerciseDaoImpl.deleteExerciseInformationById(exercise_id);
 	}
-	
-	public int deleteAllExerciseInformation() {
-		return exerciseDaoImpl.deleteAllExercisInformation();
+
+	public DeleteAllResponse deleteAllExerciseInformation() {
+		DeleteAllResponse response = new DeleteAllResponse();
+		int count = exerciseDaoImpl.deleteAllExercisInformation();
+
+		response.setCount(count);
+
+		return response;
 	}
 
 	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.Exercise> findExerciseById(int exercise_id) {

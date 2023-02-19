@@ -4,11 +4,6 @@ import com.deguzman.DeGuzmanStuffAnywhere.model.Exercise;
 
 public class ExerciseAddUpdateResponse {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
 	Exercise exercise;
 
 	public Exercise getExercise() {

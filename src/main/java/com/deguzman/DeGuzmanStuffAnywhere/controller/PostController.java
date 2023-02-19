@@ -1,6 +1,5 @@
 package com.deguzman.DeGuzmanStuffAnywhere.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -17,11 +16,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.PostDaoImpl;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.PostAddUpdateRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.PostAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.PostListResponse;
-import com.deguzman.DeGuzmanStuffAnywhere.dto.PostDTO;
-import com.deguzman.DeGuzmanStuffAnywhere.model.Post;
 import com.deguzman.DeGuzmanStuffAnywhere.service.PostsService;
 
 @RestController
@@ -52,8 +49,9 @@ public class PostController {
 	}
 	
 	@PostMapping("/add-post")
-	public int addPostInformation(@RequestBody @Valid PostAddUpdateRequest request) {
-		return socialMediaService.addPost(request);
+	public PostAddUpdateResponse addPostInformation(@RequestBody @Valid PostAddUpdateRequest request) {
+		PostAddUpdateResponse response = socialMediaService.addPost(request);
+		return response;
 	}
 	
 	@DeleteMapping("/post/{post_id}")

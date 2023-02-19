@@ -1,6 +1,5 @@
 package com.deguzman.DeGuzmanStuffAnywhere.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -18,9 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.VehicleDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.VehicleListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.VehilceAddUpdateRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.VehilceAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.InvalidVehicleException;
 import com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle;
 import com.deguzman.DeGuzmanStuffAnywhere.service.VehicleService;
@@ -90,14 +90,16 @@ public class VehicleController {
 
 	@PostMapping("/add-vehicle-information")
 	@CrossOrigin
-	public int addVehicleInformation(@RequestBody @Valid VehilceAddUpdateRequest request) {
-		return vehicleService.addVehicleInformation(request);
+	public VehilceAddUpdateResponse addVehicleInformation(@RequestBody @Valid VehilceAddUpdateRequest request) {
+		VehilceAddUpdateResponse response = vehicleService.addVehicleInformation(request);
+		return response;
 	}
 	
 	@PutMapping("/vehicle/{vehicleId}")
 	@CrossOrigin
-	public int updateVehicleInformation(@PathVariable int vehicleId, @RequestBody @Valid VehilceAddUpdateRequest request) {
-		return vehicleService.updateVehicleInfomration(vehicleId, request);
+	public VehilceAddUpdateResponse updateVehicleInformation(@RequestBody @Valid VehilceAddUpdateRequest request) {
+		VehilceAddUpdateResponse response = vehicleService.updateVehicleInfomration(request);
+		return response;
 	}
 
 	@DeleteMapping("/vehicle/{vehicleId}")
@@ -108,8 +110,9 @@ public class VehicleController {
 
 	@DeleteMapping("/delete-all-vehicles")
 	@CrossOrigin
-	public int deleteAllVehicleInformation() {
-		return vehicleService.deleteAllVehicleInformation();
+	public DeleteAllResponse deleteAllVehicleInformation() {
+		DeleteAllResponse response = vehicleService.deleteAllVehicleInformation();
+		return response;
 	}
 
 }

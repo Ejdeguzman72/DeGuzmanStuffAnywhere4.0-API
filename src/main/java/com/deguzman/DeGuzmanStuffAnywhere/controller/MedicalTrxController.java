@@ -1,7 +1,8 @@
 package com.deguzman.DeGuzmanStuffAnywhere.controller;
 
-import java.util.List;
 import java.util.Map;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.MedicalTrxDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalTrxAddUpdateRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalTrxAddUpdateResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalTrxListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.MedicalTrxInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
 import com.deguzman.DeGuzmanStuffAnywhere.model.MedicalTransaction;
@@ -28,15 +32,15 @@ import com.deguzman.DeGuzmanStuffAnywhere.service.MedicalTrxService;
 public class MedicalTrxController {
 
 	@Autowired
-	private MedicalTrxDaoImpl medicalTrxDaoImpl;
+	private MedicalTrxService medicalService;
 	
 	@Autowired
 	private MedicalTrxService medicalTrxPageService;
 
 	@GetMapping("/all")
 	@CrossOrigin
-	public List<MedicalTrxInfoDTO> getAllMedicalTrxInformation() {
-		return medicalTrxDaoImpl.findAllMedicalTransactionInformation();
+	public MedicalTrxListResponse getAllMedicalTrxInformation() {
+		return medicalService.findAllMedicalTransactionInformation();
 	}
 	
 	@GetMapping("/all-transactions")
@@ -49,63 +53,66 @@ public class MedicalTrxController {
 
 	@GetMapping("/all/facility/{facility_id}")
 	@CrossOrigin
-	public List<MedicalTrxInfoDTO> getAllMedicalTrxInformationByFacility(@PathVariable int facility_id) {
-		return medicalTrxDaoImpl.findMedicalTransactionsByFacility(facility_id);
+	public MedicalTrxListResponse getAllMedicalTrxInformationByFacility(@PathVariable int facility_id) {
+		return medicalService.findAllMedicalTranactionsByFacility(facility_id);
 	}
 
 	@GetMapping("/all/type/{transaction_type_id}")
 	@CrossOrigin
-	public List<MedicalTrxInfoDTO> getAllMedicalTrxInformationByType(@PathVariable long transaction_type_id) {
-		return medicalTrxDaoImpl.findMedicalTransactionsByType(transaction_type_id);
+	public MedicalTrxListResponse getAllMedicalTrxInformationByType(@PathVariable long transaction_type_id) {
+		return medicalService.findMedicalTransactionsByType(transaction_type_id);
 	}
 
 	@GetMapping("/all/user/{user_id}")
 	@CrossOrigin
-	public List<MedicalTrxInfoDTO> getAllMedicalTrxInformationByUser(@PathVariable long user_id) {
-		return medicalTrxDaoImpl.findAllMedicalTransactionbyUser(user_id);
+	public MedicalTrxListResponse getAllMedicalTrxInformationByUser(@PathVariable long user_id) {
+		return medicalService.findmedicalTransactionsByUser(user_id);
 	}
 
 	@GetMapping("/medical-transaction/{medical_transaction_id}")
 	@CrossOrigin
 	public ResponseEntity<MedicalTransaction> getMedicalTrxById(@PathVariable long medical_transaction_id)
 			throws ResourceNotFoundException {
-		return medicalTrxDaoImpl.findMedicalTransactionInformationById(medical_transaction_id);
+		return medicalService.getMedicalTrxById(medical_transaction_id);
 	}
 	
 	@GetMapping("/medical-transaction-dto/{medical_transaction_id}")
 	@CrossOrigin
 	public ResponseEntity<MedicalTrxInfoDTO> getMedicalTrxDTOById(@PathVariable long medical_transaction_id)
 			throws ResourceNotFoundException {
-		return medicalTrxDaoImpl.findMedicalTransactionInformationDTOById(medical_transaction_id);
+		return medicalService.findMedicalTransasctionInformationDTOById(medical_transaction_id);
 	}
 
 	@GetMapping("/get-medical-trx-count")
 	@CrossOrigin
 	public long getMedicalTrxCount() {
-		return medicalTrxDaoImpl.getCountOfMedicalTransactions();
+		return medicalService.getCountOfMedicalTransactions();
 	}
 
 	@PostMapping("/add-medical-transaction")
 	@CrossOrigin
-	public int addMedicalTransaction(@RequestBody MedicalTransaction medicalTrx) throws ResourceNotFoundException {
-		return medicalTrxDaoImpl.addMedicalTransactionInformation(medicalTrx);
+	public MedicalTrxAddUpdateResponse addMedicalTransaction(@RequestBody @Valid MedicalTrxAddUpdateRequest request) throws ResourceNotFoundException {
+		MedicalTrxAddUpdateResponse response =medicalService.addMedicalTranactionInformation(request);
+		return response;
 	}
 	
 	@PutMapping("/medical-transaction/{medical_transaction_id}")
 	@CrossOrigin
-	public int updateMedicalTransactionInformation(@PathVariable long medical_transaction_id, @RequestBody MedicalTransaction medicalTranasctionDetails) {
-		return medicalTrxDaoImpl.updateMedicalTransaction(medical_transaction_id, medicalTranasctionDetails);
+	public MedicalTrxAddUpdateResponse updateMedicalTransactionInformation(@RequestBody @Valid MedicalTrxAddUpdateRequest request) {
+		MedicalTrxAddUpdateResponse response = medicalService.updateMedicalTransaction(request);
+		return response;
 	}
 
 	@DeleteMapping("/medical-transaction/{medical_transaction_id}")
 	@CrossOrigin
 	public int deleteMedicalTrxById(@PathVariable long medical_transaction_id) {
-		return medicalTrxDaoImpl.deleteMedicalTraansactionInformation(medical_transaction_id);
+		return medicalService.deleteMedicalTransactionInformation(medical_transaction_id);
 	}
 
 	@DeleteMapping("/delete-all-medical-transactions")
 	@CrossOrigin
-	public int deleteAllMedicalTransactions() {
-		return medicalTrxDaoImpl.deleteAllMedicalTransactions();
+	public DeleteAllResponse deleteAllMedicalTransactions() {
+		DeleteAllResponse response = medicalService.deleteAllMedicalTransactions();
+		return response;
 	}
 }

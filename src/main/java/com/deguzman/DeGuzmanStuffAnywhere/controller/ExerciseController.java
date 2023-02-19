@@ -1,6 +1,5 @@
 package com.deguzman.DeGuzmanStuffAnywhere.controller;
 
-import java.util.List;
 import java.util.Map;
 
 import javax.validation.Valid;
@@ -18,8 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.ExerciseDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.ExerciseAddUpdateRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.ExerciseAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.ExerciseListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.ExerciseInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.model.Exercise;
@@ -75,14 +75,16 @@ public class ExerciseController {
 
 	@PostMapping("/add-exercise-information")
 	@CrossOrigin
-	public int addExerciseInformation(@RequestBody @Valid ExerciseAddUpdateRequest request) {
-		return exerciseInfoService.addExerciseInformation(request);
+	public ExerciseAddUpdateResponse addExerciseInformation(@RequestBody @Valid ExerciseAddUpdateRequest request) {
+		ExerciseAddUpdateResponse response = exerciseInfoService.addExerciseInformation(request);
+		return response;
 	}
 	
 	@PutMapping("/exercise/{exercise_id}")
 	@CrossOrigin
-	public int updateExerciseInformation(@PathVariable int exercise_id, @RequestBody Exercise exerciseDetails) {
-		return exerciseInfoService.updateExerciseInformation(exercise_id, exerciseDetails);
+	public ExerciseAddUpdateResponse updateExerciseInformation(@RequestBody @Valid ExerciseAddUpdateRequest request) {
+		ExerciseAddUpdateResponse response = exerciseInfoService.updateExerciseInformation(request);
+		return response;
 	}
 
 	@DeleteMapping("/exercise/{exercise_id}")
@@ -93,7 +95,8 @@ public class ExerciseController {
 
 	@DeleteMapping("/delete-all-exercises")
 	@CrossOrigin
-	public int deleteAllExercises() {
-		return exerciseInfoService.deleteAllExerciseInformation();
+	public DeleteAllResponse deleteAllExercises() {
+		DeleteAllResponse response = exerciseInfoService.deleteAllExerciseInformation();
+		return response;
 	}
 }

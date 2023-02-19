@@ -11,10 +11,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.RestaurantDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.RestaurantAddUpdateRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.RestaurantAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.RestaurantListResponse;
@@ -133,15 +133,35 @@ public class RestaurantInfoService {
 		return response;
 	}
 	
-	public int updateRestaurantInformation(int restaurant_id, com.deguzman.DeGuzmanStuffAnywhere.model.Restaurant restaurantDetails) throws ResourceNotFoundException {
-		return restaurantDaoImpl.updateRestaurantInformation(restaurant_id, restaurantDetails);
+	public RestaurantAddUpdateResponse updateRestaurantInformation(RestaurantAddUpdateRequest request) throws ResourceNotFoundException {
+		RestaurantAddUpdateResponse response = new RestaurantAddUpdateResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.Restaurant restaurant = null;
+		int count = 0;
+		
+		count = restaurantDaoImpl.updateRestaurantInformation(request.getRestaurant_id(), request);
+		if (count > 0) {
+			restaurant.setAddress(request.getAddress());
+			restaurant.setCity(request.getCity());
+			restaurant.setName(request.getName());
+			restaurant.setRestaurant_type_id(request.getRestaurant_type_id());
+			restaurant.setState(request.getState());
+			restaurant.setZip(request.getZip());
+			if (restaurant != null) {
+				response.setRestaurant(restaurant);
+			}
+		}
+		return response;
 	}
 	
 	public int deleteRestaurantInformation(int restaurant_id) {
 		return restaurantDaoImpl.deleteRestaurantInformation(restaurant_id);
 	}
 	
-	public int deleteAllRestaurantInformation() {
-		return restaurantDaoImpl.deleteAllRestaurantInformation();
+	public DeleteAllResponse deleteAllRestaurantInformation() {
+		DeleteAllResponse response = new DeleteAllResponse();
+		int count = restaurantDaoImpl.deleteAllRestaurantInformation();
+		
+		response.setCount(count);
+		return response;
 	}
 }

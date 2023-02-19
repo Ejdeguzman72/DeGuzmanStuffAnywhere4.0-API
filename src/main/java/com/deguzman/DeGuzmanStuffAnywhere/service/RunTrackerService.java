@@ -11,10 +11,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.RunTrackerDaoImpl;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.RunTrackerAddUpdateRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.RunTrackerAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.RunTrackerListResponse;
@@ -111,15 +111,34 @@ public class RunTrackerService {
 		return response;
 	}
 	
-	public int updateRunTrackerInformation(long run_id, com.deguzman.DeGuzmanStuffAnywhere.model.RunTracker runTrackerDetails) {
-		return runTrackerDaoImpl.updateRunTrackerInformation(run_id, runTrackerDetails);
+	public RunTrackerAddUpdateResponse updateRunTrackerInformation(RunTrackerAddUpdateRequest request) {
+		RunTrackerAddUpdateResponse response = new RunTrackerAddUpdateResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.RunTracker runTracker = null;
+		int count = 0;
+		
+		count = runTrackerDaoImpl.updateRunTrackerInformation(request.getRun_id(),request);
+		if (count > 0) {
+			runTracker.setRunDate(request.getRunDate());
+			runTracker.setRunDistance(request.getRunDistance());
+			runTracker.setRunTime(request.getRunTime());
+			runTracker.setUser_id(request.getUser_id());
+			if (runTracker != null) {
+				response.setRunTracker(runTracker);
+			}
+		}
+		
+		return response;
 	}
 	
 	public int deleteRunTrackerInformation(long run_id) {
 		return runTrackerDaoImpl.deleteRunTrackerInformation(run_id);
 	}
 	
-	public int deleteAllRunTrackerInformation() {
-		return runTrackerDaoImpl.deleteAllRunTrackerInformation();
+	public DeleteAllResponse deleteAllRunTrackerInformation() {
+		DeleteAllResponse response = new DeleteAllResponse();
+		int count = runTrackerDaoImpl.deleteAllRunTrackerInformation();
+		
+		response.setCount(count);
+		return response;
 	}
 }
