@@ -18,6 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByDescr;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByIntRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByLongRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByNameRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.VehicleListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.VehicleSearchResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.VehilceAddUpdateRequest;
@@ -49,37 +53,37 @@ public class VehicleController {
 
 	@GetMapping("/vehicle/{vehicleId}")
 	@CrossOrigin
-	public VehicleSearchResponse getVehicleInformationById(@PathVariable int vehicleId)
+	public VehicleSearchResponse getVehicleInformationById(@RequestBody @Valid SearchByLongRequest request)
 			throws InvalidVehicleException {
-		VehicleSearchResponse response = vehicleService.findVehicleInformationById(vehicleId);
+		VehicleSearchResponse response = vehicleService.findVehicleInformationById(request);
 		return response;
 	}
 
 	@GetMapping("/vehicle/make/{make}")
 	@CrossOrigin
-	public VehicleListResponse getVehicleInformationByMake(@PathVariable String make) {
-		VehicleListResponse response = vehicleService.findVehicleInformationByMake(make);
+	public VehicleListResponse getVehicleInformationByMake(@RequestBody @Valid SearchByNameRequest request) {
+		VehicleListResponse response = vehicleService.findVehicleInformationByMake(request);
 		return response;
 	}
 
 	@GetMapping("/vehicle/model/{model}")
 	@CrossOrigin
-	public VehicleListResponse getVehicleInformationByModel(@PathVariable String model) {
-		VehicleListResponse response = vehicleService.findVehicleInformationbyModel(model);
+	public VehicleListResponse getVehicleInformationByModel(@RequestBody @Valid SearchByNameRequest request) {
+		VehicleListResponse response = vehicleService.findVehicleInformationbyModel(request);
 		return response;
 	}
 
 	@GetMapping("/vehicle/year/{year}")
 	@CrossOrigin
-	public VehicleListResponse getVehicleInformationByYear(@PathVariable String year) {
-		VehicleListResponse response = vehicleService.findVehicleInformationByYear(year);
+	public VehicleListResponse getVehicleInformationByYear(@RequestBody @Valid SearchByDescr request) {
+		VehicleListResponse response = vehicleService.findVehicleInformationByYear(request);
 		return response;
 	}
 
 	@GetMapping("/vehicle/transmission/{transmission}")
 	@CrossOrigin
-	public VehicleListResponse getVehicleInformationByTransmission(@PathVariable String transmission) {
-		VehicleListResponse response = vehicleService.findVehicleInformationByTransmission(transmission);
+	public VehicleListResponse getVehicleInformationByTransmission(@RequestBody @Valid SearchByNameRequest request) {
+		VehicleListResponse response = vehicleService.findVehicleInformationByTransmission(request);
 		return response;
 	}
 
@@ -98,15 +102,16 @@ public class VehicleController {
 	
 	@PutMapping("/vehicle/{vehicleId}")
 	@CrossOrigin
-	public VehilceAddUpdateResponse updateVehicleInformation(@RequestBody @Valid VehilceAddUpdateRequest request) {
+	public VehilceAddUpdateResponse updateVehicleInformation(@RequestBody @Valid VehilceAddUpdateRequest request) throws InvalidVehicleException {
 		VehilceAddUpdateResponse response = vehicleService.updateVehicleInfomration(request);
 		return response;
 	}
 
 	@DeleteMapping("/vehicle/{vehicleId}")
 	@CrossOrigin
-	public int deleteVehicleInformationbyId(@PathVariable int vehicleId) {
-		return vehicleService.deleteVehicleInformation(vehicleId);
+	public VehicleSearchResponse deleteVehicleInformationbyId(@RequestBody @Valid SearchByLongRequest request) throws InvalidVehicleException {
+		VehicleSearchResponse response = vehicleService.deleteVehicleInformation(request);
+		return response;
 	}
 
 	@DeleteMapping("/delete-all-vehicles")

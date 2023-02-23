@@ -55,7 +55,7 @@ public class UtilityService {
 		return utilityDaoImpl.findUtilityCount();
 	}
 	
-	public int addUtilityInformation(@RequestBody Utility utility) {
+	public int addUtilityInformation(Utility utility) {
 		return utilityDaoImpl.addUtilityInformation(utility);
 	}
 	

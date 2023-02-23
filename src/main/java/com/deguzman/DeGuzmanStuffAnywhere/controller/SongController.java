@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByDescr;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByIntRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByNameRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.SongAddUpdateRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.SongAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.SongListResponse;
@@ -50,22 +53,22 @@ public class SongController {
 
 	@GetMapping("/song/{song_id}")
 	@CrossOrigin
-	public SongSearchResponse getSongInformationById(@PathVariable int song_id) throws ResourceNotFoundException {
-		SongSearchResponse response =songService.findSongById(song_id);
+	public SongSearchResponse getSongInformationById(@RequestBody @Valid SearchByIntRequest request) throws ResourceNotFoundException {
+		SongSearchResponse response =songService.findSongById(request);
 		return response;
 	}
 
 	@GetMapping("/song/artist/{artist}")
 	@CrossOrigin
-	public SongListResponse getSongInformationByArtist(@PathVariable String artist) {
-		SongListResponse response = songService.findSongByArtist(artist);
+	public SongListResponse getSongInformationByArtist(@RequestBody @Valid SearchByNameRequest request) {
+		SongListResponse response = songService.findSongByArtist(request);
 		return response;
 	}
 
 	@GetMapping("/song/genre/{genre}")
 	@CrossOrigin
-	public SongListResponse getSongInformationByGenre(@PathVariable String genre) {
-		SongListResponse response =  songService.findSongsByGenre(genre);
+	public SongListResponse getSongInformationByGenre(@RequestBody @Valid SearchByDescr request) {
+		SongListResponse response =  songService.findSongsByGenre(request);
 		return response;
 	}
 
@@ -84,15 +87,15 @@ public class SongController {
 	
 	@PutMapping("/song/{song_id}")
 	@CrossOrigin
-	public SongAddUpdateResponse updateSongInformation(@RequestBody @Valid SongAddUpdateRequest request) {
+	public SongAddUpdateResponse updateSongInformation(@RequestBody @Valid SongAddUpdateRequest request) throws ResourceNotFoundException {
 		SongAddUpdateResponse response = songService.updateSongInformation(request);
 		return response;
 	}
 
 	@DeleteMapping("/song/{song_id}")
 	@CrossOrigin
-	public int deleteSongInformationById(@PathVariable int song_id) {
-		return songService.deleteSongInformation(song_id);
+	public int deleteSongInformationById(@RequestBody @Valid SearchByIntRequest request) {
+		return songService.deleteSongInformation(request);
 	}
 
 	@DeleteMapping("/delete-all-songs")

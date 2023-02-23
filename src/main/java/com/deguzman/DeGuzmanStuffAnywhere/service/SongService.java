@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.SongDaoImpl;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByDescr;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByIntRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByNameRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.SongAddUpdateRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.SongAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.SongListResponse;
@@ -74,33 +77,33 @@ public class SongService {
 		}
 	}
 	
-	public SongListResponse findSongByArtist(String artist) {
+	public SongListResponse findSongByArtist(SearchByNameRequest request) {
 		SongListResponse response = new SongListResponse();
-		List<com.deguzman.DeGuzmanStuffAnywhere.model.Song> list = songDaoImpl.findSongByArtist(artist);
+		List<com.deguzman.DeGuzmanStuffAnywhere.model.Song> list = songDaoImpl.findSongByArtist(request.getName());
 		
 		response.setList(list);
 		return response;
 	}
 	
-	public SongListResponse findSongsByGenre(String genre) {
+	public SongListResponse findSongsByGenre(SearchByDescr request) {
 		SongListResponse response = new SongListResponse();
-		List<com.deguzman.DeGuzmanStuffAnywhere.model.Song> list = songDaoImpl.findSongsByGenre(genre);
+		List<com.deguzman.DeGuzmanStuffAnywhere.model.Song> list = songDaoImpl.findSongsByGenre(request.getDescr());
 		
 		response.setList(list);
 		return response;
 	}
 	
-	public SongSearchResponse findSongById(int song_id) throws ResourceNotFoundException {
+	public SongSearchResponse findSongById(SearchByIntRequest request) throws ResourceNotFoundException {
 		SongSearchResponse response = new SongSearchResponse();
-		com.deguzman.DeGuzmanStuffAnywhere.model.Song song = songDaoImpl.findSongById(song_id);
+		com.deguzman.DeGuzmanStuffAnywhere.model.Song song = songDaoImpl.findSongById(request.getId());
 		
 		response.setSong(song);
 		return response;
 	}
 	
-	public SongSearchResponse findSongByTitle(String title) {
+	public SongSearchResponse findSongByTitle(SearchByNameRequest request) {
 		SongSearchResponse response = new SongSearchResponse();
-		com.deguzman.DeGuzmanStuffAnywhere.model.Song song = songDaoImpl.findSongByTitle(title);
+		com.deguzman.DeGuzmanStuffAnywhere.model.Song song = songDaoImpl.findSongByTitle(request.getName());
 		
 		response.setSong(song);
 		return response;
@@ -128,9 +131,9 @@ public class SongService {
 		return response;
 	}
 	
-	public SongAddUpdateResponse updateSongInformation(SongAddUpdateRequest request) {
+	public SongAddUpdateResponse updateSongInformation(SongAddUpdateRequest request) throws ResourceNotFoundException {
 		SongAddUpdateResponse response = new SongAddUpdateResponse();
-		com.deguzman.DeGuzmanStuffAnywhere.model.Song song = null;
+		com.deguzman.DeGuzmanStuffAnywhere.model.Song song = songDaoImpl.findSongById(request.getSong_id());
 		int count = 0;
 		
 		count = songDaoImpl.updateSongInformation(request.getSong_id(),request);
@@ -146,8 +149,8 @@ public class SongService {
 		return response;
 	}
 	
-	public int deleteSongInformation(int song_id) {
-		return songDaoImpl.deleteSongInformation(song_id);
+	public int deleteSongInformation(SearchByIntRequest request) {
+		return songDaoImpl.deleteSongInformation(request.getId());
 	}
 	
 	public DeleteAllResponse deleteAllSongs() {

@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.VehicleDaoImpl;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByDescr;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByLongRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByNameRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.VehicleListResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.VehicleSearchResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.VehilceAddUpdateRequest;
@@ -73,44 +76,44 @@ public class VehicleService {
 		}
 	}
 
-	public VehicleSearchResponse findVehicleInformationById(long vehicleId)
+	public VehicleSearchResponse findVehicleInformationById(SearchByLongRequest request)
 			throws InvalidVehicleException {
 		VehicleSearchResponse response = new VehicleSearchResponse();
-		com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle vehicle = vehicleDaoImpl.findVehicleInformationById(vehicleId);
+		com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle vehicle = vehicleDaoImpl.findVehicleInformationById(request.getId());
 		
 		response.setVehicle(vehicle);
 		return response;
 	}
 
-	public VehicleListResponse findVehicleInformationByMake(String make) {
+	public VehicleListResponse findVehicleInformationByMake(SearchByNameRequest request) {
 		VehicleListResponse response = new VehicleListResponse();
-		List<com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle> list = vehicleDaoImpl.findVehicleInformatioByMake(make);
+		List<com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle> list = vehicleDaoImpl.findVehicleInformatioByMake(request.getName());
 
 		response.setList(list);
 		return response;
 	}
 
-	public VehicleListResponse findVehicleInformationbyModel(String model) {
+	public VehicleListResponse findVehicleInformationbyModel(SearchByNameRequest request) {
 		VehicleListResponse response = new VehicleListResponse();
 		List<com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle> list = vehicleDaoImpl
-				.findVehicleInformationByModel(model);
+				.findVehicleInformationByModel(request.getName());
 
 		response.setList(list);
 		return response;
 	}
 
-	public VehicleListResponse findVehicleInformationByYear(String year) {
+	public VehicleListResponse findVehicleInformationByYear(SearchByDescr request) {
 		VehicleListResponse response = new VehicleListResponse();
-		List<com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle> list = vehicleDaoImpl.findVehicleInformationByYear(year);
+		List<com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle> list = vehicleDaoImpl.findVehicleInformationByYear(request.getDescr());
 
 		response.setList(list);
 		return response;
 	}
 
-	public VehicleListResponse findVehicleInformationByTransmission(String transmission) {
+	public VehicleListResponse findVehicleInformationByTransmission(SearchByNameRequest request) {
 		VehicleListResponse response = new VehicleListResponse();
 		List<com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle> list = vehicleDaoImpl
-				.findVehicleInformationByTransmission(transmission);
+				.findVehicleInformationByTransmission(request.getName());
 
 		response.setList(list);
 		return response;
@@ -141,9 +144,9 @@ public class VehicleService {
 		return response;
 	}
 
-	public VehilceAddUpdateResponse updateVehicleInfomration(VehilceAddUpdateRequest request) {
+	public VehilceAddUpdateResponse updateVehicleInfomration(VehilceAddUpdateRequest request) throws InvalidVehicleException {
 		VehilceAddUpdateResponse response = new VehilceAddUpdateResponse();
-		com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle vehicle = null;
+		com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle vehicle = vehicleDaoImpl.findVehicleInformationById(request.getVehicleId());
 		int count = 0;
 		
 		count = vehicleDaoImpl.updateCarInformation(request.getVehicleId(), request);
@@ -161,8 +164,18 @@ public class VehicleService {
 		return response;
 	}
 
-	public int deleteVehicleInformation(long vehicleId) {
-		return vehicleDaoImpl.deleteCarInformation(vehicleId);
+	public VehicleSearchResponse deleteVehicleInformation(SearchByLongRequest request) throws InvalidVehicleException {
+		VehicleSearchResponse response = new VehicleSearchResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle vehicle = vehicleDaoImpl.findVehicleInformationById(request.getId());
+		int count = 0;
+		
+		count = vehicleDaoImpl.deleteCarInformation(request.getId());
+		
+		if (count > 0) {
+			response.setVehicle(vehicle);
+		}
+		
+		return response;
 	}
 
 	public DeleteAllResponse deleteAllVehicleInformation() {
