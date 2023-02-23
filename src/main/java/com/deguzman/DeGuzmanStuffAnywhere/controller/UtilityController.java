@@ -1,7 +1,6 @@
 package com.deguzman.DeGuzmanStuffAnywhere.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.UtilityListResponse;
-import com.deguzman.DeGuzmanStuffAnywhere.dto.UtilityInfoDTO;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.UtilitySearchResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.model.Utility;
 import com.deguzman.DeGuzmanStuffAnywhere.service.UtilityService;
 
@@ -40,20 +39,23 @@ public class UtilityController {
 
 	@GetMapping("/utility/{utility_id}")
 	@CrossOrigin
-	public ResponseEntity<UtilityInfoDTO> getUtilityInformationById(@PathVariable long utility_id) {
-		return utilityService.findUtilityInformationById(utility_id);
+	public UtilitySearchResponse getUtilityInformationById(@PathVariable long utility_id) {
+		UtilitySearchResponse response = utilityService.findUtilityInformationById(utility_id);
+		return response;
 	}
 
 	@GetMapping("/utility/name/{name}")
 	@CrossOrigin
-	public ResponseEntity<UtilityInfoDTO> getUtilityInformationByName(@PathVariable String name) {
-		return utilityService.findUtilityInformationByName(name);
+	public UtilitySearchResponse getUtilityInformationByName(@PathVariable String name) {
+		UtilitySearchResponse response = utilityService.findUtilityInformationByName(name);
+		return response;
 	}
 
 	@GetMapping("/utility/utility-type/{utility_type_id}")
 	@CrossOrigin
-	public ResponseEntity<UtilityInfoDTO> getUtilityInformationByType(@PathVariable int utility_type_id) {
-		return utilityService.findUtilityInformationByType(utility_type_id);
+	public UtilitySearchResponse getUtilityInformationByType(@PathVariable int utility_type_id) {
+		UtilitySearchResponse response = utilityService.findUtilityInformationByType(utility_type_id);
+		return response;
 	}
 
 	@GetMapping("/get-utility-count")

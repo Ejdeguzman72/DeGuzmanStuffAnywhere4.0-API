@@ -20,8 +20,10 @@ import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalOfficeAddUpdateRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalOfficeAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalOfficeListResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalOfficeSearchResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByLongRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByZipRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateOfficeException;
-import com.deguzman.DeGuzmanStuffAnywhere.model.MedicalOffice;
 import com.deguzman.DeGuzmanStuffAnywhere.service.MedicalOfficeService;
 
 import org.springframework.web.bind.annotation.RestController;
@@ -51,15 +53,16 @@ public class MedicalOfficeController {
 
 	@GetMapping("/medical-office/zip/{zip}")
 	@CrossOrigin
-	public MedicalOfficeListResponse getAllMedicalOfficeInformationByZipCode(@PathVariable String zip) {
-		MedicalOfficeListResponse response = medOfficeService.findMedicalofficesByZip(zip);
+	public MedicalOfficeListResponse getAllMedicalOfficeInformationByZipCode(@RequestBody @Valid SearchByZipRequest request) {
+		MedicalOfficeListResponse response = medOfficeService.findMedicalofficesByZip(request);
 		return response;
 	}
 
 	@GetMapping("/medical-office/{medicalOfficeId}")
 	@CrossOrigin
-	public ResponseEntity<MedicalOffice> getMedicalOfficeInformationById(@PathVariable long medicalOfficeId) {
-		return medOfficeService.findMedicalOfficeInformationById(medicalOfficeId);
+	public MedicalOfficeSearchResponse getMedicalOfficeInformationById(@RequestBody @Valid SearchByLongRequest request) {
+		MedicalOfficeSearchResponse response = medOfficeService.findMedicalOfficeInformationById(request);
+		return response;
 	}
 
 	@GetMapping("/medical-office-count")

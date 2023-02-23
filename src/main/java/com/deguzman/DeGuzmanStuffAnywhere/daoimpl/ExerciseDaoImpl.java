@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import com.deguzman.DeGuzmanStuffAnywhere.dao.ExerciseDao;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.ExerciseInfoDTO;
@@ -111,7 +110,7 @@ public class ExerciseDaoImpl implements ExerciseDao {
 
 	@Override
 	@Cacheable(value = "exerciseById", key = "#exercise_id")
-	public ResponseEntity<Exercise> findExerciseById(int exercise_id) {
+	public Exercise findExerciseById(int exercise_id) {
 		Exercise exerciseInfo = new Exercise();
 		
 		try {
@@ -123,11 +122,11 @@ public class ExerciseDaoImpl implements ExerciseDao {
 			LOGGER.error("Empty data set: " + e.toString());
 		}
 
-		return ResponseEntity.ok().body(exerciseInfo);
+		return exerciseInfo;
 	}
 	
 	@Override
-	public ResponseEntity<ExerciseInfoDTO> findExerciseDTOById(int exercise_id) {
+	public ExerciseInfoDTO findExerciseDTOById(int exercise_id) {
 		ExerciseInfoDTO exerciseInfo = new ExerciseInfoDTO();
 		
 		try {
@@ -139,7 +138,7 @@ public class ExerciseDaoImpl implements ExerciseDao {
 			LOGGER.error("Empty data set: " + e.toString());
 		}
 
-		return ResponseEntity.ok().body(exerciseInfo);
+		return exerciseInfo;
 	}
 	
 	@Override

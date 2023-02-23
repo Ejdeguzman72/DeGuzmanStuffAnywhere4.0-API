@@ -1,16 +1,16 @@
 package com.deguzman.DeGuzmanStuffAnywhere.domain;
 
-import com.deguzman.DeGuzmanStuffAnywhere.dto.AutoTrxInfoDTO;
+import com.deguzman.DeGuzmanStuffAnywhere.model.AutoTransaction;
 
 public class AutoTrxSearchResponse {
 
-	public AutoTrxInfoDTO transaction;
+	public AutoTransaction transaction;
 
-	public AutoTrxInfoDTO getTransaction() {
+	public AutoTransaction getTransaction() {
 		return transaction;
 	}
 
-	public void setTransaction(AutoTrxInfoDTO transaction) {
+	public void setTransaction(AutoTransaction transaction) {
 		this.transaction = transaction;
 	} 
 }

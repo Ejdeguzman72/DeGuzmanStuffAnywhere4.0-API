@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -63,7 +62,7 @@ public class VehicleDaoImpl implements VehicleDao {
 
 	@Override
 	@Cacheable(value = "vehicleById", key = "#vehicleId")
-	public ResponseEntity<Vehicle> findVehicleInformationById(long vehicleId)
+	public Vehicle findVehicleInformationById(long vehicleId)
 			throws InvalidVehicleException {
 		Vehicle vehicle = null;
 		try {
@@ -76,7 +75,7 @@ public class VehicleDaoImpl implements VehicleDao {
 			e.printStackTrace();
 		}
 		
-		return ResponseEntity.ok().body(vehicle);
+		return vehicle;
 	}
 
 	@Override

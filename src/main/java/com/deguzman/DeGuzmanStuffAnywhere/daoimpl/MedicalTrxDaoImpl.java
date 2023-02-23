@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -155,7 +154,7 @@ public class MedicalTrxDaoImpl implements MedicalTrxDao {
 
 	@Override
 	@Cacheable(value = "medicalTransactionById", key = "#medical_transaction_id")
-	public ResponseEntity<MedicalTrxInfoDTO> findMedicalTransactionInformationDTOById(
+	public MedicalTrxInfoDTO findMedicalTransactionInformationDTOById(
 			long medical_transaction_id) throws ResourceNotFoundException {
 		MedicalTrxInfoDTO medicalTrx = new MedicalTrxInfoDTO();
 		
@@ -168,11 +167,11 @@ public class MedicalTrxDaoImpl implements MedicalTrxDao {
 			LOGGER.error("Exception: " + e.toString());
 		}
 
-		return ResponseEntity.ok().body(medicalTrx);
+		return medicalTrx;
 	}
 
 	@Override
-	public ResponseEntity<MedicalTransaction> findMedicalTransactionInformationById(
+	public MedicalTransaction findMedicalTransactionInformationById(
 			long medical_transaction_id) throws ResourceNotFoundException {
 		MedicalTransaction medicalTrx = new MedicalTransaction();
 		
@@ -185,7 +184,7 @@ public class MedicalTrxDaoImpl implements MedicalTrxDao {
 			LOGGER.error("Empty data set: " + e.toString());
 		}
 
-		return ResponseEntity.ok().body(medicalTrx);
+		return medicalTrx;
 	}
 	
 	@Override

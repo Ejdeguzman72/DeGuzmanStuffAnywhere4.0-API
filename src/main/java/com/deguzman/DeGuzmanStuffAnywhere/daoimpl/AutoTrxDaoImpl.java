@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -158,7 +157,7 @@ public class AutoTrxDaoImpl implements AutoTrxDao {
 
 	@Override
 	@Cacheable(value = "autoTrasactionById", key = "#auto_transaction_id")
-	public ResponseEntity<AutoTrxInfoDTO> findAutoTranasctionInformatioDTOnById(long auto_transaction_id)
+	public AutoTrxInfoDTO findAutoTranasctionInformatioDTOnById(long auto_transaction_id)
 			throws InvalidTransactionException {
 		AutoTrxInfoDTO autoTrxInfo = new AutoTrxInfoDTO();
 		try {
@@ -171,17 +170,17 @@ public class AutoTrxDaoImpl implements AutoTrxDao {
 		}
 		
 
-		return ResponseEntity.ok().body(autoTrxInfo);
+		return autoTrxInfo;
 	}
 	
 	@Override
-	public ResponseEntity<AutoTransaction> findAutoTranasctionInformationById(long auto_transaction_id) throws InvalidTransactionException {
+	public AutoTransaction findAutoTranasctionInformationById(long auto_transaction_id) throws InvalidTransactionException {
 		AutoTransaction transaction = jdbcTemplate.queryForObject(GET_AUTO_TRANSACTION_INFO,
 				BeanPropertyRowMapper.newInstance(AutoTransaction.class), auto_transaction_id);
 		
 		LOGGER.info("Retrieving transaction based on ID: " + " " + auto_transaction_id);
 		
-		return ResponseEntity.ok().body(transaction);
+		return transaction;
 	}
 
 	@Override

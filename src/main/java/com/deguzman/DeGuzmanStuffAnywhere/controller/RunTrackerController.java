@@ -1,7 +1,8 @@
 package com.deguzman.DeGuzmanStuffAnywhere.controller;
 
-import java.util.List;
 import java.util.Map;
+
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,80 +17,88 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.RunTrackerDaoImpl;
-import com.deguzman.DeGuzmanStuffAnywhere.dto.RunTrackerInfoDTO;
-import com.deguzman.DeGuzmanStuffAnywhere.model.RunTracker;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.RunTrackerAddUpdateRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.RunTrackerAddUpdateResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.RunTrackerDTOSearchResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.RunTrackerListResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.RunTrackerSearchResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByLongRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.service.RunTrackerService;
 
 @RestController
 @RequestMapping("/app/run-tracker-app")
 @CrossOrigin
 public class RunTrackerController {
-
-	@Autowired
-	private RunTrackerDaoImpl runTrackerDaoImpl;
 	
 	@Autowired
-	private RunTrackerService runTrackerPageService;
+	private RunTrackerService runTrackerService;
 
 	@GetMapping("/all")
 	@CrossOrigin
-	public List<RunTrackerInfoDTO> getAllRunTrackerInformation() {
-		return runTrackerDaoImpl.findAllRunTrackerInformation();
+	public RunTrackerListResponse getAllRunTrackerInformation() {
+		RunTrackerListResponse response = runTrackerService.findAllRunTrackerInformation();
+		return response;
 	}
 	
 	@GetMapping("all-runs")
 	@CrossOrigin
 	public ResponseEntity<Map<String, Object>> getAllRunInfoPagination(@RequestParam(required = false) String runDate,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
-		return runTrackerPageService.getAllRunInfoPagination(runDate, page, size);
+		return runTrackerService.getAllRunInfoPagination(runDate, page, size);
 	}
 
 	@GetMapping("/run/user/{user_id}")
 	@CrossOrigin
-	public List<RunTrackerInfoDTO> getRunTrackerInformationByUser(@PathVariable long user_id) {
-		return runTrackerDaoImpl.findRunTrackerInformationByUser(user_id);
+	public RunTrackerListResponse getRunTrackerInformationByUser(@RequestBody @Valid SearchByLongRequest request) {
+		RunTrackerListResponse response = runTrackerService.findRunTrackerInformationByUser(request);
+		return response;
 	}
 
 	@GetMapping("/run/{run_id}")
 	@CrossOrigin
-	public ResponseEntity<RunTracker> getRunTrackerInformationById(@PathVariable long run_id) {
-		return runTrackerDaoImpl.findRunTrackerById(run_id);
+	public RunTrackerSearchResponse getRunTrackerInformationById(@RequestBody @Valid SearchByLongRequest request) {
+		RunTrackerSearchResponse response = runTrackerService.findRunTrackerById(request);
+		return response;
 	}
 	
 	@GetMapping("/run-dto/{run_id}")
 	@CrossOrigin
-	public ResponseEntity<RunTrackerInfoDTO> getRunTrackerInformationDTOById(@PathVariable long run_id) {
-		return runTrackerDaoImpl.findRunTrackerInformationDTOById(run_id);
+	public RunTrackerDTOSearchResponse getRunTrackerInformationDTOById(@RequestBody @Valid SearchByLongRequest request) {
+		RunTrackerDTOSearchResponse response = runTrackerService.findRunTrackerInformationDTOById(request);
+		return response;
 	}
 
 	@GetMapping("run-count")
 	@CrossOrigin
 	public long getRunCount() {
-		return runTrackerDaoImpl.findCountOfRunTrackerInformation();
+		return runTrackerService.findCountOfRunTrackerInformation();
 	}
 
 	@PostMapping("/add-run-tracker-info")
 	@CrossOrigin
-	public int addRunTrackerInformation(@RequestBody RunTracker run) {
-		return runTrackerDaoImpl.addRunTrackerInformation(run);
+	public RunTrackerAddUpdateResponse addRunTrackerInformation(@RequestBody RunTrackerAddUpdateRequest request) {
+		RunTrackerAddUpdateResponse response = runTrackerService.addRunTrackerInfomration(request);
+		return response;
 	}
 
 	@PutMapping("/run/{run_id}")
 	@CrossOrigin
-	public int updateRunTrackerInformation(@PathVariable long run_id, @RequestBody RunTracker runTrackerDetails) {
-		return runTrackerDaoImpl.updateRunTrackerInformation(run_id, runTrackerDetails);
+	public RunTrackerAddUpdateResponse updateRunTrackerInformation(@RequestBody @Valid RunTrackerAddUpdateRequest request) {
+		RunTrackerAddUpdateResponse response = runTrackerService.updateRunTrackerInformation(request);
+		return response;
 	}
 	
 	@DeleteMapping("/run/{run_id}")
 	@CrossOrigin
-	public int deleteRunTrackerInformationById(@PathVariable long run_id) {
-		return runTrackerDaoImpl.deleteRunTrackerInformation(run_id);
+	public int deleteRunTrackerInformationById(@RequestBody @Valid SearchByLongRequest request) {
+		return runTrackerService.deleteRunTrackerInformation(request);
 	}
 
 	@DeleteMapping("/delete-all-runs")
 	@CrossOrigin
-	public int deleteAllRunInformation() {
-		return runTrackerDaoImpl.deleteAllRunTrackerInformation();
+	public DeleteAllResponse deleteAllRunInformation() {
+		DeleteAllResponse response = runTrackerService.deleteAllRunTrackerInformation();
+		return response;
 	}
 }

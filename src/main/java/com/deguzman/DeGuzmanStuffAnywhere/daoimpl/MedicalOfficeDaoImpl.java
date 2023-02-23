@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -78,7 +77,7 @@ public class MedicalOfficeDaoImpl implements MedicalOfficeDao {
 
 	@Override
 	@Cacheable(value = "medicalOfficeById", key = "#medicalOfficeId")
-	public ResponseEntity<MedicalOffice> findMedicalOfficeInformationById(long medicalOfficeId) {
+	public MedicalOffice findMedicalOfficeInformationById(long medicalOfficeId) {
 		MedicalOffice medicalOffice = new MedicalOffice();
 		
 		try {
@@ -90,7 +89,7 @@ public class MedicalOfficeDaoImpl implements MedicalOfficeDao {
 			LOGGER.error("Empty data set: " + e.toString());
 		}
 
-		return ResponseEntity.ok().body(medicalOffice);
+		return medicalOffice;
 	}
 
 	@Override

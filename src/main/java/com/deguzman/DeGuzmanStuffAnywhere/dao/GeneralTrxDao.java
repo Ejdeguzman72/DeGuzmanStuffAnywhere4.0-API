@@ -2,7 +2,6 @@ package com.deguzman.DeGuzmanStuffAnywhere.dao;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.GeneralTrxInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
 import com.deguzman.DeGuzmanStuffAnywhere.model.GeneralTransaction;
@@ -15,10 +14,10 @@ public interface GeneralTrxDao {
 
 	public List<GeneralTrxInfoDTO> findTransactionsByType(long transaction_type_id);
 
-	public ResponseEntity<GeneralTrxInfoDTO> findTransactionInformationDTOById(long transaction_id)
+	public GeneralTrxInfoDTO findTransactionInformationDTOById(long transaction_id)
 			throws ResourceNotFoundException;
 	
-	public ResponseEntity<GeneralTransaction> findTransactionInformationById(long transaction_id)
+	public GeneralTransaction findTransactionInformationById(long transaction_id)
 			throws ResourceNotFoundException;
 
 	public long findCountOfGeneralTransaction();

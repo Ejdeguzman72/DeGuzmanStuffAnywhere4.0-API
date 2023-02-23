@@ -2,7 +2,6 @@ package com.deguzman.DeGuzmanStuffAnywhere.dao;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.RunTrackerInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.model.RunTracker;
 
@@ -12,9 +11,9 @@ public interface RunTrackerDao {
 
 	public List<RunTrackerInfoDTO> findRunTrackerInformationByUser(long user_id);
 
-	public ResponseEntity<RunTrackerInfoDTO> findRunTrackerInformationDTOById(long run_id);
+	public RunTrackerInfoDTO findRunTrackerInformationDTOById(long run_id);
 	
-	public ResponseEntity<RunTracker> findRunTrackerById(long run_id);
+	public RunTracker findRunTrackerById(long run_id);
 
 	public long findCountOfRunTrackerInformation();
 

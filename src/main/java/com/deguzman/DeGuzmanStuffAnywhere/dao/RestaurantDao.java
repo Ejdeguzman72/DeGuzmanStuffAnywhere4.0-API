@@ -1,7 +1,6 @@
 package com.deguzman.DeGuzmanStuffAnywhere.dao;
 
 import java.util.List;
-import org.springframework.http.ResponseEntity;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.RestaurantInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateRestaurantException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.InvalidRestaurantException;
@@ -18,10 +17,10 @@ public interface RestaurantDao {
 
 	public List<RestaurantInfoDTO> findRestaurantsByDescr(String descr);
 
-	public ResponseEntity<RestaurantInfoDTO> findRestaurantById(int restaurant_id)
+	public RestaurantInfoDTO findRestaurantById(int restaurant_id)
 			throws InvalidRestaurantException;
 
-	public ResponseEntity<RestaurantInfoDTO> findRestaurantByName(String name);
+	public RestaurantInfoDTO findRestaurantByName(String name);
 
 	public long getRestaurantCount();
 

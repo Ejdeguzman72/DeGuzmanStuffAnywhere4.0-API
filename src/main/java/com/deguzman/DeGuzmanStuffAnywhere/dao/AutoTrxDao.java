@@ -2,7 +2,6 @@ package com.deguzman.DeGuzmanStuffAnywhere.dao;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.AutoTrxInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.InvalidAutoShopException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.InvalidTransactionException;
@@ -21,7 +20,7 @@ public interface AutoTrxDao {
 
 	public List<AutoTrxInfoDTO> findAutoTransactionsByType(long transaction_type_id);
 
-	public ResponseEntity<AutoTransaction> findAutoTranasctionInformationById(long auto_transaction_id)
+	public AutoTransaction findAutoTranasctionInformationById(long auto_transaction_id)
 			throws InvalidTransactionException;
 
 	public long getCountOfAutoTransactions();
@@ -38,7 +37,7 @@ public interface AutoTrxDao {
 
 	public int deleteAllAutoTransactions();
 
-	ResponseEntity<AutoTrxInfoDTO> findAutoTranasctionInformatioDTOnById(long auto_transaction_id)
+	AutoTrxInfoDTO findAutoTranasctionInformatioDTOnById(long auto_transaction_id)
 			throws InvalidTransactionException;
 
 }

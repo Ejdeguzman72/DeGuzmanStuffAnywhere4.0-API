@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.VehicleDaoImpl;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.VehicleListResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.VehicleSearchResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.VehilceAddUpdateRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.VehilceAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.InvalidVehicleException;
@@ -72,9 +73,13 @@ public class VehicleService {
 		}
 	}
 
-	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle> findVehicleInformationById(long vehicleId)
+	public VehicleSearchResponse findVehicleInformationById(long vehicleId)
 			throws InvalidVehicleException {
-		return vehicleDaoImpl.findVehicleInformationById(vehicleId);
+		VehicleSearchResponse response = new VehicleSearchResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle vehicle = vehicleDaoImpl.findVehicleInformationById(vehicleId);
+		
+		response.setVehicle(vehicle);
+		return response;
 	}
 
 	public VehicleListResponse findVehicleInformationByMake(String make) {

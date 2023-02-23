@@ -2,7 +2,6 @@ package com.deguzman.DeGuzmanStuffAnywhere.dao;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.InvalidVehicleException;
 import com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle;
 
@@ -10,7 +9,7 @@ public interface VehicleDao {
 
 	public List<Vehicle> findAllCarInformation();
 
-	public ResponseEntity<Vehicle> findVehicleInformationById(long vehicleId)
+	public Vehicle findVehicleInformationById(long vehicleId)
 			throws InvalidVehicleException;
 
 	public List<Vehicle> findVehicleInformatioByMake(String make);

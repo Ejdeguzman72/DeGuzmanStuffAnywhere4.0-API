@@ -18,6 +18,11 @@ import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.RestaurantAddUpdateRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.RestaurantAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.RestaurantListResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.RestaurantSearchResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByDescr;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByIntRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByNameRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByZipRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.RestaurantInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateRestaurantException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.InvalidRestaurantException;
@@ -76,36 +81,44 @@ public class RestaurantInfoService {
 		}
 	}
 	
-	public RestaurantListResponse findAllRestaurantsByType(int restaurant_type_id) {
+	public RestaurantListResponse findAllRestaurantsByType(SearchByIntRequest request) {
 		RestaurantListResponse response = new RestaurantListResponse();
-		List<RestaurantInfoDTO> list = restaurantDaoImpl.findAllRestaurantsByType(restaurant_type_id);
+		List<RestaurantInfoDTO> list = restaurantDaoImpl.findAllRestaurantsByType(request.getId());
 		
 		response.setList(list);
 		return response;
 	}
 	
-	public ResponseEntity<RestaurantInfoDTO> findRestaurantById(int restaurant_id) throws InvalidRestaurantException {
-		return restaurantDaoImpl.findRestaurantById(restaurant_id);
+	public RestaurantSearchResponse findRestaurantById(SearchByIntRequest request) throws InvalidRestaurantException {
+		RestaurantSearchResponse response = new RestaurantSearchResponse();
+		RestaurantInfoDTO restaurant = restaurantDaoImpl.findRestaurantById(request.getId());
+		
+		response.setRestaurant(restaurant);
+		return response;
 	}
 	
-	public RestaurantListResponse findRestaurantByZipCode(String zip) {
+	public RestaurantListResponse findRestaurantByZipCode(SearchByZipRequest request) {
 		RestaurantListResponse response = new RestaurantListResponse();
-		List<RestaurantInfoDTO> list = restaurantDaoImpl.findRestaurantsByZipCode(zip);
+		List<RestaurantInfoDTO> list = restaurantDaoImpl.findRestaurantsByZipCode(request.getZip());
 		
 		response.setList(list);
 		return response;
 	}
 	
-	public RestaurantListResponse findRestaurantsByDescr(String descr) {
+	public RestaurantListResponse findRestaurantsByDescr(SearchByDescr request) {
 		RestaurantListResponse response = new RestaurantListResponse();
-		List<RestaurantInfoDTO> list = restaurantDaoImpl.findRestaurantsByDescr(descr);
+		List<RestaurantInfoDTO> list = restaurantDaoImpl.findRestaurantsByDescr(request.getDescr());
 		
 		response.setList(list);
 		return response;
 	}
 	
-	public ResponseEntity<RestaurantInfoDTO> findRestaurantByName(String name) {
-		return restaurantDaoImpl.findRestaurantByName(name);
+	public RestaurantSearchResponse findRestaurantByName(SearchByNameRequest request) {
+		RestaurantSearchResponse response = new RestaurantSearchResponse();
+		RestaurantInfoDTO restaurant = restaurantDaoImpl.findRestaurantByName(request.getName());
+		
+		response.setRestaurant(restaurant);
+		return response;
 	}
 	
 	public long getRestaurantCount() {
@@ -135,7 +148,7 @@ public class RestaurantInfoService {
 	
 	public RestaurantAddUpdateResponse updateRestaurantInformation(RestaurantAddUpdateRequest request) throws ResourceNotFoundException {
 		RestaurantAddUpdateResponse response = new RestaurantAddUpdateResponse();
-		com.deguzman.DeGuzmanStuffAnywhere.model.Restaurant restaurant = null;
+		com.deguzman.DeGuzmanStuffAnywhere.model.Restaurant restaurant = restaurantDaoImpl.findRestaurantInfoById(request.getRestaurant_id());
 		int count = 0;
 		
 		count = restaurantDaoImpl.updateRestaurantInformation(request.getRestaurant_id(), request);
@@ -153,8 +166,8 @@ public class RestaurantInfoService {
 		return response;
 	}
 	
-	public int deleteRestaurantInformation(int restaurant_id) {
-		return restaurantDaoImpl.deleteRestaurantInformation(restaurant_id);
+	public int deleteRestaurantInformation(SearchByIntRequest request) {
+		return restaurantDaoImpl.deleteRestaurantInformation(request.getId());
 	}
 	
 	public DeleteAllResponse deleteAllRestaurantInformation() {

@@ -18,6 +18,9 @@ import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalOfficeAddUpdateRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalOfficeAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalOfficeListResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalOfficeSearchResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByLongRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByZipRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateOfficeException;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_dao.MedicalOfficeJpaDao;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_model.MedicalOffice;
@@ -73,9 +76,9 @@ public class MedicalOfficeService {
 		}
 	}
 	
-	public MedicalOfficeListResponse findMedicalofficesByZip(String zip) {
+	public MedicalOfficeListResponse findMedicalofficesByZip(SearchByZipRequest request) {
 		MedicalOfficeListResponse response = new MedicalOfficeListResponse();
-		List<com.deguzman.DeGuzmanStuffAnywhere.model.MedicalOffice> list = medicalOfficeDaoImpl.findMedicalOfficesByZip(zip);
+		List<com.deguzman.DeGuzmanStuffAnywhere.model.MedicalOffice> list = medicalOfficeDaoImpl.findMedicalOfficesByZip(request.getZip());
 		
 		response.setList(list);
 		return response;
@@ -139,8 +142,12 @@ public class MedicalOfficeService {
 		return response;
 	}
 
-	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.MedicalOffice> findMedicalOfficeInformationById(
-			long medicalOfficeId) {
-		return medicalOfficeDaoImpl.findMedicalOfficeInformationById(medicalOfficeId);
+	public MedicalOfficeSearchResponse findMedicalOfficeInformationById(
+			SearchByLongRequest request) {
+		MedicalOfficeSearchResponse response = new MedicalOfficeSearchResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.MedicalOffice office = medicalOfficeDaoImpl.findMedicalOfficeInformationById(request.getId());
+		
+		response.setMedicalOffice(office);
+		return response;
 	}
 }

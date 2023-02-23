@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.deguzman.DeGuzmanStuffAnywhere.authentication_models.User;
 import com.deguzman.DeGuzmanStuffAnywhere.authentication_repository.UserRepository;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.UserListResponse;
 
 @Service
 public class UserService {
@@ -14,7 +15,11 @@ public class UserService {
 	@Autowired
 	private UserRepository userRepository;
 	
-	public List<User> findAllUsersInformation() {
-		return userRepository.findAll();
+	public UserListResponse findAllUsersInformation() {
+		UserListResponse response = new UserListResponse();
+		List<User> list = userRepository.findAll();
+		
+		response.setList(list);
+		return response;
 	}
 }

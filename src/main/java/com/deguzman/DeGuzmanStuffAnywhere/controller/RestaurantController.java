@@ -21,7 +21,11 @@ import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.RestaurantAddUpdateRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.RestaurantAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.RestaurantListResponse;
-import com.deguzman.DeGuzmanStuffAnywhere.dto.RestaurantInfoDTO;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.RestaurantSearchResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByDescr;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByIntRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByNameRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByZipRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateRestaurantException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.InvalidRestaurantException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
@@ -50,42 +54,45 @@ public class RestaurantController {
 
 	@GetMapping("/restaurant/type/{restaurant_type_id}")
 	@CrossOrigin
-	public RestaurantListResponse getAllRestaurantInformationByType(@PathVariable int restaurant_type_id) {
-		RestaurantListResponse response = restaurantInfoService.findAllRestaurantsByType(restaurant_type_id);
+	public RestaurantListResponse getAllRestaurantInformationByType(@RequestBody @Valid SearchByIntRequest request) {
+		RestaurantListResponse response = restaurantInfoService.findAllRestaurantsByType(request);
 		return response;
 	}
 
 	@GetMapping("/restaurant/zip/{zip}")
 	@CrossOrigin
-	public RestaurantListResponse getAllRestaurantInformationByZip(@PathVariable String zip) {
-		RestaurantListResponse response = restaurantInfoService.findRestaurantByZipCode(zip);
+	public RestaurantListResponse getAllRestaurantInformationByZip(@RequestBody @Valid SearchByZipRequest request) {
+		RestaurantListResponse response = restaurantInfoService.findRestaurantByZipCode(request);
 		return response;
 	}
 
 	@GetMapping("/restaurant/descr/{descr}")
 	@CrossOrigin
-	public RestaurantListResponse getAllRestaurantInformationByDescr(@PathVariable String descr) {
-		RestaurantListResponse response = restaurantInfoService.findRestaurantsByDescr(descr);
+	public RestaurantListResponse getAllRestaurantInformationByDescr(@RequestBody @Valid SearchByDescr request) {
+		RestaurantListResponse response = restaurantInfoService.findRestaurantsByDescr(request);
 		return response;
 	}
 
 	@GetMapping("/restaurant-dto/{restaurant_id}")
 	@CrossOrigin
-	public ResponseEntity<RestaurantInfoDTO> getRestaurantDTOInfoById(@PathVariable int restaurant_id)
+	public RestaurantSearchResponse getRestaurantDTOInfoById(@RequestBody @Valid SearchByIntRequest request)
 			throws InvalidRestaurantException {
-		return restaurantInfoService.findRestaurantById(restaurant_id);
+		RestaurantSearchResponse response = restaurantInfoService.findRestaurantById(request);
+		return response;
 	}
 	
 	@GetMapping("/restaurant/{restaurant_id}")
-	public ResponseEntity<RestaurantInfoDTO> getRestaurantInfoById(@PathVariable int restaurant_id) throws InvalidRestaurantException {
-		return restaurantInfoService.findRestaurantById(restaurant_id);
+	public RestaurantSearchResponse getRestaurantInfoById(@RequestBody @Valid SearchByIntRequest request) throws InvalidRestaurantException {
+		RestaurantSearchResponse response = restaurantInfoService.findRestaurantById(request);
+		return response;
 	}
 	
 
 	@GetMapping("/restaurant/name/{name}")
 	@CrossOrigin
-	public ResponseEntity<RestaurantInfoDTO> getRestaurantInformationByName(@PathVariable String name) {
-		return restaurantInfoService.findRestaurantByName(name);
+	public RestaurantSearchResponse getRestaurantInformationByName(@RequestBody @Valid SearchByNameRequest request) {
+		RestaurantSearchResponse response = restaurantInfoService.findRestaurantByName(request);
+		return response;
 	}
 
 	@GetMapping("/restaurant-count")
@@ -110,8 +117,8 @@ public class RestaurantController {
 	
 	@DeleteMapping("/restaurant/{restaurant_id}")
 	@CrossOrigin
-	public int deleteRestaurantInformationById(@PathVariable int restaurant_id) {
-		return restaurantInfoService.deleteRestaurantInformation(restaurant_id);
+	public int deleteRestaurantInformationById(@RequestBody @Valid SearchByIntRequest request) {
+		return restaurantInfoService.deleteRestaurantInformation(request);
 	}
 
 	@DeleteMapping("/delete-all-restaurant")

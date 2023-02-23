@@ -2,7 +2,6 @@ package com.deguzman.DeGuzmanStuffAnywhere.dao;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateBookNameException;
@@ -15,9 +14,9 @@ public interface BooksDao {
 
 	public List<Books> findAllBooksByAuthor(String author);
 
-	public ResponseEntity<Books> findBooksInformationById(int book_id) throws ResourceNotFoundException;
+	public Books findBooksInformationById(int book_id) throws ResourceNotFoundException;
 
-	public ResponseEntity<Books> findBookInformationByName(String title);
+	public Books findBookInformationByName(String title);
 
 	public long getBookCount();
 

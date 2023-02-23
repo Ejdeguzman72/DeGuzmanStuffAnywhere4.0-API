@@ -17,6 +17,7 @@ import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.PostDaoImpl;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.PostAddUpdateRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.PostAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.PostListResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByLongRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.PostDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_dao.PostsJpaDao;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_model.Post;
@@ -72,9 +73,9 @@ public class PostsService {
 		}
 	}
 	
-	public PostListResponse findPostsByUser(long user_id) {
+	public PostListResponse findPostsByUser(SearchByLongRequest request) {
 		PostListResponse response = new PostListResponse();
-		List<PostDTO> list = postDaoImpl.findPostsByUser(user_id);
+		List<PostDTO> list = postDaoImpl.findPostsByUser(request.getId());
 		
 		response.setList(list);
 		return response;

@@ -3,13 +3,13 @@ package com.deguzman.DeGuzmanStuffAnywhere.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.UtilityDaoImpl;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.UtilityListResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.UtilitySearchResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.UtilityInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.model.Utility;
 
@@ -35,12 +35,20 @@ public class UtilityService {
 		return response;
 	}
 	
-	public ResponseEntity<UtilityInfoDTO> findUtilityInformationById(long utility_id) {
-		return utilityDaoImpl.findUtilityInformationById(utility_id);
+	public UtilitySearchResponse findUtilityInformationById(long utility_id) {
+		UtilitySearchResponse response = new UtilitySearchResponse();
+		UtilityInfoDTO utility = utilityDaoImpl.findUtilityInformationById(utility_id);
+		
+		response.setUtility(utility);
+		return response;
 	}
 	
-	public ResponseEntity<UtilityInfoDTO> findUtilityInformationByType(int utility_type_id) {
-		return utilityDaoImpl.findUtilityInformationByType(utility_type_id);
+	public UtilitySearchResponse findUtilityInformationByType(int utility_type_id) {
+		UtilitySearchResponse response = new UtilitySearchResponse();
+		UtilityInfoDTO utility = utilityDaoImpl.findUtilityInformationByType(utility_type_id);
+		
+		response.setUtility(utility);
+		return response;
 	}
 	
 	public long findUtilityCount() {
@@ -67,7 +75,11 @@ public class UtilityService {
 		return response;
 	}
 
-	public ResponseEntity<UtilityInfoDTO> findUtilityInformationByName(String name) {
-		return utilityDaoImpl.findUtilityInformationByName(name);
+	public UtilitySearchResponse findUtilityInformationByName(String name) {
+		UtilitySearchResponse response = new UtilitySearchResponse();
+		UtilityInfoDTO utility = utilityDaoImpl.findUtilityInformationByName(name);
+		
+		response.setUtility(utility);
+		return response;
 	}
 }

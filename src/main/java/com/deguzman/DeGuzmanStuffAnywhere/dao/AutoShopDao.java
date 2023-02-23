@@ -2,7 +2,6 @@ package com.deguzman.DeGuzmanStuffAnywhere.dao;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateAutoShopException;
 import com.deguzman.DeGuzmanStuffAnywhere.model.AutoRepairShop;
 

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.PostAddUpdateRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.PostAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.PostListResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByLongRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.service.PostsService;
 
 @RestController
@@ -43,8 +44,8 @@ public class PostController {
 	}
 	
 	@GetMapping("/user/{user_id}")
-	public PostListResponse getPostsByUser(@PathVariable long user_id) {
-		PostListResponse response = socialMediaService.findPostsByUser(user_id);
+	public PostListResponse getPostsByUser(@RequestBody @Valid SearchByLongRequest request) {
+		PostListResponse response = socialMediaService.findPostsByUser(request);
 		return response;
 	}
 	

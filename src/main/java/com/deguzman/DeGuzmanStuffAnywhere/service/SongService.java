@@ -18,6 +18,7 @@ import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.SongAddUpdateRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.SongAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.SongListResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SongSearchResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateSongTitleException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_dao.SongJpaDao;
@@ -89,12 +90,20 @@ public class SongService {
 		return response;
 	}
 	
-	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.Song> findSongById(int song_id) throws ResourceNotFoundException {
-		return songDaoImpl.findSongById(song_id);
+	public SongSearchResponse findSongById(int song_id) throws ResourceNotFoundException {
+		SongSearchResponse response = new SongSearchResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.Song song = songDaoImpl.findSongById(song_id);
+		
+		response.setSong(song);
+		return response;
 	}
 	
-	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.Song> findSongByTitle(String title) {
-		return songDaoImpl.findSongByTitle(title);
+	public SongSearchResponse findSongByTitle(String title) {
+		SongSearchResponse response = new SongSearchResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.Song song = songDaoImpl.findSongByTitle(title);
+		
+		response.setSong(song);
+		return response;
 	}
 	
 	public int findSongCount() {

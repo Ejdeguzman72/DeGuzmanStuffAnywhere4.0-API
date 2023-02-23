@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -95,7 +94,7 @@ public class RunTrackerDaoImpl implements RunTrackerDao {
 
 	@Override
 	@Cacheable(value = "runById", key = "#run_id")
-	public ResponseEntity<RunTrackerInfoDTO> findRunTrackerInformationDTOById(long run_id) {
+	public RunTrackerInfoDTO findRunTrackerInformationDTOById(long run_id) {
 		RunTrackerInfoDTO runTrackerInfo = new RunTrackerInfoDTO();
 		
 		try {
@@ -107,11 +106,11 @@ public class RunTrackerDaoImpl implements RunTrackerDao {
 			LOGGER.error("Empty data set: " + e.toString());
 		}
 
-		return ResponseEntity.ok().body(runTrackerInfo);
+		return runTrackerInfo;
 	}
 	
 	@Override
-	public ResponseEntity<RunTracker> findRunTrackerById(long run_id) {
+	public RunTracker findRunTrackerById(long run_id) {
 		RunTracker runTrackerInfo = new RunTracker();
 		
 		try {
@@ -123,7 +122,7 @@ public class RunTrackerDaoImpl implements RunTrackerDao {
 			LOGGER.error("Empty data set: " + e.toString());
 		}
 
-		return ResponseEntity.ok().body(runTrackerInfo);
+		return runTrackerInfo;
 	}
 
 	@Override

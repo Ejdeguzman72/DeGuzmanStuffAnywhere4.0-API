@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -11,13 +13,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.RunTrackerDaoImpl;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.RunTrackerAddUpdateRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.RunTrackerAddUpdateResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.RunTrackerDTOSearchResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.RunTrackerListResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.RunTrackerSearchResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByIntRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByLongRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.RunTrackerInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_dao.RunTrackerJpaDao;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_model.RunTracker;
@@ -72,20 +79,28 @@ public class RunTrackerService {
 		}
 	}
 	
-	public RunTrackerListResponse findRunTrackerInformationByUser(long user_id) {
+	public RunTrackerListResponse findRunTrackerInformationByUser(@RequestBody @Valid SearchByLongRequest request) {
 		RunTrackerListResponse response = new RunTrackerListResponse();
-		List<RunTrackerInfoDTO> list = runTrackerDaoImpl.findRunTrackerInformationByUser(user_id);
+		List<RunTrackerInfoDTO> list = runTrackerDaoImpl.findRunTrackerInformationByUser(request.getId());
 		
 		response.setList(list);
 		return response;
 	}
 	
-	public ResponseEntity<RunTrackerInfoDTO> findRunTrackerInformationDTOById(long run_id) {
-		return runTrackerDaoImpl.findRunTrackerInformationDTOById(run_id);
+	public RunTrackerDTOSearchResponse findRunTrackerInformationDTOById(@RequestBody @Valid SearchByLongRequest request) {
+		RunTrackerDTOSearchResponse response = new RunTrackerDTOSearchResponse();
+		RunTrackerInfoDTO run = runTrackerDaoImpl.findRunTrackerInformationDTOById(request.getId());
+		
+		response.setRun(run);
+		return response;
 	}
 	
-	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.RunTracker> findRunTrackerById(long run_id) {
-		return runTrackerDaoImpl.findRunTrackerById(run_id);
+	public RunTrackerSearchResponse findRunTrackerById(@RequestBody @Valid SearchByLongRequest request) {
+		RunTrackerSearchResponse response = new RunTrackerSearchResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.RunTracker run = runTrackerDaoImpl.findRunTrackerById(request.getId());
+		
+		response.setRun(run);
+		return response;
 	}
 	
 	public long findCountOfRunTrackerInformation() {
@@ -113,7 +128,7 @@ public class RunTrackerService {
 	
 	public RunTrackerAddUpdateResponse updateRunTrackerInformation(RunTrackerAddUpdateRequest request) {
 		RunTrackerAddUpdateResponse response = new RunTrackerAddUpdateResponse();
-		com.deguzman.DeGuzmanStuffAnywhere.model.RunTracker runTracker = null;
+		com.deguzman.DeGuzmanStuffAnywhere.model.RunTracker runTracker = runTrackerDaoImpl.findRunTrackerById(request.getRun_id());
 		int count = 0;
 		
 		count = runTrackerDaoImpl.updateRunTrackerInformation(request.getRun_id(),request);
@@ -130,8 +145,8 @@ public class RunTrackerService {
 		return response;
 	}
 	
-	public int deleteRunTrackerInformation(long run_id) {
-		return runTrackerDaoImpl.deleteRunTrackerInformation(run_id);
+	public int deleteRunTrackerInformation(@RequestBody @Valid SearchByLongRequest request) {
+		return runTrackerDaoImpl.deleteRunTrackerInformation(request.getId());
 	}
 	
 	public DeleteAllResponse deleteAllRunTrackerInformation() {

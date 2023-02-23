@@ -2,7 +2,6 @@ package com.deguzman.DeGuzmanStuffAnywhere.dao;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.UtilityInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.model.Utility;
 
@@ -12,11 +11,11 @@ public interface UtilityDao {
 
 	public List<UtilityInfoDTO> findUtilityInformationByDueDate(String dueDate);
 
-	public ResponseEntity<UtilityInfoDTO> findUtilityInformationById(long utility_id);
+	public UtilityInfoDTO findUtilityInformationById(long utility_id);
 
-	public ResponseEntity<UtilityInfoDTO> findUtilityInformationByName(String name);
+	public UtilityInfoDTO findUtilityInformationByName(String name);
 
-	public ResponseEntity<UtilityInfoDTO> findUtilityInformationByType(int utility_type_id);
+	public UtilityInfoDTO findUtilityInformationByType(int utility_type_id);
 
 	public long findUtilityCount();
 

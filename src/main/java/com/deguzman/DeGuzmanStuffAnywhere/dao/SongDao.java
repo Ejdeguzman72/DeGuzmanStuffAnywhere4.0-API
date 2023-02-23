@@ -2,7 +2,6 @@ package com.deguzman.DeGuzmanStuffAnywhere.dao;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateSongTitleException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
 import com.deguzman.DeGuzmanStuffAnywhere.model.Song;
@@ -15,9 +14,9 @@ public interface SongDao {
 
 	public List<Song> findSongsByGenre(String genre);
 
-	public ResponseEntity<Song> findSongById(int song_id) throws ResourceNotFoundException;
+	public Song findSongById(int song_id) throws ResourceNotFoundException;
 
-	public ResponseEntity<Song> findSongByTitle(String title);
+	public Song findSongByTitle(String title);
 
 	public int findSongCount();
 

@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -117,7 +116,7 @@ public class GeneralTrxDaoImpl implements GeneralTrxDao {
 
 	@Override
 	@Cacheable(value = "generalTransactionById", key = "#transaction_id")
-	public ResponseEntity<GeneralTrxInfoDTO> findTransactionInformationDTOById(long transaction_id)
+	public GeneralTrxInfoDTO findTransactionInformationDTOById(long transaction_id)
 			throws ResourceNotFoundException {
 
 		GeneralTrxInfoDTO generalTrx = new GeneralTrxInfoDTO();
@@ -131,11 +130,11 @@ public class GeneralTrxDaoImpl implements GeneralTrxDao {
 			LOGGER.error("Empty data set: " + e.toString());
 		}
 
-		return ResponseEntity.ok().body(generalTrx);
+		return generalTrx;
 	}
 
 	@Override
-	public ResponseEntity<GeneralTransaction> findTransactionInformationById(long transaction_id)
+	public GeneralTransaction findTransactionInformationById(long transaction_id)
 			throws ResourceNotFoundException {
 
 		GeneralTransaction transaction = new GeneralTransaction();
@@ -149,7 +148,7 @@ public class GeneralTrxDaoImpl implements GeneralTrxDao {
 			LOGGER.error("Empty data set: " + e.toString());
 		}
 
-		return ResponseEntity.ok().body(transaction);
+		return transaction;
 	}
 
 	@Override

@@ -1,16 +1,16 @@
 package com.deguzman.DeGuzmanStuffAnywhere.domain;
 
-import com.deguzman.DeGuzmanStuffAnywhere.dto.MedicalTrxInfoDTO;
+import com.deguzman.DeGuzmanStuffAnywhere.model.MedicalTransaction;
 
 public class MedicalTrxSearchResposnse {
 
-	public MedicalTrxInfoDTO transaction;
+	public MedicalTransaction transaction;
 
-	public MedicalTrxInfoDTO getTransaction() {
+	public MedicalTransaction getTransaction() {
 		return transaction;
 	}
 
-	public void setTransaction(MedicalTrxInfoDTO transaction) {
+	public void setTransaction(MedicalTransaction transaction) {
 		this.transaction = transaction;
 	}
 }

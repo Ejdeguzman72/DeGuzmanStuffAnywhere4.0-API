@@ -21,9 +21,9 @@ import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.SongAddUpdateRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.SongAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.SongListResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SongSearchResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateSongTitleException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
-import com.deguzman.DeGuzmanStuffAnywhere.model.Song;
 import com.deguzman.DeGuzmanStuffAnywhere.service.SongService;
 
 @RestController
@@ -50,8 +50,9 @@ public class SongController {
 
 	@GetMapping("/song/{song_id}")
 	@CrossOrigin
-	public ResponseEntity<Song> getSongInformationById(@PathVariable int song_id) throws ResourceNotFoundException {
-		return songService.findSongById(song_id);
+	public SongSearchResponse getSongInformationById(@PathVariable int song_id) throws ResourceNotFoundException {
+		SongSearchResponse response =songService.findSongById(song_id);
+		return response;
 	}
 
 	@GetMapping("/song/artist/{artist}")

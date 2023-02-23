@@ -2,7 +2,6 @@ package com.deguzman.DeGuzmanStuffAnywhere.dao;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.MedicalTrxInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
 import com.deguzman.DeGuzmanStuffAnywhere.model.MedicalTransaction;
@@ -17,10 +16,10 @@ public interface MedicalTrxDao {
 
 	public List<MedicalTrxInfoDTO> findAllMedicalTransactionbyUser(long user_id);
 
-	public ResponseEntity<MedicalTrxInfoDTO> findMedicalTransactionInformationDTOById(
+	public MedicalTrxInfoDTO findMedicalTransactionInformationDTOById(
 			long medical_transaction_id) throws ResourceNotFoundException;
 	
-	public ResponseEntity<MedicalTransaction> findMedicalTransactionInformationById(
+	public MedicalTransaction findMedicalTransactionInformationById(
 			long medical_transaction_id) throws ResourceNotFoundException;
 
 	public long getCountOfMedicalTransactions();

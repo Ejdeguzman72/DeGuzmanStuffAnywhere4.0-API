@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,7 +20,12 @@ import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.ContactDaoImpl;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.ContactAddUpdateRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.ContactAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.ContactListResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.ContactSearchResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByEmail;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByIntRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByNameRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByPhone;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.DuplicateContactException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_dao.PersonJpaDao;
@@ -74,21 +81,37 @@ public class ContactService {
 		}
 	}
 
-	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.Person> findPersonById(int personId)
+	public ContactSearchResponse findPersonById(@Valid SearchByIntRequest request)
 			throws ResourceNotFoundException, SecurityException, IOException {
-		return contactDaoImpl.findPersonById(personId);
+		ContactSearchResponse response = new ContactSearchResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.Person person = contactDaoImpl.findPersonById(request.getId());
+		
+		response.setPerson(person);
+		return response;
 	}
 
-	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.Person> findPersonByLastname(String lastname) {
-		return contactDaoImpl.findPersonByLastName(lastname);
+	public ContactSearchResponse findPersonByLastname(SearchByNameRequest request) {
+		ContactSearchResponse response = new ContactSearchResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.Person person = contactDaoImpl.findPersonByLastName(request.getName());
+		
+		response.setPerson(person);
+		return response;
 	}
 
-	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.Person> findPersonByEmail(String email) {
-		return contactDaoImpl.findPersonByEmail(email);
+	public ContactSearchResponse findPersonByEmail(SearchByPhone request) {
+		ContactSearchResponse response = new ContactSearchResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.Person person = contactDaoImpl.findPersonByEmail(request.getPhone());
+		
+		response.setPerson(person);
+		return response;
 	}
 
-	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.Person> findPersonByPhone(String phone) {
-		return contactDaoImpl.findPersonByPhone(phone);
+	public ContactSearchResponse findPersonByPhone(SearchByEmail request) {
+		ContactSearchResponse response = new ContactSearchResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.Person person = contactDaoImpl.findPersonByPhone(request.getEmail());
+		
+		response.setPerson(person);
+		return response;
 	}
 
 	public long getCountofPersonInformation() {
@@ -149,8 +172,17 @@ public class ContactService {
 		return response;
 	}
 
-	public int deletePersonInformation(int personId) throws SecurityException, IOException {
-		return contactDaoImpl.deletePersonInformation(personId);
+	public ContactSearchResponse deletePersonInformation(SearchByIntRequest request) throws SecurityException, IOException, ResourceNotFoundException {
+		ContactSearchResponse response = new ContactSearchResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.Person person = contactDaoImpl.findPersonById(request.getId());
+		int count = 0;
+		
+		count = contactDaoImpl.deletePersonInformation(request.getId());
+		if (count > 0) {
+			response.setPerson(person);
+		}
+		
+		return response;
 	}
 
 	public DeleteAllResponse deleteAllPersonInformation() {

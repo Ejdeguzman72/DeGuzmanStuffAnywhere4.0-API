@@ -17,7 +17,11 @@ import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.ExerciseDaoImpl;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.ExerciseAddUpdateRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.ExerciseAddUpdateResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.ExerciseDTOSearchResposne;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.ExerciseListResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.ExerciseSearchResposne;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByIntRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByLongRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.ExerciseInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_dao.ExerciseJpaDao;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_model.Exercise;
@@ -73,24 +77,28 @@ public class ExerciseService {
 		}
 	}
 
-	public ExerciseListResponse findExerciseInformationByUser(long user_id) {
+	public ExerciseListResponse findExerciseInformationByUser(SearchByLongRequest request) {
 		ExerciseListResponse response = new ExerciseListResponse();
-		List<ExerciseInfoDTO> list = exerciseDaoImpl.findExerciseInformationByUser(user_id);
+		List<ExerciseInfoDTO> list = exerciseDaoImpl.findExerciseInformationByUser(request.getId());
 
 		response.setList(list);
 		return response;
 	}
 
-	public ExerciseListResponse findExerciseInformationByType(int exercise_type_id) {
+	public ExerciseListResponse findExerciseInformationByType(SearchByIntRequest request) {
 		ExerciseListResponse response = new ExerciseListResponse();
-		List<ExerciseInfoDTO> list = exerciseDaoImpl.findExerciseInformationByType(exercise_type_id);
+		List<ExerciseInfoDTO> list = exerciseDaoImpl.findExerciseInformationByType(request.getId());
 
 		response.setList(list);
 		return response;
 	}
 
-	public ResponseEntity<ExerciseInfoDTO> findExerciseDTOById(int exercise_id) {
-		return exerciseDaoImpl.findExerciseDTOById(exercise_id);
+	public ExerciseDTOSearchResposne findExerciseDTOById(SearchByIntRequest request) {
+		ExerciseDTOSearchResposne response = new ExerciseDTOSearchResposne();
+		ExerciseInfoDTO exercise = exerciseDaoImpl.findExerciseDTOById(request.getId());
+		
+		response.setExercise(exercise);
+		return response;
 	}
 
 	public ExerciseAddUpdateResponse addExerciseInformation(ExerciseAddUpdateRequest request) {
@@ -119,7 +127,7 @@ public class ExerciseService {
 
 	public ExerciseAddUpdateResponse updateExerciseInformation(ExerciseAddUpdateRequest request) {
 		ExerciseAddUpdateResponse response = new ExerciseAddUpdateResponse();
-		com.deguzman.DeGuzmanStuffAnywhere.model.Exercise exercise = null;
+		com.deguzman.DeGuzmanStuffAnywhere.model.Exercise exercise = exerciseDaoImpl.findExerciseById(request.getExercise_id());
 		int count = 0;
 
 		count = exerciseDaoImpl.updateExerciseInformation(request.getExercise_id(), request);
@@ -152,7 +160,11 @@ public class ExerciseService {
 		return response;
 	}
 
-	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.Exercise> findExerciseById(int exercise_id) {
-		return exerciseDaoImpl.findExerciseById(exercise_id);
+	public ExerciseSearchResposne findExerciseById(SearchByIntRequest request) {
+		ExerciseSearchResposne response = new ExerciseSearchResposne();
+		com.deguzman.DeGuzmanStuffAnywhere.model.Exercise exercise = exerciseDaoImpl.findExerciseById(request.getId());
+		
+		response.setExercise(exercise);
+		return response;
 	}
 }

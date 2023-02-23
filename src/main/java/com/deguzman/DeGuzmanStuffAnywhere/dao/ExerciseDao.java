@@ -2,7 +2,6 @@ package com.deguzman.DeGuzmanStuffAnywhere.dao;
 
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.ExerciseInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.model.Exercise;
 
@@ -14,9 +13,9 @@ public interface ExerciseDao {
 
 	public List<ExerciseInfoDTO> findExerciseInformationByType(int exercise_type_id);
 
-	public ResponseEntity<ExerciseInfoDTO> findExerciseDTOById(int exercise_id);
+	public ExerciseInfoDTO findExerciseDTOById(int exercise_id);
 	
-	public ResponseEntity<Exercise> findExerciseById(int exercise_id);
+	public Exercise findExerciseById(int exercise_id);
 
 	public int addExerciseInformation(Exercise exercise);
 

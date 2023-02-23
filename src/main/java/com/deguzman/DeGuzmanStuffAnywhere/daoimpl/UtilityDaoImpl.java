@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -91,7 +90,7 @@ public class UtilityDaoImpl implements UtilityDao {
 
 	@Override
 	@Cacheable(value = "utilityById", key = "#utility_id")
-	public ResponseEntity<UtilityInfoDTO> findUtilityInformationById(long utility_id) {
+	public UtilityInfoDTO findUtilityInformationById(long utility_id) {
 		UtilityInfoDTO utilityInfo = null;
 		try {
 			utilityInfo = jdbcTemplate.queryForObject(GET_UTILITY_INFORMATION_BY_ID,
@@ -103,11 +102,11 @@ public class UtilityDaoImpl implements UtilityDao {
 			e.printStackTrace();
 		}
 
-		return ResponseEntity.ok().body(utilityInfo);
+		return utilityInfo;
 	}
 
 	@Override
-	public ResponseEntity<UtilityInfoDTO> findUtilityInformationByName(String name) {
+	public UtilityInfoDTO findUtilityInformationByName(String name) {
 		UtilityInfoDTO utilityInfo = null;
 		try {
 			utilityInfo = jdbcTemplate.queryForObject(GET_UTILITY_INFORMATION_BY_NAME,
@@ -119,11 +118,11 @@ public class UtilityDaoImpl implements UtilityDao {
 			e.printStackTrace();
 		}
 
-		return ResponseEntity.ok().body(utilityInfo);
+		return utilityInfo;
 	}
 
 	@Override
-	public ResponseEntity<UtilityInfoDTO> findUtilityInformationByType(int utility_type_id) {
+	public UtilityInfoDTO findUtilityInformationByType(int utility_type_id) {
 		UtilityInfoDTO utilityInfo = null;
 		try {
 			utilityInfo = jdbcTemplate.queryForObject(GET_UTILITY_INFORMATION_BY_TYPE,
@@ -136,7 +135,7 @@ public class UtilityDaoImpl implements UtilityDao {
 			e.printStackTrace();
 		}
 
-		return ResponseEntity.ok().body(utilityInfo);
+		return utilityInfo;
 	}
 
 	@Override

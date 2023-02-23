@@ -17,7 +17,10 @@ import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.AutoTrxDaoImpl;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoTrxAddUpdateRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoTrxAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoTrxListResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoTrxSearchResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.AutoTrxDTOSearchResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByLongRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.AutoTrxInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.InvalidAutoShopException;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.InvalidTransactionException;
@@ -78,38 +81,45 @@ public class AutoTrxService {
 		}
 	}
 
-	public AutoTrxListResponse findAutoTransactionsByVehicle(long vehicle_id) {
+	public AutoTrxListResponse findAutoTransactionsByVehicle(SearchByLongRequest request) {
 		AutoTrxListResponse response = new AutoTrxListResponse();
-		List<AutoTrxInfoDTO> list = autoTrxDaoImpl.findAutoTransactionsByVehicle(vehicle_id);
+		List<AutoTrxInfoDTO> list = autoTrxDaoImpl.findAutoTransactionsByVehicle(request.getId());
 
 		response.setList(list);
 		return response;
 	}
 
-	public AutoTrxListResponse findAutoTransactionsByUser(long user_id) {
+	public AutoTrxListResponse findAutoTransactionsByUser(SearchByLongRequest request) {
 		AutoTrxListResponse response = new AutoTrxListResponse();
-		List<AutoTrxInfoDTO> list = autoTrxDaoImpl.findAutoTransactionsByUser(user_id);
+		List<AutoTrxInfoDTO> list = autoTrxDaoImpl.findAutoTransactionsByUser(request.getId());
 
 		response.setList(list);
 		return response;
 	}
 
-	public AutoTrxListResponse findAutoTransactionsByType(long transaction_type_id) {
+	public AutoTrxListResponse findAutoTransactionsByType(SearchByLongRequest request) {
 		AutoTrxListResponse response = new AutoTrxListResponse();
-		List<AutoTrxInfoDTO> list = autoTrxDaoImpl.findAutoTransactionsByType(transaction_type_id);
+		List<AutoTrxInfoDTO> list = autoTrxDaoImpl.findAutoTransactionsByType(request.getId());
 
 		response.setList(list);
 		return response;
 	}
 
-	public ResponseEntity<AutoTrxInfoDTO> findAutoTransactionInformationDTOById(long auto_shop_id)
+	public AutoTrxDTOSearchResponse findAutoTransactionInformationDTOById(SearchByLongRequest request)
 			throws InvalidTransactionException {
-		return autoTrxDaoImpl.findAutoTranasctionInformatioDTOnById(auto_shop_id);
+		AutoTrxDTOSearchResponse response = new AutoTrxDTOSearchResponse();
+		AutoTrxInfoDTO transaction = autoTrxDaoImpl.findAutoTranasctionInformatioDTOnById(request.getId());
+		
+		response.setTransaction(transaction);
+		return response;
 	}
 
-	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.AutoTransaction> findAutoTransactionInformationById(
-			long auto_transaction_id) throws InvalidTransactionException {
-		return autoTrxDaoImpl.findAutoTranasctionInformationById(auto_transaction_id);
+	public AutoTrxSearchResponse findAutoTransactionInformationById(SearchByLongRequest request) throws InvalidTransactionException {
+		AutoTrxSearchResponse response = new AutoTrxSearchResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.AutoTransaction transaction = autoTrxDaoImpl.findAutoTranasctionInformationById(request.getId());
+		response.setTransaction(transaction);
+		
+		return response;
 	}
 
 	public long getCountOfAutoTransactions() {
@@ -162,8 +172,17 @@ public class AutoTrxService {
 		return response;
 	}
 
-	public int deleteAutoTransactionInformation(long auto_transaction_id) {
-		return autoTrxDaoImpl.deleteAutoTransactionInformation(auto_transaction_id);
+	public AutoTrxSearchResponse deleteAutoTransactionInformation(SearchByLongRequest request) throws InvalidTransactionException {
+		AutoTrxSearchResponse response  = new AutoTrxSearchResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.AutoTransaction transaction = autoTrxDaoImpl.findAutoTranasctionInformationById(request.getId());
+		int count = 0;
+		count = autoTrxDaoImpl.deleteAutoTransactionInformation(request.getId());
+		
+		if (count > 0) {
+			response.setTransaction(transaction);
+		}
+		
+		return response;
 	}
 
 	public DeleteAllResponse deleteAllAutoTransactions() {

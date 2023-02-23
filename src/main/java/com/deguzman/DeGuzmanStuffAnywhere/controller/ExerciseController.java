@@ -20,9 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.ExerciseAddUpdateRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.ExerciseAddUpdateResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.ExerciseDTOSearchResposne;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.ExerciseListResponse;
-import com.deguzman.DeGuzmanStuffAnywhere.dto.ExerciseInfoDTO;
-import com.deguzman.DeGuzmanStuffAnywhere.model.Exercise;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.ExerciseSearchResposne;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByIntRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByLongRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.service.ExerciseService;
 
 @RestController
@@ -49,28 +51,30 @@ public class ExerciseController {
 
 	@GetMapping("/all/name/{user_id}")
 	@CrossOrigin
-	public ExerciseListResponse getExerciseInformationByUser(@PathVariable long user_id) {
-		ExerciseListResponse response = exerciseInfoService.findExerciseInformationByUser(user_id);
+	public ExerciseListResponse getExerciseInformationByUser(@RequestBody @Valid SearchByLongRequest request) {
+		ExerciseListResponse response = exerciseInfoService.findExerciseInformationByUser(request);
 		return response;
 	}
 
 	@GetMapping("/all/exercise-type/{exercise_type_id}")
 	@CrossOrigin
-	public ExerciseListResponse getExerciseInformationbyType(@PathVariable int exercise_type_id) {
-		ExerciseListResponse response = exerciseInfoService.findExerciseInformationByType(exercise_type_id);
+	public ExerciseListResponse getExerciseInformationbyType(@RequestBody @Valid SearchByIntRequest request) {
+		ExerciseListResponse response = exerciseInfoService.findExerciseInformationByType(request);
 		return response;
 	}
 
 	@GetMapping("/exercise/{exercise_id}")
 	@CrossOrigin
-	public ResponseEntity<Exercise> getExerciseById(@PathVariable int exercise_id) {
-		return exerciseInfoService.findExerciseById(exercise_id);
+	public ExerciseSearchResposne getExerciseById(@RequestBody @Valid SearchByIntRequest request) {
+		ExerciseSearchResposne response = exerciseInfoService.findExerciseById(request);
+		return response;
 	}
 	
 	@GetMapping("/exercise-dto/{exercise_id}")
 	@CrossOrigin
-	public ResponseEntity<ExerciseInfoDTO> getExerciseDTOById(@PathVariable int exercise_id) {
-		return exerciseInfoService.findExerciseDTOById(exercise_id);
+	public ExerciseDTOSearchResposne getExerciseDTOById(@RequestBody @Valid SearchByIntRequest request) {
+		ExerciseDTOSearchResposne response = exerciseInfoService.findExerciseDTOById(request);
+		return response;
 	}
 
 	@PostMapping("/add-exercise-information")

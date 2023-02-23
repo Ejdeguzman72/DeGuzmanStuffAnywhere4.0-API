@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -111,7 +110,7 @@ public class RestaurantDaoImpl implements RestaurantDao {
 
 	@Override
 	@Cacheable(value = "restaurantById", key = "#restaurant_id")
-	public ResponseEntity<RestaurantInfoDTO> findRestaurantById(int restaurant_id) throws InvalidRestaurantException {
+	public RestaurantInfoDTO findRestaurantById(int restaurant_id) throws InvalidRestaurantException {
 		RestaurantInfoDTO restaurantInfo = new RestaurantInfoDTO();
 		
 		try {
@@ -123,10 +122,10 @@ public class RestaurantDaoImpl implements RestaurantDao {
 			LOGGER.error("Empty data set: " + e.toString());
 		}
 
-		return ResponseEntity.ok().body(restaurantInfo);
+		return restaurantInfo;
 	}
 	
-	public ResponseEntity<Restaurant> findRestaurantInfoById(int restaurant_id) {
+	public Restaurant findRestaurantInfoById(int restaurant_id) {
 		
 		Restaurant restaurant = new Restaurant();
 		
@@ -139,7 +138,7 @@ public class RestaurantDaoImpl implements RestaurantDao {
 		}
 		
 		
-		return ResponseEntity.ok().body(restaurant);
+		return restaurant;
 	}
 
 	@Override
@@ -181,7 +180,7 @@ public class RestaurantDaoImpl implements RestaurantDao {
 	}
 
 	@Override
-	public ResponseEntity<RestaurantInfoDTO> findRestaurantByName(String name) {
+	public RestaurantInfoDTO findRestaurantByName(String name) {
 		RestaurantInfoDTO restaurant = new RestaurantInfoDTO();
 		
 		try {
@@ -193,7 +192,7 @@ public class RestaurantDaoImpl implements RestaurantDao {
 			LOGGER.error("Empty data set: " + e.toString());
 		}
 
-		return ResponseEntity.ok().body(restaurant);
+		return restaurant;
 	}
 
 	@Override

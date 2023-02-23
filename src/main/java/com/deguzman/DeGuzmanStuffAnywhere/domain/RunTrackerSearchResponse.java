@@ -1,16 +1,16 @@
 package com.deguzman.DeGuzmanStuffAnywhere.domain;
 
-import com.deguzman.DeGuzmanStuffAnywhere.dto.RunTrackerInfoDTO;
+import com.deguzman.DeGuzmanStuffAnywhere.model.RunTracker;
 
 public class RunTrackerSearchResponse {
 
-	public RunTrackerInfoDTO run;
+	public RunTracker run;
 
-	public RunTrackerInfoDTO getRun() {
+	public RunTracker getRun() {
 		return run;
 	}
 
-	public void setRun(RunTrackerInfoDTO run) {
+	public void setRun(RunTracker run) {
 		this.run = run;
 	}
 }

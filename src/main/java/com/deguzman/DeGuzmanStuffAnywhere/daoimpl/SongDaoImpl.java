@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -95,7 +94,7 @@ public class SongDaoImpl implements SongDao {
 
 	@Override
 	@Cacheable(value = "songById", key = "#song_id")
-	public ResponseEntity<Song> findSongById(int song_id) throws ResourceNotFoundException {
+	public Song findSongById(int song_id) throws ResourceNotFoundException {
 		Song song = new Song();
 		
 		try {
@@ -108,11 +107,11 @@ public class SongDaoImpl implements SongDao {
 			e.printStackTrace();
 		}
 
-		return ResponseEntity.ok().body(song);
+		return song;
 	}
 
 	@Override
-	public ResponseEntity<Song> findSongByTitle(String title) {
+	public Song findSongByTitle(String title) {
 		Song song = new Song();
 		
 		try {
@@ -125,7 +124,7 @@ public class SongDaoImpl implements SongDao {
 			e.printStackTrace();
 		}
 
-		return ResponseEntity.ok().body(song);
+		return song;
 	}
 
 	@Override

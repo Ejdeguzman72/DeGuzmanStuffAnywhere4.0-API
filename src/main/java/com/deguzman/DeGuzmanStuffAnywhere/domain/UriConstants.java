@@ -174,7 +174,7 @@ public class UriConstants {
 	public static final String GET_TRX_TYPE_DESCR = "/app/transaction-types/type/descr";
 	
 	// USER INFO URI 
-	public static final String GET_ALL_UERS = "/app/users/all";
+	public static final String GET_ALL_USERS = "/app/users/all";
 	
 	// UTILITY URI 
 	public static final String GET_ALL_UTILITY_INFORMATION = "/app/utility-information/all";

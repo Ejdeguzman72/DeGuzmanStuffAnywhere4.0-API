@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.VehicleListResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.VehicleSearchResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.VehilceAddUpdateRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.VehilceAddUpdateResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.InvalidVehicleException;
-import com.deguzman.DeGuzmanStuffAnywhere.model.Vehicle;
 import com.deguzman.DeGuzmanStuffAnywhere.service.VehicleService;
 
 @RestController
@@ -49,9 +49,10 @@ public class VehicleController {
 
 	@GetMapping("/vehicle/{vehicleId}")
 	@CrossOrigin
-	public ResponseEntity<Vehicle> getVehicleInformationById(@PathVariable int vehicleId)
+	public VehicleSearchResponse getVehicleInformationById(@PathVariable int vehicleId)
 			throws InvalidVehicleException {
-		return vehicleService.findVehicleInformationById(vehicleId);
+		VehicleSearchResponse response = vehicleService.findVehicleInformationById(vehicleId);
+		return response;
 	}
 
 	@GetMapping("/vehicle/make/{make}")

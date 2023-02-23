@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -71,7 +70,7 @@ public class BooksDaoImpl implements BooksDao {
 
 	@Override
 	@Cacheable(value = "bookById", key = "#book_id")
-	public ResponseEntity<Books> findBooksInformationById(int book_id) throws ResourceNotFoundException {
+	public Books findBooksInformationById(int book_id) throws ResourceNotFoundException {
 		Books book = new Books();
 		try {
 			book = jdbcTemplate.queryForObject(GET_BOOK_INFORMATION_BY_ID,
@@ -82,12 +81,12 @@ public class BooksDaoImpl implements BooksDao {
 			LOGGER.error("Empty data set: " + e.toString());
 		}
 
-		return ResponseEntity.ok().body(book);
+		return book;
 	}
 
 	@Override
 	@Cacheable(value = "bookName", key = "#name")
-	public ResponseEntity<Books> findBookInformationByName(String name) {
+	public Books findBookInformationByName(String name) {
 		Books book = new Books();
 		try {
 			book = jdbcTemplate.queryForObject(GET_BOOK_INFORMATION_NAME,
@@ -98,7 +97,7 @@ public class BooksDaoImpl implements BooksDao {
 			LOGGER.error("Error: " + e.toString());
 		}
 
-		return ResponseEntity.ok().body(book);
+		return book;
 	}
 
 	@Override

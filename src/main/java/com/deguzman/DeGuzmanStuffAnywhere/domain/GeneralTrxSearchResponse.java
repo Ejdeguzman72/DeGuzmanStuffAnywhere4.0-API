@@ -1,16 +1,16 @@
 package com.deguzman.DeGuzmanStuffAnywhere.domain;
 
-import com.deguzman.DeGuzmanStuffAnywhere.dto.GeneralTrxInfoDTO;
+import com.deguzman.DeGuzmanStuffAnywhere.model.GeneralTransaction;
 
 public class GeneralTrxSearchResponse {
 
-	public GeneralTrxInfoDTO transaction;
+	public GeneralTransaction transaction;
 
-	public GeneralTrxInfoDTO getTransaction() {
+	public GeneralTransaction getTransaction() {
 		return transaction;
 	}
 
-	public void setTransaction(GeneralTrxInfoDTO transaction) {
+	public void setTransaction(GeneralTransaction transaction) {
 		this.transaction = transaction;
 	}
 }

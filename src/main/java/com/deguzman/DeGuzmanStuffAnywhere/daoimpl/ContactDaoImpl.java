@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -72,7 +71,7 @@ public class ContactDaoImpl implements ContactDao {
 
 	@Override
 	@Cacheable(value = "contactById", key = "#personId")
-	public ResponseEntity<Person> findPersonById(int personId)
+	public Person findPersonById(int personId)
 			throws ResourceNotFoundException, SecurityException, IOException {
 		Person personInfo = new Person();
 		try {
@@ -84,11 +83,11 @@ public class ContactDaoImpl implements ContactDao {
 			LOGGER.error("Empty data set: " + e.toString());
 		}
 
-		return ResponseEntity.ok().body(personInfo);
+		return personInfo;
 	}
 
 	@Override
-	public ResponseEntity<Person> findPersonByLastName(String lastname) {
+	public Person findPersonByLastName(String lastname) {
 		Person person = new Person();
 		try {
 			person = jdbcTemplate.queryForObject(GET_CONTACT_INFO_BY_LASTNAME,
@@ -99,11 +98,11 @@ public class ContactDaoImpl implements ContactDao {
 			LOGGER.error("Error: " + e.toString());
 		}
 
-		return ResponseEntity.ok().body(person);
+		return person;
 	}
 
 	@Override
-	public ResponseEntity<Person> findPersonByEmail(String email) {
+	public Person findPersonByEmail(String email) {
 		Person person = new Person();
 		
 		try {
@@ -115,11 +114,11 @@ public class ContactDaoImpl implements ContactDao {
 			LOGGER.error("Error: " + e.toString());
 		}
 		
-		return ResponseEntity.ok().body(person);
+		return person;
 	}
 
 	@Override
-	public ResponseEntity<Person> findPersonByPhone(String phone) {
+	public Person findPersonByPhone(String phone) {
 		Person person = new Person();
 		
 		try {
@@ -131,7 +130,7 @@ public class ContactDaoImpl implements ContactDao {
 			LOGGER.error("Empty data set: " + e.toString());
 		}
 
-		return ResponseEntity.ok().body(person);
+		return person;
 	}
 
 	@Override

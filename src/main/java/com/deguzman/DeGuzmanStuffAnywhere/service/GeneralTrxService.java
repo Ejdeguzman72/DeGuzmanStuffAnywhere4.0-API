@@ -17,7 +17,10 @@ import com.deguzman.DeGuzmanStuffAnywhere.daoimpl.GeneralTrxDaoImpl;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.GeneralTrxAddUpdateRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.GeneralTrxAddUpdateResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.GeneralTrxDTOSearchResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.GeneralTrxListResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.GeneralTrxSearchResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByLongRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.dto.GeneralTrxInfoDTO;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
 import com.deguzman.DeGuzmanStuffAnywhere.jpa_dao.GeneralTrxJpaDao;
@@ -74,25 +77,29 @@ public class GeneralTrxService {
 		}
 	}
 
-	public GeneralTrxListResponse findTransactionsByUser(long user_id) {
+	public GeneralTrxListResponse findTransactionsByUser(SearchByLongRequest request) {
 		GeneralTrxListResponse response = new GeneralTrxListResponse();
-		List<GeneralTrxInfoDTO> list = generalTrxDaoImpl.findTransactionsByUser(user_id);
+		List<GeneralTrxInfoDTO> list = generalTrxDaoImpl.findTransactionsByUser(request.getId());
 
 		response.setList(list);
 		return response;
 	}
 
-	public GeneralTrxListResponse findTransactionsByType(long transaction_type_id) {
+	public GeneralTrxListResponse findTransactionsByType(SearchByLongRequest request) {
 		GeneralTrxListResponse response = new GeneralTrxListResponse();
-		List<GeneralTrxInfoDTO> list = generalTrxDaoImpl.findTransactionsByType(transaction_type_id);
+		List<GeneralTrxInfoDTO> list = generalTrxDaoImpl.findTransactionsByType(request.getId());
 
 		response.setList(list);
 		return response;
 	}
 
-	public ResponseEntity<GeneralTrxInfoDTO> findTranactionInformationDTOById(long transaction_id)
+	public GeneralTrxDTOSearchResponse findTranactionInformationDTOById(SearchByLongRequest request)
 			throws ResourceNotFoundException {
-		return generalTrxDaoImpl.findTransactionInformationDTOById(transaction_id);
+		GeneralTrxDTOSearchResponse response = new GeneralTrxDTOSearchResponse();
+		GeneralTrxInfoDTO transaction = generalTrxDaoImpl.findTransactionInformationDTOById(request.getId());
+		
+		response.setTransaction(transaction);
+		return response;
 	}
 
 	public long findCountOfGeneralTransacion() {
@@ -121,9 +128,9 @@ public class GeneralTrxService {
 		return response;
 	}
 
-	public GeneralTrxAddUpdateResponse updateTransactionInformation(GeneralTrxAddUpdateRequest request) {
+	public GeneralTrxAddUpdateResponse updateTransactionInformation(GeneralTrxAddUpdateRequest request) throws ResourceNotFoundException {
 		GeneralTrxAddUpdateResponse response = new GeneralTrxAddUpdateResponse();
-		com.deguzman.DeGuzmanStuffAnywhere.model.GeneralTransaction transaction = null;
+		com.deguzman.DeGuzmanStuffAnywhere.model.GeneralTransaction transaction = generalTrxDaoImpl.findTransactionInformationById(request.getTransaction_id());
 		int count = 0;
 
 		count = generalTrxDaoImpl.updateTransactionInformation(request.getTransaction_id(), request);
@@ -141,8 +148,8 @@ public class GeneralTrxService {
 		return response;
 	}
 
-	public int deleteTransactioninformation(long transaction_id) {
-		return generalTrxDaoImpl.deleteTransactionInformation(transaction_id);
+	public int deleteTransactioninformation(SearchByLongRequest request) {
+		return generalTrxDaoImpl.deleteTransactionInformation(request.getId());
 	}
 
 	public DeleteAllResponse deleteAllTransactions() {
@@ -154,8 +161,12 @@ public class GeneralTrxService {
 		return response;
 	}
 
-	public ResponseEntity<com.deguzman.DeGuzmanStuffAnywhere.model.GeneralTransaction> findTransactionInformationById(
-			long transaction_id) throws ResourceNotFoundException {
-		return generalTrxDaoImpl.findTransactionInformationById(transaction_id);
+	public GeneralTrxSearchResponse findTransactionInformationById(
+SearchByLongRequest request) throws ResourceNotFoundException {
+		GeneralTrxSearchResponse response = new GeneralTrxSearchResponse();
+		com.deguzman.DeGuzmanStuffAnywhere.model.GeneralTransaction transaction = generalTrxDaoImpl.findTransactionInformationById(request.getId());
+		
+		response.setTransaction(transaction);
+		return response;
 	}
 }

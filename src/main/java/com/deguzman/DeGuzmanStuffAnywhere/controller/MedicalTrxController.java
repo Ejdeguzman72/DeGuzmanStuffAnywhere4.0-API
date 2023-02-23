@@ -20,10 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalTrxAddUpdateRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalTrxAddUpdateResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalTrxDTOSearchResposnse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalTrxListResponse;
-import com.deguzman.DeGuzmanStuffAnywhere.dto.MedicalTrxInfoDTO;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.MedicalTrxSearchResposnse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByIntRequest;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByLongRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
-import com.deguzman.DeGuzmanStuffAnywhere.model.MedicalTransaction;
 import com.deguzman.DeGuzmanStuffAnywhere.service.MedicalTrxService;
 
 @RestController
@@ -53,34 +55,36 @@ public class MedicalTrxController {
 
 	@GetMapping("/all/facility/{facility_id}")
 	@CrossOrigin
-	public MedicalTrxListResponse getAllMedicalTrxInformationByFacility(@PathVariable int facility_id) {
-		return medicalService.findAllMedicalTranactionsByFacility(facility_id);
+	public MedicalTrxListResponse getAllMedicalTrxInformationByFacility(@RequestBody @Valid SearchByIntRequest request) {
+		return medicalService.findAllMedicalTranactionsByFacility(request);
 	}
 
 	@GetMapping("/all/type/{transaction_type_id}")
 	@CrossOrigin
-	public MedicalTrxListResponse getAllMedicalTrxInformationByType(@PathVariable long transaction_type_id) {
-		return medicalService.findMedicalTransactionsByType(transaction_type_id);
+	public MedicalTrxListResponse getAllMedicalTrxInformationByType(@RequestBody @Valid SearchByLongRequest request) {
+		return medicalService.findMedicalTransactionsByType(request);
 	}
 
 	@GetMapping("/all/user/{user_id}")
 	@CrossOrigin
-	public MedicalTrxListResponse getAllMedicalTrxInformationByUser(@PathVariable long user_id) {
-		return medicalService.findmedicalTransactionsByUser(user_id);
+	public MedicalTrxListResponse getAllMedicalTrxInformationByUser(@RequestBody @Valid SearchByLongRequest request) {
+		return medicalService.findmedicalTransactionsByUser(request);
 	}
 
 	@GetMapping("/medical-transaction/{medical_transaction_id}")
 	@CrossOrigin
-	public ResponseEntity<MedicalTransaction> getMedicalTrxById(@PathVariable long medical_transaction_id)
+	public MedicalTrxSearchResposnse getMedicalTrxById(@RequestBody @Valid SearchByLongRequest request)
 			throws ResourceNotFoundException {
-		return medicalService.getMedicalTrxById(medical_transaction_id);
+		MedicalTrxSearchResposnse response = medicalService.getMedicalTrxById(request);
+		return response;
 	}
 	
 	@GetMapping("/medical-transaction-dto/{medical_transaction_id}")
 	@CrossOrigin
-	public ResponseEntity<MedicalTrxInfoDTO> getMedicalTrxDTOById(@PathVariable long medical_transaction_id)
+	public MedicalTrxDTOSearchResposnse getMedicalTrxDTOById(@RequestBody @Valid SearchByLongRequest request)
 			throws ResourceNotFoundException {
-		return medicalService.findMedicalTransasctionInformationDTOById(medical_transaction_id);
+		MedicalTrxDTOSearchResposnse response = medicalService.findMedicalTransasctionInformationDTOById(request);
+		return response;
 	}
 
 	@GetMapping("/get-medical-trx-count")
@@ -98,15 +102,15 @@ public class MedicalTrxController {
 	
 	@PutMapping("/medical-transaction/{medical_transaction_id}")
 	@CrossOrigin
-	public MedicalTrxAddUpdateResponse updateMedicalTransactionInformation(@RequestBody @Valid MedicalTrxAddUpdateRequest request) {
+	public MedicalTrxAddUpdateResponse updateMedicalTransactionInformation(@RequestBody @Valid MedicalTrxAddUpdateRequest request) throws ResourceNotFoundException {
 		MedicalTrxAddUpdateResponse response = medicalService.updateMedicalTransaction(request);
 		return response;
 	}
 
 	@DeleteMapping("/medical-transaction/{medical_transaction_id}")
 	@CrossOrigin
-	public int deleteMedicalTrxById(@PathVariable long medical_transaction_id) {
-		return medicalService.deleteMedicalTransactionInformation(medical_transaction_id);
+	public int deleteMedicalTrxById(@RequestBody @Valid SearchByLongRequest request) {
+		return medicalService.deleteMedicalTransactionInformation(request);
 	}
 
 	@DeleteMapping("/delete-all-medical-transactions")

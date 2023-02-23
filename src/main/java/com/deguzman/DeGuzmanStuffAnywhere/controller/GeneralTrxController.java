@@ -20,10 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.DeleteAllResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.GeneralTrxAddUpdateRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.GeneralTrxAddUpdateResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.GeneralTrxDTOSearchResponse;
 import com.deguzman.DeGuzmanStuffAnywhere.domain.GeneralTrxListResponse;
-import com.deguzman.DeGuzmanStuffAnywhere.dto.GeneralTrxInfoDTO;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.GeneralTrxSearchResponse;
+import com.deguzman.DeGuzmanStuffAnywhere.domain.SearchByLongRequest;
 import com.deguzman.DeGuzmanStuffAnywhere.exception.ResourceNotFoundException;
-import com.deguzman.DeGuzmanStuffAnywhere.model.GeneralTransaction;
 import com.deguzman.DeGuzmanStuffAnywhere.service.GeneralTrxService;
 
 @RestController
@@ -49,30 +50,32 @@ public class GeneralTrxController {
 
 	@GetMapping("/all/type/{transaction_type_id}")
 	@CrossOrigin
-	public GeneralTrxListResponse getTransactionsByType(@PathVariable long transaction_type_id) {
-		GeneralTrxListResponse response = generalTrxService.findTransactionsByType(transaction_type_id);
+	public GeneralTrxListResponse getTransactionsByType(@RequestBody @Valid SearchByLongRequest request) {
+		GeneralTrxListResponse response = generalTrxService.findTransactionsByType(request);
 		return response;
 	}
 
 	@GetMapping("/all/user/{user_id}")
 	@CrossOrigin
-	public GeneralTrxListResponse getTransactionsByUser(@PathVariable long user_id) {
-		GeneralTrxListResponse response = generalTrxService.findTransactionsByUser(user_id);
+	public GeneralTrxListResponse getTransactionsByUser(@RequestBody @Valid SearchByLongRequest request) {
+		GeneralTrxListResponse response = generalTrxService.findTransactionsByUser(request);
 		return response;
 	}
 
 	@GetMapping("/transaction-dto/{transaction_id}")
 	@CrossOrigin
-	public ResponseEntity<GeneralTrxInfoDTO> getTrxInformationDTOById(@PathVariable long transaction_id)
+	public GeneralTrxDTOSearchResponse getTrxInformationDTOById(@RequestBody @Valid SearchByLongRequest request)
 			throws ResourceNotFoundException {
-		return generalTrxService.findTranactionInformationDTOById(transaction_id);
+		GeneralTrxDTOSearchResponse response = generalTrxService.findTranactionInformationDTOById(request);
+		return response;
 	}
 	
 	@GetMapping("/transaction/{transaction_id}")
 	@CrossOrigin
-	public ResponseEntity<GeneralTransaction> getTrxInformationById(@PathVariable long transaction_id)
+	public GeneralTrxSearchResponse getTrxInformationById(@RequestBody @Valid SearchByLongRequest request)
 			throws ResourceNotFoundException {
-		return generalTrxService.findTransactionInformationById(transaction_id);
+		GeneralTrxSearchResponse response = generalTrxService.findTransactionInformationById(request);
+		return response;
 	}
 
 	@GetMapping("/get-transaction-count")
@@ -91,15 +94,15 @@ public class GeneralTrxController {
 	
 	@PutMapping("/transaction/{transaction_id}")
 	@CrossOrigin
-	public GeneralTrxAddUpdateResponse updateTransactionInformation(@RequestBody @Valid GeneralTrxAddUpdateRequest request) {
+	public GeneralTrxAddUpdateResponse updateTransactionInformation(@RequestBody @Valid GeneralTrxAddUpdateRequest request) throws ResourceNotFoundException {
 		GeneralTrxAddUpdateResponse response = generalTrxService.updateTransactionInformation(request);
 		return response;
 	}
 
 	@DeleteMapping("/transaction/{transaction_id}")
 	@CrossOrigin
-	public int deleteTransactionById(@PathVariable long transaction_id) {
-		return generalTrxService.deleteTransactioninformation(transaction_id);
+	public int deleteTransactionById(@RequestBody @Valid SearchByLongRequest request) {
+		return generalTrxService.deleteTransactioninformation(request);
 	}
 
 	@DeleteMapping("/delete-all-transactions")
